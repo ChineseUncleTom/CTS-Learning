@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café Lumen</title>
+<meta name="description" content="CTS Chapter 5 — video systems from photon to pixel. 11 levels, 5 interactive gadgets and a 15-HP boss.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFF3E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241823" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Café Lumen">
+<meta property="og:description" content="CTS Chapter 5 — video systems from photon to pixel. 11 levels, 5 interactive gadgets and a 15-HP boss.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%92%A1%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0}img,svg,canvas{max-width:100%}</style>
+</head>
+<body>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
+.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+
+/* ═══ CH4 ADDITIONS ═══════════════════════════════════════ */
+
+/* the signal chain — a row of stages with levels */
+.chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chain-step{flex:1 1 8.5rem; min-width:0; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-1); position:relative}
+.chain-step .cs-i{font-size:1.5rem; line-height:1}
+.chain-step .cs-n{font-family:var(--f-display); font-size:var(--t-sm); line-height:1.2}
+.chain-step .cs-v{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--tone,var(--berry))}
+.chain-step.mic{--tone:var(--lav)} .chain-step.line{--tone:var(--sun)} .chain-step.spk{--tone:var(--berry)}
+.chain-arrow{align-self:center; font-family:var(--f-mono); font-weight:700; color:var(--ink-faint); flex:none}
+@media (max-width:720px){.chain-arrow{display:none}}
+
+/* a compact spec list used for mic types, processors, applications */
+.specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr)); gap:var(--sp-4)}
+.spec-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-5,1.25rem) var(--sp-5,1.25rem);
+  display:flex; flex-direction:column; gap:var(--sp-2); border-top:5px solid var(--tone,var(--sakura))}
+.spec-card h4{font-family:var(--f-display); font-size:var(--t-md)}
+.spec-card .sc-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tone,var(--sakura))}
+.spec-card p{font-size:var(--t-sm); color:var(--ink-soft)}
+.spec-card ul{margin:0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.spec-card b{color:var(--ink)}
+
+/* versus block — two poles side by side */
+.vs{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:var(--sp-4);
+  align-items:center; margin-top:var(--sp-4)}
+@media (max-width:760px){.vs{grid-template-columns:1fr} .vs-mid{justify-self:center}}
+.vs-mid{font-family:var(--f-display); font-size:var(--t-lg); color:var(--paper);
+  background:var(--line); border-radius:50%; width:2.6em; height:2.6em;
+  display:grid; place-items:center; flex:none}
+
+/* the polar-pattern picker */
+.picker{display:flex; flex-wrap:wrap; gap:var(--sp-2)}
+.pick{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.04em;
+  padding:.35rem .7rem; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp); cursor:pointer;
+  transition:transform .12s, background .16s}
+.pick:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pick[aria-pressed="true"]{background:var(--sakura); color:var(--tag-ink); transform:translate(-1px,-1px)}
+
+/* dB / value readouts inside gadgets */
+.dial{display:flex; gap:var(--sp-3); flex-wrap:wrap}
+.dial div{background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 7rem}
+.dial span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.dial b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* grouped cheat sheet */
+.sheet h4{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--paper); background:var(--sakura); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.2rem .8rem; display:inline-block; margin:var(--sp-6) 0 var(--sp-3)}
+.sheet h4:first-child{margin-top:0}
+
+/* a wide callout for the one big formula of a section */
+.formula{background:var(--night); color:#FFE9D6; border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono); font-size:var(--t-md); font-weight:700; text-align:center;
+  overflow-x:auto; margin-top:var(--sp-4)}
+.formula em{color:var(--sun); font-style:normal}
+.formula small{display:block; font-size:var(--t-xs); color:#C3A4B0; font-weight:400; margin-top:var(--sp-2)}
+
+/* ═══ CH5 ADDITIONS ═══════════════════════════════════════ */
+
+/* the 2×2 light-units matrix — the hardest table in the chapter */
+.matrix{display:grid; grid-template-columns:auto 1fr 1fr; gap:var(--sp-2); margin-top:var(--sp-4)}
+@media (max-width:700px){.matrix{grid-template-columns:1fr}}
+.mx-h{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:center;
+  justify-content:center; text-align:center; padding:var(--sp-2)}
+.mx-side{writing-mode:horizontal-tb; background:var(--paper-2); border:2px solid var(--line);
+  border-radius:var(--r); padding:var(--sp-3); display:flex; flex-direction:column;
+  justify-content:center; gap:2px; min-width:8.5rem}
+.mx-side b{font-family:var(--f-display); font-size:var(--t-base); color:var(--tone,var(--sakura))}
+.mx-side span{font-family:var(--f-mono); font-size:var(--t-xs); color:var(--ink-soft)}
+.mx-cell{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  border-top:5px solid var(--tone,var(--sakura))}
+.mx-cell .u{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura))}
+.mx-cell .d{font-family:var(--f-mono); font-size:var(--t-sm); color:var(--ink)}
+.mx-cell .n{font-size:var(--t-sm); color:var(--ink-soft)}
+.mx-cell.us{--tone:var(--berry)} .mx-cell.si{--tone:var(--mint)}
+
+/* colour-temperature preview strip */
+.ctbar{height:64px; border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:flex}
+.ctbar div{flex:1; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:rgba(0,0,0,.55)}
+.ctswatch{height:96px; border:var(--bw) solid var(--line); border-radius:var(--r);
+  display:grid; place-items:center; font-family:var(--f-display); font-size:var(--t-lg);
+  color:rgba(0,0,0,.6); text-shadow:0 1px 0 rgba(255,255,255,.45)}
+
+/* contrast-ratio demo panel */
+.crdemo{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:grid; grid-template-columns:repeat(6,1fr); height:90px}
+.crdemo div{display:grid; place-items:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700}
+
+/* a small inline key/value strip used under figures */
+.kv{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-2)}
+.kv span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .6rem; color:var(--ink)}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 5</span>
+      <h1><small>CTS ☆ CHAPTER 5</small>Café<br>Lumen</h1>
+      <p class="hero-sub">Video systems — from a photon leaving a lamp to a pixel landing in your eye.
+        <b>11 levels</b>, five gadgets, and a 15-HP boss. Anna and Digi have opened a cinema in the
+        back room. <span class="kmj">( •_•)⌐■-■</span></p>
+      <nav class="chips">
+        <a class="chip" href="#light">💡 1 · light</a>
+        <a class="chip" href="#units">📏 2 · measuring it</a>
+        <a class="chip" href="#isl">📉 3 · inverse square</a>
+        <a class="chip" href="#colour">🎨 4 · colour</a>
+        <a class="chip" href="#camera">📷 5 · camera</a>
+        <a class="chip" href="#signals">📶 6 · video signals</a>
+        <a class="chip" href="#digital">🔌 7 · connections</a>
+        <a class="chip" href="#displays">🖥 8 · displays</a>
+        <a class="chip" href="#projection">📽 9 · projection</a>
+        <a class="chip" href="#screens">🎞 10 · screens</a>
+        <a class="chip" href="#setup">🔧 11 · setup</a>
+        <a class="chip" href="#song">🎵 the song</a>
+        <a class="chip" href="#quiz">⚔️ boss ×15</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · LIGHT ══════════════ -->
+<section id="light">
+  <div class="head">
+    <span class="lv">Lv.1 · the nature of light</span>
+    <h2>Waves, or tiny bullets <span class="kao">💡</span></h2>
+    <p class="lede">Two theories: light is <b>bursts of electromagnetic waves</b>, or light is
+      <b>particles called photons</b>. Both are right, which is annoying — sometimes it behaves as one,
+      sometimes the other. <b>For AV work, think of it as waves.</b></p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Wavelength is the filing system.</q>
+    <p class="why">Every type of electromagnetic radiation is <b>categorised by its wavelength</b> — that's
+      the answer to question 1, and the trap options are "spectrum" and "visibility". Gamma rays sit at
+      about <b>10⁻¹² m</b>; TV and radio at <b>10⁵ m</b>. Visible light is a thin sliver in between.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--lav)">
+    <div class="story-text">
+      <p class="story-lead"><span>🌈</span><span>The sliver we can actually see.</span></p>
+      <div class="beat"><span class="beat-i">📐</span>
+        <p>Visible light runs roughly <span class="hl">380 nm to 750 nm</span>, where a nanometre is
+          10⁻⁹ metres. Everything you have ever seen lives in that band.</p></div>
+      <div class="beat"><span class="beat-i">🔴</span>
+        <p><span class="hl-p">Red is long, violet is short.</span> Red 620–750 · green 495–570 ·
+          blue 450–495 · violet 380–450. Same rule as sound last chapter — long wavelength, low
+          frequency.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--lav)">
+      <span class="fig-t">🌈 the visible band</span>
+      <svg viewBox="0 0 220 150" role="img" aria-label="The visible spectrum from violet at 380 nanometres to red at 750 nanometres.">
+        <defs><linearGradient id="spec" x1="0" x2="1">
+          <stop offset="0" stop-color="#8B5CF6"/><stop offset="0.19" stop-color="#3B82F6"/>
+          <stop offset="0.33" stop-color="#22D3EE"/><stop offset="0.5" stop-color="#22C55E"/>
+          <stop offset="0.68" stop-color="#FACC15"/><stop offset="0.82" stop-color="#F97316"/>
+          <stop offset="1" stop-color="#EF4444"/></linearGradient></defs>
+        <rect x="8" y="20" width="204" height="44" rx="8" fill="url(#spec)" stroke="var(--line)" stroke-width="3"/>
+        <text x="8" y="15" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">380 nm</text>
+        <text x="212" y="15" text-anchor="end" font-family="monospace" font-size="10" font-weight="700" fill="var(--berry)">750 nm</text>
+        <g font-family="monospace" font-size="9" font-weight="700" fill="var(--ink)">
+          <rect x="8" y="76" width="204" height="18" rx="4" fill="var(--paper-2)" stroke="var(--line)" stroke-width="2"/>
+          <text x="14" y="89">violet 380–450</text>
+          <rect x="8" y="98" width="204" height="18" rx="4" fill="var(--paper-2)" stroke="var(--line)" stroke-width="2"/>
+          <text x="14" y="111">blue 450–495 · green 495–570</text>
+          <rect x="8" y="120" width="204" height="18" rx="4" fill="var(--paper-2)" stroke="var(--line)" stroke-width="2"/>
+          <text x="14" y="133">red 620–750 · the long end</text>
+        </g>
+      </svg>
+      <figcaption>Short and energetic on the left, long and lazy on the right.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · UNITS ══════════════ -->
+<section id="units">
+  <div class="head">
+    <span class="lv">Lv.2 · units of light measure</span>
+    <h2>Four units, one grid <span class="kao">📏</span></h2>
+    <p class="lede">This is the messiest table in the chapter, and it becomes easy the moment you stop
+      memorising four things and start memorising <b>two questions</b>: is the light <em>landing</em> or
+      <em>leaving</em>, and are we in the <em>US</em> or <em>everywhere else</em>?</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Incident lands. Reflected leaves. Feet are American.</q>
+    <p class="why"><b>Incident meters</b> measure light coming <em>directly from a source</em> — a lamp,
+      projector, monitor. <b>Reflected (spot) meters</b> measure light <em>bouncing off</em> a screen, wall
+      or face. Then: anything with <b>"foot" in the name is US customary</b>; the rest is SI.</p>
+  </div>
+
+  <div class="matrix">
+    <div class="mx-h"></div>
+    <div class="mx-h">🇺🇸 US customary</div>
+    <div class="mx-h">🌍 SI (everywhere else)</div>
+
+    <div class="mx-side" style="--tone:var(--sun)">
+      <b>INCIDENT ↓</b><span>light landing on a surface</span><span>= illuminance</span>
+    </div>
+    <div class="mx-cell us">
+      <span class="u">Foot-candle</span>
+      <span class="d">1 lumen / ft²</span>
+      <span class="n">≈ 10.76 lux. Abbreviated <b>fc</b>.</span>
+    </div>
+    <div class="mx-cell si">
+      <span class="u">Lux</span>
+      <span class="d">1 lumen / m²</span>
+      <span class="n">1 lux ≈ 0.093 fc. Measured at a <b>task area</b> — a screen, a work surface.</span>
+    </div>
+
+    <div class="mx-side" style="--tone:var(--lav)">
+      <b>REFLECTED ↑</b><span>light leaving a surface</span><span>= luminance</span>
+    </div>
+    <div class="mx-cell us">
+      <span class="u">Foot-lambert</span>
+      <span class="d">1/π candela / ft²</span>
+      <span class="n">≈ 3.43 cd/m². Abbreviated <b>fl</b>.</span>
+    </div>
+    <div class="mx-cell si">
+      <span class="u">Nit</span>
+      <span class="d">1 candela / m²</span>
+      <span class="n">Written <b>nt</b> or cd/m². What monitor brightness specs use.</span>
+    </div>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">fundamental 1</span><h4>Candela 🕯</h4>
+      <p>The <b>base unit of luminous intensity</b>. Latin for <em>candle</em> — it happens to match the
+        output of a historic standard wax candle.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">fundamental 2</span><h4>Lumen 💡</h4>
+      <p>The unit of <b>luminous flux</b> — the photons from a 1-candela source passing through 1 m² on a
+        sphere of 1 m radius.</p>
+      <p><b>The usual unit for projector output.</b> Different bodies measure it differently; the most
+        quoted worldwide is the <b>ANSI</b> method, despite no longer being the international standard.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam wording</span>
+    Question 2 asks what's "generally taken at a task area like a video screen" and wants <b>lux</b>.
+    Strictly, <b>foot-candle measures the same thing</b> — both are illuminance — so the question is really
+    testing that you know lux is the <b>standard international</b> unit. Read those options carefully.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · INVERSE SQUARE ══════════════ -->
+<section id="isl">
+  <div class="head">
+    <span class="lv">Lv.3 · the inverse square law, again</span>
+    <h2>You already know this one <span class="kao">📉</span></h2>
+    <p class="lede">Same law as the sound chapter, new victim. Light radiates in all directions, so the
+      same energy covers a bigger and bigger sphere.</p>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">Sound lost <b>6 dB</b> per doubling. Light loses <b>three quarters</b> per
+      doubling. Same law, different clothes, nya 🐾</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A quarter left means three quarters lost.</q>
+    <p class="why">Double the distance and intensity falls to <b>1/2² = a quarter</b> of what it was.
+      The exam asks it the other way round: illumination <b>decreases by 75 percent</b>. Same fact,
+      inverted — and "50 percent" is sitting right there to catch you.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · walk away from the lamp</span>
+      <span class="verdict ok" id="il-v">1× distance</span>
+    </div>
+    <div class="screen"><canvas id="il" width="1000" height="270"></canvas></div>
+    <div class="ctl">
+      <label for="il-r">distance from source</label>
+      <input type="range" id="il-r" min="10" max="50" step="1" value="10">
+      <output id="il-d">1.0 ×</output>
+    </div>
+    <div class="dial">
+      <div><span>intensity left</span><b id="il-left">100%</b></div>
+      <div><span>lost</span><b id="il-lost">0%</b></div>
+      <div><span>area covered</span><b id="il-area">1 ×</b></div>
+    </div>
+    <p class="gsay" id="il-say">At 1× the light covers one square. Slide right and watch it spread.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔢 the numbers to keep</span>
+    <b>×2 distance → 1/4</b> (75% lost) · <b>×3 → 1/9</b> · <b>×5 → 1/25</b>.
+    And backwards: <b>half the distance → 4× brighter</b> · <b>⅓ the distance → 9×</b> ·
+    <b>⅕ the distance → 25×</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · COLOUR ══════════════ -->
+<section id="colour">
+  <div class="head">
+    <span class="lv">Lv.4 · colour, temperature &amp; CRI</span>
+    <h2>Three dimensions of a colour <span class="kao">🎨</span></h2>
+    <p class="lede">Every possible colour is pinned down by three numbers — that's the <b>Munsell</b>
+      system, drawn as a cylinder.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">dimension 1</span><h4>Hue</h4>
+      <p>The underlying <b>spectrum colour</b> — red, orange, yellow, green, blue, indigo, violet.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--ink-soft)">
+      <span class="sc-tag">dimension 2</span><h4>Value / brightness</h4>
+      <p>The <b>greyscale value</b> — where it sits between white and black.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">dimension 3</span><h4>Saturation / chroma</h4>
+      <p>How <b>much</b> of the hue — from pale pastel tint to strong bold colour.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Light adds RGB. Paint subtracts RYB.</q>
+    <p class="why">Your retina has <b>three cone types — red, green, blue</b>, so those are the
+      <b>primary colours of light</b>, mixed <b>additively</b>. Printing inks are <b>cyan (B+G), magenta
+      (R+B), yellow (R+G)</b>. But pigments that <em>absorb</em> light mix <b>subtractively</b>, and there
+      the primaries are <b>red, yellow and blue</b>.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🌙 everyone goes colour-blind at night</span>
+    Cone cells stop working at very low light, so in near-darkness <b>everybody</b> has monochrome
+    (<b>scotopic</b>) vision. That's the excuse behind those slightly clumsy blue-tinted
+    <b>"day-for-night"</b> scenes in film.
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Colour temperature 🔥</h3>
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Hot is blue, cool is orange — the opposite of the tap.</q>
+    <p class="why">Colour temperature is measured in <b>kelvin — never "degrees"</b>. And it runs backwards
+      from every bathroom tap you've ever used: <b>higher K = bluer light</b>, <b>lower K = more orange
+      light</b>. Cameras are far more sensitive to it than your eye, which is why <b>white balance</b> is
+      critical.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · white isn't white</span>
+      <span class="verdict bad" id="ct-v">warm</span>
+    </div>
+    <div class="ctswatch" id="ct-sw">this is "white"</div>
+    <div class="ctl">
+      <label for="ct-r">colour temperature</label>
+      <input type="range" id="ct-r" min="1500" max="10000" step="50" value="3200">
+      <output id="ct-out">3200 K</output>
+    </div>
+    <p class="gsay" id="ct-say">Candle flame ≈ 1900 K · tungsten ≈ 3200 K · daylight ≈ 5600 K · blue sky ≫ 9000 K</p>
+  </div>
+
+  <div class="story" style="--tone:var(--sun)">
+    <div class="story-text">
+      <p class="story-lead"><span>🎯</span><span>Colour Rendering Index.</span></p>
+      <div class="beat"><span class="beat-i">💯</span>
+        <p>CRI says <span class="hl">how accurately a light shows the colours of what it lights</span>.
+          <b>100 is perfect</b> — and only sources that make light by <b>incandescence</b> get it: a
+          tungsten filament, a candle flame, the sun's photosphere.</p></div>
+      <div class="beat"><span class="beat-i">📉</span>
+        <p>Everything else scores lower — sodium vapour, fluorescent phosphors,
+          <span class="hl-p">LEDs</span>. High-CRI versions exist but cost more and are less efficient.</p></div>
+      <div class="beat"><span class="beat-i">📷</span>
+        <p>Cameras struggle below <span class="hl-m">CRI 60</span>, even after a full white balance.
+          Matters enormously when a client's brand colour has to be right.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--sun)">
+      <span class="fig-t">💯 CRI 100 means it burns</span>
+      <svg viewBox="0 0 220 130" role="img" aria-label="Incandescent sources score CRI 100; other sources score lower.">
+        <rect x="4" y="6" width="212" height="52" rx="8" fill="var(--sun-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="22" font-family="monospace" font-size="10" font-weight="700" fill="var(--sun)">CRI 100 · INCANDESCENCE</text>
+        <text x="14" y="40" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">🕯 candle · 💡 tungsten</text>
+        <text x="14" y="53" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">☀️ the sun</text>
+        <rect x="4" y="66" width="212" height="58" rx="8" fill="var(--paper-2)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="82" font-family="monospace" font-size="10" font-weight="700" fill="var(--ink-soft)">LOWER CRI · OTHER MEANS</text>
+        <text x="14" y="99" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">gas · phosphor · LED</text>
+        <rect x="14" y="106" width="120" height="10" rx="5" fill="var(--berry)" stroke="var(--line)" stroke-width="2"/>
+        <text x="142" y="115" font-family="monospace" font-size="9" font-weight="700" fill="var(--berry)">&lt;60 = trouble</text>
+      </svg>
+      <figcaption>If it glows because it's hot, it renders colour perfectly.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Ambient light is the enemy of contrast.</q>
+    <p class="why"><b>Ambient light is any light in the room other than the displayed image.</b> It hits
+      the screen and walls, bounces into the viewing area, and <b>competes with the picture by reducing
+      contrast and washing it out</b>. Question 4 wants exactly one word: it <b>negatively affects</b>
+      image quality. Fix it by extinguishing or masking unnecessary sources and tightly controlling the
+      necessary ones.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 5 · CAMERA ══════════════ -->
+<section id="camera">
+  <div class="head">
+    <span class="lv">Lv.5 · image capture</span>
+    <h2>How a camera thinks <span class="kao">📷</span></h2>
+    <p class="lede">Video is just <b>a series of consecutive still images</b>, like frames on a strip of
+      film — except a grid of microscopic sensors replaces the chemistry.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">focal length</span><h4>Short sees wide 👀</h4>
+      <p>The distance <b>between the lens and the image sensor when the subject is in focus</b>, in mm.
+        It sets the <b>angle of view</b>.</p>
+      <p><b>Wide-angle = short focal length = sees more.</b> <b>Telephoto = long = sees less.</b>
+        A zoom lens varies it, and gets quoted at both extremes.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">back focus</span><h4>Staying sharp while zooming</h4>
+      <p>The adjustment that keeps a zoom lens <b>in focus across its whole range</b>. Two steps,
+        repeated:</p>
+      <ul>
+        <li><b>1.</b> Zoom fully <b>in</b> on a back-focus chart, adjust until sharp</li>
+        <li><b>2.</b> Zoom fully <b>out</b> to widest, adjust again</li>
+        <li><b>Repeat</b> until focus holds from wide to telephoto</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Big number, small hole, deep field.</q>
+    <p class="why">The <b>aperture</b> is the opening; the <b>iris</b> controls it; it's measured in
+      <b>f-stops</b>. <b>The larger the f-stop number, the smaller the opening and the less light.</b>
+      f/2 lets in more than f/2.8 but less than f/1.4, and each step is <b>half or double</b> the light.
+      Then: <b>the smaller the aperture, the greater the depth of field</b> — so a big f-number gives you
+      a deep zone of focus. A pinhole has enormous depth of field and needs no focusing at all.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 03 · the iris</span>
+      <span class="verdict ok" id="ap-v">deep field</span>
+    </div>
+    <div class="screen"><canvas id="ap" width="1000" height="300"></canvas></div>
+    <div class="ctl">
+      <label for="ap-r">f-stop</label>
+      <input type="range" id="ap-r" min="0" max="7" step="1" value="4">
+      <output id="ap-out">f/4</output>
+    </div>
+    <div class="dial">
+      <div><span>opening</span><b id="ap-open">medium</b></div>
+      <div><span>light in</span><b id="ap-light">1×</b></div>
+      <div><span>depth of field</span><b id="ap-dof">moderate</b></div>
+    </div>
+    <p class="gsay" id="ap-say">Each stop halves or doubles the light. Watch the focus band grow as the hole shrinks.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🌒 the dim-room catch</span>
+    <b>Dimly lit scenes have a smaller depth of field</b> — because you must open the iris wide to get
+    enough light in, and a wide aperture gives a shallow field. Low light and deep focus are enemies.
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">imager &amp; prism</span><h4>One chip or three</h4>
+      <p><b>Three-chip</b> cameras use a <b>prism</b> plus precise <b>dichroic filters</b> to split the
+        beam into red, green and blue, one imager each. Broadcast and digital cinema.</p>
+      <p><b>Single-chip</b> cameras have <b>no prism</b> — colour filters are applied to the imager
+        <b>pixel by pixel</b> during manufacture. Most cameras are single-imager.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">imagers</span><h4>CMOS &amp; CCD</h4>
+      <p>Arrays of hundreds of thousands of light-sensing elements. A <b>pixel</b> (picture element) is the
+        group of red, green and blue elements making one colour point — though the individual sensors get
+        called pixels too.</p>
+      <p>Frame rates: obsolete <b>NTSC 29.94 fps</b>, obsolete <b>PAL 25 fps</b>; digital and large-format
+        run <b>24 to 120 fps</b>. Higher rate = bigger signal + better motion accuracy.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">shutter</span><h4>Stopping the overload</h4>
+      <p>Too much light overloads an imager. The <b>electronic shutter</b> regulates <b>how long the imager
+        accepts light</b>; shortening it lowers the output voltage and prevents overload.</p>
+      <p><b>Shutter speed affects only the imagers — not the video output frame rate.</b> Fast motion needs
+        a higher shutter speed, or the picture looks jerky and stuttered.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · SIGNALS ══════════════ -->
+<section id="signals">
+  <div class="head">
+    <span class="lv">Lv.6 · video signals</span>
+    <h2>Three colours and two edges <span class="kao">📶</span></h2>
+    <p class="lede">A video signal has exactly two groups of components: <b>colour signals</b> and
+      <b>synchronisation signals</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>R, G, B, H, V — three colours and two edges.</q>
+    <p class="why">The <b>five basic elements</b> of a video signal, containing everything needed for a
+      complete image. A <b>full-bandwidth RGBHV</b> signal therefore needs <b>five cables</b>, one each.
+      <b>H sync</b> times the left/right edges; <b>V sync</b> times top and bottom, and begins at the
+      <b>bottom-right pixel</b>. Without them the picture rolls sideways and vertically.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-step mic"><span class="cs-i">🔴</span><span class="cs-n">Red</span><span class="cs-v">colour</span></div>
+    <div class="chain-step mic"><span class="cs-i">🟢</span><span class="cs-n">Green</span><span class="cs-v">colour</span></div>
+    <div class="chain-step mic"><span class="cs-i">🔵</span><span class="cs-n">Blue</span><span class="cs-v">colour</span></div>
+    <div class="chain-step line"><span class="cs-i">↔️</span><span class="cs-n">H sync</span><span class="cs-v">left / right</span></div>
+    <div class="chain-step spk"><span class="cs-i">↕️</span><span class="cs-n">V sync</span><span class="cs-v">top / bottom</span></div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Switch in the gap, or you crash.</q>
+    <p class="why">Sync also lets you change sources cleanly. Switching <b>during the short interval
+      between complete frames</b> is <b>vertical interval switching</b> — the preferred method for all
+      video systems. Switching at any other moment is <b>crash switching</b>, and it produces a burst of
+      instability until the system re-synchronises.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--lav)">
+    <div class="story-text">
+      <p class="story-lead"><span>📺</span><span>Scan rates, i and p.</span></p>
+      <div class="beat"><span class="beat-i">↔️</span>
+        <p><b>Horizontal scan rate</b> = <span class="hl">lines displayed per second</span>, in kHz.
+          <b>Vertical scan rate</b> = complete fields per second, in Hz. Many horizontal scans fit inside
+          one vertical scan, so <span class="hl-p">horizontal always has the higher frequency</span>.</p></div>
+      <div class="beat"><span class="beat-i">🪜</span>
+        <p>Old displays couldn't draw every line at once, so they drew odd lines, then even lines — that's
+          <b>interlaced</b>, the <span class="hl-m">i</span> in 480i. Its rate is <b>half</b> the vertical
+          scan rate. All lines in one pass is <b>progressive</b> — the <span class="hl-m">p</span> in
+          1080p.</p></div>
+      <div class="beat"><span class="beat-i">🎚</span>
+        <p>Bandwidth is the <b>range of frequencies a circuit can pass</b>. In video:
+          <b>vertical sync is the slow end (Hz)</b>, <b>horizontal sync is the middle (kHz)</b>, and
+          <b>fine picture detail is the fast end (MHz)</b>.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--lav)">
+      <span class="fig-t">🪜 interlaced vs progressive</span>
+      <svg viewBox="0 0 220 150" role="img" aria-label="Interlaced draws odd lines then even lines; progressive draws every line in one pass.">
+        <rect x="4" y="6" width="212" height="64" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="12" y="20" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">INTERLACED · two passes</text>
+        <g stroke="var(--lav)" stroke-width="4" stroke-linecap="round">
+          <path d="M16 30 H120"/><path d="M16 42 H120"/><path d="M16 54 H120"/><path d="M16 66 H120"/></g>
+        <g stroke="var(--berry)" stroke-width="4" stroke-linecap="round" stroke-dasharray="5 5">
+          <path d="M16 36 H120"/><path d="M16 48 H120"/><path d="M16 60 H120"/></g>
+        <text x="130" y="42" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">odd, then</text>
+        <text x="130" y="54" font-family="monospace" font-size="9" font-weight="700" fill="var(--berry)">even</text>
+        <rect x="4" y="78" width="212" height="64" rx="8" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="12" y="92" font-family="monospace" font-size="10" font-weight="700" fill="var(--mint)">PROGRESSIVE · one pass</text>
+        <g stroke="var(--mint)" stroke-width="4" stroke-linecap="round">
+          <path d="M16 102 H120"/><path d="M16 110 H120"/><path d="M16 118 H120"/>
+          <path d="M16 126 H120"/><path d="M16 134 H120"/></g>
+        <text x="130" y="118" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">all at once</text>
+      </svg>
+      <figcaption>The i and the p in 480i and 1080p, drawn out.</figcaption>
+    </figure>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🎨 video bit depth</span>
+    Colour bit depth has mostly stayed at <b>8 bits per channel</b> (RGB). <b>UHD Blu-ray brought 10 bits
+    per channel</b> with wide-colour-gamut tech, and some composition software works at <b>16 bits per
+    channel</b> — but displays that can show it aren't widely available yet. <b>HDR</b> is increasingly
+    popular for capturing subtle luminance detail.
+  </div>
+
+  <div class="note">
+    <span class="note-h">🎛 bandwidth limiting</span>
+    Needed to squeeze complex signals into a limited band, achieved through <b>filtering and encoding</b>
+    — RGB values get reduced to smaller values. It takes less bandwidth, but <b>encoding and decoding add
+    noise and artifacts</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · DIGITAL ══════════════ -->
+<section id="digital">
+  <div class="head">
+    <span class="lv">Lv.7 · digital signals &amp; connections</span>
+    <h2>What's on the end of the cable <span class="kao">🔌</span></h2>
+    <p class="lede">Digital video devices also output <b>RGBHV</b> — usually with control signals and often
+      audio riding along too.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">the original</span><h4>DVI</h4>
+      <p><b>Digital Visual Interface</b> — the <b>first accepted digital standard for computers</b>.
+        Versions: DVI, DVI-D, DVI-I, Mini-DVI.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">the everywhere one</span><h4>HDMI</h4>
+      <p><b>Builds on DVI</b> by adding <b>audio, EDID device control, HDCP content protection and
+        Ethernet</b>. <b>Backward-compatible with DVI.</b> Comes as HDMI, Mini and Micro.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">the rival</span><h4>DisplayPort</h4>
+      <p>Also builds on DVI's success, carrying video and audio in a <b>similar yet not completely
+        compatible</b> format. Also available as Mini-DisplayPort.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">one cable to rule them</span><h4>HDBaseT</h4>
+      <p>Carries <b>HDMI + Ethernet + control + USB + 100 W of DC power</b> down a single standard
+        <b>UTP (Cat 5e and beyond)</b> cable, terminated in a normal <b>8P8C / RJ45</b> connector.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">broadcast</span><h4>SDI</h4>
+      <p><b>Serial Digital Interface</b>, from <b>SMPTE</b>, over <b>BNC-terminated 75 Ω coax</b> — the
+        cable pro analog video already used. <b>HD-SDI</b>, <b>6G-SDI</b> (4K), <b>24G-SDI</b> (8K).
+        Carries audio and control, <b>but no content protection</b>. Also runs over fibre.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--ink-soft)">
+      <span class="sc-tag">general purpose</span><h4>USB &amp; Ethernet</h4>
+      <p>Since <b>USB 3.1</b>, the <b>type-C</b> connector can switch into <b>Alt mode</b> to carry HDMI or
+        DisplayPort. <b>Ethernet</b> carries many streaming video formats over wired, fibre and wireless.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>HDMI is DVI plus sound and rules.</q>
+    <p class="why">Question 8 wants the three major formats: <b>DVI, HDMI, DisplayPort</b> — and every
+      wrong option smuggles in a fake acronym like <b>DMI</b> or <b>HDVI</b>. Read the letters, not the
+      shape of the word.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Native resolution is rows and columns of pixels.</q>
+    <p class="why">A display's <b>native resolution</b> is the resolution it's <b>optimised for</b> —
+      literally its <b>horizontal rows and vertical columns of pixels</b>, e.g. 1920×1080. Feeding it its
+      native resolution <b>avoids scaling</b> and gives the best picture. Not contrast ratio, not aspect
+      ratio, not sync signals.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📇 VESA and EDID</span>
+    <b>VESA</b> (Video Electronics Standards Association) coordinates computer resolution standards —
+    about <b>50</b> of them — and defines <b>EDID</b>, the data by which <b>a display tells connected
+    sources what it can do</b>. Managing EDID gets genuinely hard when several displays run from one
+    source.
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Pixels × frames, halve it, triple it.</q>
+    <p class="why">Computer output bandwidth: <b>[(TP × FR) / 2] × 3</b> hertz, where TP is total pixels
+      per frame and FR is frame rate. <b>Halve</b> because the worst case is half the pixels white and
+      half black. <b>Triple</b> to leave room for the <b>third harmonic</b>, which keeps signal edges
+      sharp at the display. Resolution up → bandwidth up, directly.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 04 · the bandwidth till</span>
+      <span class="verdict ok" id="bw-badge">HD</span>
+    </div>
+    <div class="ctl">
+      <label for="bw-preset">preset</label>
+      <select id="bw-preset">
+        <option value="1920,1080,60">HD 1920×1080 @ 60</option>
+        <option value="1280,720,60">720p 1280×720 @ 60</option>
+        <option value="2560,1440,60">QHD 2560×1440 @ 60</option>
+        <option value="3840,2160,60">UHD 4K 3840×2160 @ 60</option>
+        <option value="720,480,30">DVD 720×480 @ 30</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="bw-h">pixels across</label><input type="number" id="bw-h" value="1920" min="1" style="width:7rem">
+      <label for="bw-v">down</label><input type="number" id="bw-v" value="1080" min="1" style="width:6rem">
+      <label for="bw-f">frames/s</label><input type="number" id="bw-f" value="60" min="1" style="width:5rem">
+    </div>
+    <div class="dial">
+      <div><span>total pixels</span><b id="bw-tp">2,073,600</b></div>
+      <div><span>÷2 · half on, half off</span><b id="bw-half">62.2 MHz</b></div>
+      <div><span>×3 · bandwidth</span><b id="bw-out">186.6 MHz</b></div>
+    </div>
+    <p class="gsay" id="bw-say">Your textbook's worked example: <b>1920 × 1080 × 60 = 186.6 MHz</b>. Red, green and blue each carry this.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · DISPLAYS ══════════════ -->
+<section id="displays">
+  <div class="head">
+    <span class="lv">Lv.8 · producing an image</span>
+    <h2>Through, off, or out <span class="kao">🖥</span></h2>
+    <p class="lede">Displays send light to your eyes in exactly three ways — and the exam asks which
+      category rear projection falls into.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Through, off, or out.</q>
+    <p class="why"><b>Transmissive</b> — light passes <em>through</em>: rear-screen projection, and LCDs
+      with backlights. <b>Reflective</b> — light bounces <em>off</em>: front-screen projection.
+      <b>Emissive</b> — the display makes its <em>own</em> light and sends it <em>out</em>: LED, OLED,
+      microLED.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">transmissive</span><h4>Rear projection</h4>
+      <p><b>Good</b>: strong contrast ratio, you can stand at the screen without shadowing, large images
+        possible.</p>
+      <p><b>Bad</b>: needs more space than front projection, and <b>hot spotting</b> is possible.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">reflective</span><h4>Front projection</h4>
+      <p><b>Good</b>: large images, easy to install.</p>
+      <p><b>Bad</b>: <b>lower contrast ratio</b>, and the projector sits in the room — so fan and projector
+        noise reach the audience.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">emissive</span><h4>LED · OLED · microLED</h4>
+      <p>Each element <b>creates its own light</b> and sends it straight out. No backlight, no projector.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Light meets the polarizer first.</q>
+    <p class="why">In an <b>LCD</b>, light must <b>first pass through a polarizer</b> — a set of extremely
+      fine parallel lines acting like a net that blocks every wave not parallel to them. Then it crosses a
+      sandwich of switching transistors and liquid crystals between <b>two</b> polarizing sheets. Because
+      polarizers can't block 100% of the light, <b>LCD "black" is really dark grey</b>.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--berry)">
+    <div class="story-text">
+      <p class="story-lead"><span>🚪</span><span>The screen-door effect.</span></p>
+      <div class="beat"><span class="beat-i">🖤</span>
+        <p>Each transistor has to be hidden from the light, so it's covered by a non-transparent layer
+          called the <span class="hl">black matrix</span>.</p></div>
+      <div class="beat"><span class="beat-i">🕸</span>
+        <p>That matrix draws a hard edge around every pixel — which on lower-resolution panels you see as
+          the <span class="hl-p">"screen door" effect</span>.</p></div>
+      <div class="beat"><span class="beat-i">📐</span>
+        <p>The <b>aperture ratio</b> is the see-through part of a pixel divided by the total surface.
+          <span class="hl-m">Smaller transistors → higher aperture ratio → more light and fewer
+          artifacts.</span></p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--berry)">
+      <span class="fig-t">🕸 aperture ratio</span>
+      <svg viewBox="0 0 220 140" role="img" aria-label="A low aperture ratio pixel with thick black borders beside a high aperture ratio pixel with thin borders.">
+        <text x="10" y="16" font-family="monospace" font-size="9" font-weight="700" fill="var(--berry)">LOW · screen door</text>
+        <rect x="8" y="22" width="96" height="96" fill="var(--line)"/>
+        <g fill="var(--sun)">
+          <rect x="18" y="32" width="28" height="28"/><rect x="60" y="32" width="28" height="28"/>
+          <rect x="18" y="74" width="28" height="28"/><rect x="60" y="74" width="28" height="28"/></g>
+        <text x="118" y="16" font-family="monospace" font-size="9" font-weight="700" fill="var(--mint)">HIGH · brighter</text>
+        <rect x="116" y="22" width="96" height="96" fill="var(--line)"/>
+        <g fill="var(--sun)">
+          <rect x="120" y="26" width="42" height="42"/><rect x="166" y="26" width="42" height="42"/>
+          <rect x="120" y="72" width="42" height="42"/><rect x="166" y="72" width="42" height="42"/></g>
+        <text x="10" y="134" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">black = transistor hidden under the matrix</text>
+      </svg>
+      <figcaption>Same pixel count. The right-hand panel simply lets more light through.</figcaption>
+    </figure>
+  </div>
+
+  <div class="vs">
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">LED &amp; microLED</div>
+        <div class="cat-role">EMISSIVE · PN JUNCTION</div></div></div>
+      <ul class="cat-list">
+        <li>A <b>PN junction</b>: electrons cross, and each one emits a photon</li>
+        <li>The <b>materials</b> forming the junction set the <b>wavelength</b></li>
+        <li>vs LCD: <b>much higher contrast</b>, faster switching, <b>hundreds of thousands of hours</b>,
+          higher brightness, wider gamut</li>
+        <li>Modules link into screens of <b>arbitrary size and shape</b></li>
+        <li><b>microLED</b> = 1–10 µm; big gaps between tiny pixels <b>absorb ambient light</b> → deeper blacks</li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--lav);--tone-soft:var(--lav-soft)">
+      <div class="cat-top"><div><div class="cat-name">OLED</div>
+        <div class="cat-role">ORGANIC · CARBON-BASED</div></div></div>
+      <ul class="cat-list">
+        <li><b>Organic compounds</b> that emit light when current flows — separate ones for R, G and B</li>
+        <li>Less power than LCD, <b>much higher contrast</b>, possibly higher brightness and wider colour</li>
+        <li>Refreshes in <b>microseconds</b> rather than LCD's milliseconds → superb motion</li>
+        <li><b>The catch: short lifespan</b>, with progressive output loss — seen as <b>blue fading</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>First decide what you want to display.</q>
+    <p class="why">Question 12 asks for the <b>first step</b> in selecting a display type, and the answer
+      isn't mounts, distances or analog-vs-digital — it's <b>determine what you want to display</b>.
+      The content decides how big the image must be, which decides screen size and placement.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">aspect ratio</span><h4>Width over height</h4>
+      <p><b>Aspect ratio = image width / image height.</b> 4:3 is also <b>1.33:1</b>; 16:9 is
+        <b>1.77:1</b>; computer displays are often 16:10.</p>
+      <p>Both <b>16/9 (1.7777…)</b> and <b>4/3 (1.3333…)</b> are repeating decimals — <b>use at least four
+        decimal places</b> in calculations.</p>
+      <p><b>Height = width / decimal ratio</b> · <b>Width = height × decimal ratio</b></p>
+      <p>⚠ Mount a display in <b>portrait</b> and the ratio reverses — 16:10 becomes <b>10:16</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">positioning</span><h4>DISCAS</h4>
+      <p>Display size must suit the <b>farthest viewer</b>. Either the display size or that farthest
+        distance can be your starting point.</p>
+      <p><b>AVIXA V202.01 (DISCAS)</b> — <em>Display Image Size for 2D Content</em> — gives the
+        calculations for image size, closest and farthest viewers, horizontal angles of view and content
+        design metrics. There's an online calculator at avixa.org.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · PROJECTION ══════════════ -->
+<section id="projection">
+  <div class="head">
+    <span class="lv">Lv.9 · the projected image</span>
+    <h2>Optics, lamps and mirrors <span class="kao">📽</span></h2>
+    <p class="lede">Projection uses <b>additive light mixing</b>. And remember: <b>black is simply the
+      absence of projected image</b> — the screen can never get darker than it is with the projector
+      switched off.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>It's reFRACTION, not reFLECTION — light goes THROUGH a lens.</q>
+    <p class="why">Question 7 lists the <b>four primary-optic factors</b> and hides a one-letter trap in
+      three of the four options. The answer is <b>Refraction · Dispersion · Spherical aberration ·
+      Curvature of field</b>. A lens <em>bends light through itself</em>; it doesn't bounce it back.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">factor 1</span><h4>Refraction</h4>
+      <p>Light <b>bending as it crosses a boundary</b> between materials — glass to air. How much it bends
+        is the <b>refractive index</b>, and the indexes of a lens's materials affect image quality.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">factor 2</span><h4>Dispersion</h4>
+      <p>Different wavelengths refract at <b>different angles</b> — a prism splitting white light. Strong
+        dispersion gives colour fringes, known as <b>chromatic aberration</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">factor 3</span><h4>Spherical aberration</h4>
+      <p>Light through the <b>edge</b> of a spherical lens leaves at a different angle than light through
+        the <b>centre</b>, giving it a different focal length. The resulting distortion is spherical
+        aberration.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">factor 4</span><h4>Curvature of field</h4>
+      <p>A curved lens projects a <b>curved image field onto a flat screen</b> — so the edges blur while
+        the centre is sharp, or the reverse. Worse with steeply curved, <b>very short focal length
+        (wide-angle)</b> lenses close to the screen.</p>
+    </article>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">lamp-based</span><h4>Three lamp technologies 🔥</h4>
+      <ul>
+        <li><b>Tungsten halogen</b> (quartz halogen / QI) — current through tungsten wire until white hot,
+          halogen gas stops blackening. Cheap, but <b>low output, inefficient, short life</b></li>
+        <li><b>Metal halide discharge</b> — current between tungsten electrodes in high-pressure
+          metal-halide gas. <b>Much more efficient, much longer life</b></li>
+        <li><b>Xenon arc</b> — arc through extremely high-pressure xenon. <b>Very efficient, very high
+          output</b>, but the pressure makes them <b>hazardous to handle</b></li>
+      </ul>
+      <p>The lamp works with a <b>reflector</b>, internal or external, to collect and direct light.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">solid-state</span><h4>LED &amp; laser 💚</h4>
+      <p>A mix of <b>LEDs, diode lasers</b> and <b>phosphors</b> excited by LEDs or lasers. Some use RGB
+        LEDs for white; RGB laser systems diffuse red, green and blue laser beams.</p>
+      <p><b>Energy efficient, lives in the tens of thousands of hours</b> — sometimes approaching the whole
+        operational life of the projector.</p>
+    </article>
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Three ways to form the image</h3>
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">3LCD</span><h4>Light-blocking</h4>
+      <p>Same principle as an LCD panel. Light is split into <b>red, green and blue</b>, each through its
+        own LCD panel, then <b>optically recombined</b> into a full-colour image.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">DLP</span><h4>Thousands of mirrors 🪞</h4>
+      <p>A <b>digital micromirror device (DMD)</b> — microscopic mirrors tilting to reflect light through
+        the lens (<b>on</b>) or into an absorber (<b>off</b>).</p>
+      <p>Only two states, so shades of grey come from <b>pulse-width modulation (PWM)</b>: the ratio of on
+        to off cycles. Too fast for your eye to see flicker.</p>
+      <p><b>3DLP</b> = one DMD per colour, combined. <b>Single-chip DLP</b> = one DMD lit alternately
+        through a fast <b>spinning colour wheel</b>, mixed by your <b>persistence of vision</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">direct laser</span><h4>Drawing the picture</h4>
+      <p>A <b>scanning mirror</b> draws the image <b>directly on the surface</b> using collimated
+        narrow-beam lasers in each primary colour, <b>line by line</b> — like the raster on an old CRT.</p>
+    </article>
+  </div>
+
+  <div class="vs" style="margin-top:var(--sp-6)">
+    <article class="cat-card" style="--tone:var(--sun);--tone-soft:var(--sun-soft)">
+      <div class="cat-top"><div><div class="cat-name">Front projection</div>
+        <div class="cat-role">REFLECTIVE · SAME SIDE</div></div></div>
+      <ul class="cat-list">
+        <li>Reflects both the wanted image <b>and unwanted ambient light</b> back at the viewer</li>
+        <li><b>Less space</b> and simpler equipment placement</li>
+        <li>Projector shares the room → <b>fan noise</b>, and presenters <b>block the beam</b></li>
+        <li><b>Ultra-short throw</b> helps — full coverage from under <b>18 in / 500 mm</b></li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--lav);--tone-soft:var(--lav-soft)">
+      <div class="cat-top"><div><div class="cat-name">Rear projection</div>
+        <div class="cat-role">TRANSMISSIVE · BEHIND</div></div></div>
+      <ul class="cat-list">
+        <li>Light passes <b>through a translucent screen</b> toward the viewer</li>
+        <li><b>Needs a room or cabinet behind</b>; <b>mirrors fold the optical path</b> to save depth</li>
+        <li><b>No equipment noise, no shadows</b> when the presenter walks past</li>
+        <li><b>Handles ambient light better</b> than front projection</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · SCREENS ══════════════ -->
+<section id="screens">
+  <div class="head">
+    <span class="lv">Lv.10 · screens &amp; perceived quality</span>
+    <h2>The other half of the system <span class="kao">🎞</span></h2>
+    <p class="lede">"Optimum performance from any projection system is dependent <b>equally</b> on the
+      screen and the projector." Screens are <b>passive</b> — they cannot create light, only redirect it.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>More gain, less room.</q>
+    <p class="why"><b>Screen gain</b> is a screen's ability to redirect light into a <b>narrower</b>
+      viewing area, making the image look brighter to viewers sitting <b>on-axis</b>.
+      <b>The higher the gain number, the brighter the image</b> — but the narrower the angle over which
+      you get that brightness. <b>Matte white is the reference surface: gain 1.0, "unity gain"</b>, a
+      perfect diffuser scattering light identically in all directions.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🌓 gain fights ambient light too</span>
+    <b>Ambient light rejection generally increases as gain increases.</b> Higher gain makes the angle light
+    arrives at matter more, so off-axis ambient light gets reflected <b>away</b> from the viewer — the
+    screen looks darker and <b>contrast goes up</b>.
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">front surface</span><h4>Matte white</h4>
+      <p>Magnesium carbonate or similar. <b>Perfect diffuser, gain 1.0</b>, good colour rendition. Best for
+        <b>data and graphics</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--ink-soft)">
+      <span class="sc-tag">front surface</span><h4>Matte grey</h4>
+      <p>Reflects <b>less</b> light overall, but produces <b>higher contrast in the dark areas</b> of an
+        image.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">front surface</span><h4>Angularly reflective</h4>
+      <p>Like a <b>textured mirror</b> — light comes back at the same angle it struck, on the other side of
+        the screen's axis. <b>Most screens above gain 5 are this type.</b> Works well for
+        <b>motion video</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">rear surface</span><h4>Diffusion material</h4>
+      <p>Rigid acrylic, glass, or vinyl fabric for portable use, with a diffused/coated/frosted surface.
+        <b>Wide viewing angle but little or no gain</b>; some <b>hot-spotting</b> possible; moderate
+        ambient light rejection.</p>
+      <p>Rear-projection screens are generally either <b>narrow and bright</b> or <b>wide and dim</b>.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📐 bigger image, dimmer image</span>
+    Pull the projector back to fill a bigger screen and the image gets noticeably darker — that's the
+    <b>inverse square law</b> again. But careful: the fact that <b>screen edges are dimmer than the
+    centre</b> is <b>not</b> the inverse square law. That's a compromise in projector optical design.
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Perceived quality &amp; contrast 🎯</h3>
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Seven, fifteen, fifty, eighty.</q>
+    <p class="why">The four minimum contrast ratios from <b>ANSI/INFOCOMM 3M-2011</b>, in the order the
+      viewer gets more demanding: <b>Passive 7:1</b> → <b>Basic decision-making 15:1</b> →
+      <b>Analytical decision-making 50:1</b> → <b>Full-motion video 80:1</b>. <b>Contrast remains the
+      fundamental metric of image quality.</b></p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 05 · how much contrast do you need?</span>
+      <span class="verdict ok" id="cr-v">15:1</span>
+    </div>
+    <div class="picker" id="cr-pick">
+      <button class="pick" type="button" data-c="passive">passive viewing</button>
+      <button class="pick" type="button" data-c="bdm" aria-pressed="true">basic decision-making</button>
+      <button class="pick" type="button" data-c="adm">analytical decision-making</button>
+      <button class="pick" type="button" data-c="fmv">full-motion video</button>
+    </div>
+    <div class="crdemo" id="cr-demo"></div>
+    <p class="gsay" id="cr-say">Six steps from system black up to peak white at the required ratio.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">viewing angles</span><h4>30 up, 60 across</h4>
+      <p><b>BDM:</b> the top of the image should be <b>no more than 30° above the eye level of the closest
+        viewer</b>; viewers within a <b>60° arc of the far edge</b> of the screen.</p>
+      <p><b>ADM:</b> <b>no vertical recommendation</b> — a viewer may need to walk right up to resolve
+        pixel detail. Horizontally, still the <b>60° arc</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">viewing distance</span><h4>%EH — element height</h4>
+      <p>An <b>element</b> is the smallest discrete unit a viewer must discern — usually a <b>text
+        character</b>, but also a graph intersection or a symbol.</p>
+      <p><b>%EH = element height / total image height.</b> A 38-pixel character on a 1080-high display is
+        <b>%EH of 22</b>; a %EH of 5 is 54 pixels. Take heights from <b>lowercase characters, excluding
+        descenders</b>.</p>
+      <p><b>ADM uses single-pixel element height</b>, since every pixel must resolve.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 11 · SETUP ══════════════ -->
+<section id="setup">
+  <div class="head">
+    <span class="lv">Lv.11 · throw, keystone &amp; alignment</span>
+    <h2>Making it land square <span class="kao">🔧</span></h2>
+    <p class="lede">The projector is chosen. Now put it in the right place and tune it.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">throw distance</span><h4>Projector to screen 📏</h4>
+      <p><b>Minimum projection distance</b> = closest acceptable. <b>Maximum projection distance</b> =
+        farthest that still makes the required image. <b>Offset</b> = how far vertically the projector can
+        sit from the bottom of the screen.</p>
+      <p>Every projector's formulas differ, and each lens gets its own. Some use <b>screen width</b>, some
+        the <b>diagonal</b>.</p>
+      <p>Worked example on a 2.44 m wide screen:<br>
+        max = (5.05 × 2.44) + 0.2 = <b>12.52 m</b><br>
+        min = (3.2 × 2.44) + 0.26 = <b>8.07 m</b><br>
+        offset = 0.03 × 2.44 = <b>0.07 m</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">keystone error</span><h4>The wonky trapezoid ⬛</h4>
+      <p>Caused by the projector being in the wrong place, so part of the screen is farther away and the
+        light spreads over a larger area. Four fixes:</p>
+      <ul>
+        <li><b>Tilt the screen</b> toward the projector</li>
+        <li><b>Adjust the projector's height</b></li>
+        <li><b>Electronic keystone</b> — reduces the number of activated pixels to square it up</li>
+        <li><b>Optical lens shift</b> — vertical is most common</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Lens shift keeps the pixels. Electronic keystone eats them.</q>
+    <p class="why">That's why <b>optical correction by lens shift is preferable to electronic keystone
+      correction</b> — it doesn't throw any pixels away.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Centering positions it. Clock sizes it. Phase sharpens it.</q>
+    <p class="why"><b>Centering</b> does <em>not</em> mean centring the image on the screen — it centres
+      the <b>signal onto the imaging device</b> (the LCD panel or DLP chip), shifting one row or column of
+      pixels at a time. <b>Clock</b> is the projector's master timing; adjust it to <b>stretch or shrink
+      the image to fit the fixed matrix</b>. <b>Phase</b> fine-tunes under one pixel — get it wrong and
+      <b>fine detail goes noisy and fuzzy</b>. They interact, so expect to go round again.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔍 pro tip from the book</span>
+    Professionals use a test pattern with a <b>single-pixel-width outside border</b> — it makes the exact
+    edges of the picture visible so you can see what's falling off the matrix.
+  </div>
+
+  <div class="story" style="--tone:var(--mint)">
+    <div class="story-text">
+      <p class="story-lead"><span>💡</span><span>ANSI lumens — the nine-zone method.</span></p>
+      <div class="beat"><span class="beat-i">⬜</span>
+        <p>Project a <span class="hl">full-white pattern</span>, focus at maximum aperture, and set zoom
+          lenses to their <b>midpoint</b>.</p></div>
+      <div class="beat"><span class="beat-i">🔢</span>
+        <p>Divide the screen into <span class="hl-p">nine equal areas</span>, take an <b>incident</b>
+          light-meter reading at the centre of each, and average the nine.</p></div>
+      <div class="beat"><span class="beat-i">✖️</span>
+        <p>Multiply that average by the screen area to get lumens:
+          <span class="hl-m">L = SH × SW × AI</span> — Screen Height × Screen Width × Average
+          Illuminance.</p></div>
+      <div class="beat"><span class="beat-i">⚠️</span>
+        <p><b>Match your units:</b> lux readings need screen area in <b>square metres</b>; foot-candle
+          readings need <b>square feet</b>.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--mint)">
+      <span class="fig-t">🔢 the nine-zone grid</span>
+      <svg viewBox="0 0 220 160" role="img" aria-label="A screen divided into nine equal measurement zones with a reading taken at the centre of each.">
+        <rect x="10" y="10" width="200" height="140" rx="6" fill="var(--paper-2)" stroke="var(--line)" stroke-width="4"/>
+        <g stroke="var(--line)" stroke-width="3">
+          <path d="M76.7 10 V150"/><path d="M143.3 10 V150"/>
+          <path d="M10 56.7 H210"/><path d="M10 103.3 H210"/></g>
+        <g fill="var(--sun)" stroke="var(--line)" stroke-width="2.5">
+          <circle cx="43" cy="33" r="8"/><circle cx="110" cy="33" r="8"/><circle cx="177" cy="33" r="8"/>
+          <circle cx="43" cy="80" r="8"/><circle cx="110" cy="80" r="8"/><circle cx="177" cy="80" r="8"/>
+          <circle cx="43" cy="127" r="8"/><circle cx="110" cy="127" r="8"/><circle cx="177" cy="127" r="8"/></g>
+      </svg>
+      <figcaption>Nine readings, one average, times the area. That's an ANSI lumen.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Brightness sets the black. Contrast sets the white.</q>
+    <p class="why">Backwards from what the words suggest, and worth ten seconds of memorising.
+      <b>Brightness is the black-level control</b> — too high and blacks turn grey; too low and dark detail
+      merges into one shade. <b>Contrast sets the range between lightest and darkest</b> — too low and
+      whites look grey; too high and white detail merges into one shade.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📋 the setting order</span>
+    Start both controls <b>midrange</b>. <b>1.</b> Adjust <b>contrast</b> until the light-grey blocks are
+    visible, stopping before detail turns all white. <b>2.</b> Adjust <b>brightness</b> until the dark-grey
+    blocks are distinguishable, stopping before true black turns grey. They interact — expect to repeat.
+    Greyscale is used because <b>equal amounts of red, green and blue</b> form its levels, so adjusting on
+    grey balances all three colours at once.
+  </div>
+</section>
+
+<!-- ══════════════ SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">the earworm · sing it once, properly</span>
+    <h2>The Light Units Song <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">The 2×2 grid that trips everybody up, set to a nursery rhyme so it stops being a grid.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ SONG GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · London Bridge Is Falling Down</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>♪ <b style="color:var(--berry)">Lux</b> and <b style="color:var(--berry)">foot-candle</b> measure IN, measure IN, measure IN,</p>
+      <p>♪ <b style="color:var(--berry)">Lux</b> and <b style="color:var(--berry)">foot-candle</b> measure IN — light that <b style="color:var(--berry)">LANDS</b> on things!</p>
+      <p>♪ <b style="color:var(--berry)">Nit</b> and <b style="color:var(--berry)">foot-lambert</b> measure OUT, measure OUT, measure OUT,</p>
+      <p>♪ <b style="color:var(--berry)">Nit</b> and <b style="color:var(--berry)">foot-lambert</b> measure OUT — light that <b style="color:var(--berry)">LEAVES</b> a thing!</p>
+      <p style="opacity:.85">♪ <em>Feet are U-S, metres S-I, metres S-I, metres S-I…</em></p>
+    </div>
+    <p class="why">Two verses and the whole matrix is done: <b>in</b> versus <b>out</b> on one axis,
+      <b>feet</b> versus <b>metres</b> on the other.</p>
+  </div>
+
+  <div class="board" style="margin-top:var(--sp-6)">
+    <h3>Five chants for the walk in 🥁</h3>
+    <div class="lyric">
+      <p class="lyric-line"><strong>A QUARTER left means THREE QUARTERS lost</strong> — inverse square, and the exam's favourite inversion</p>
+      <p class="lyric-line"><strong>HOT is BLUE, COOL is ORANGE</strong> — colour temperature, the opposite of the tap</p>
+      <p class="lyric-line"><strong>BIG number · SMALL hole · DEEP field</strong> — f-stops and depth of field</p>
+      <p class="lyric-line"><strong>SEVEN · FIFTEEN · FIFTY · EIGHTY</strong> — passive, basic, analytical, full-motion video</p>
+      <p class="lyric-line"><strong>BRIGHTNESS sets the BLACK · CONTRAST sets the WHITE</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage</span>
+    <h2>Notes taped behind the projector <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">light</span><p>Is light a wave or a particle?<br><b>Yes. Next question.</b></p></article>
+    <article class="item"><span class="item-tag">units</span><p>Why does the foot-candle sound so American?<br><b>Because it is. If it has a foot in it, it's US customary.</b></p></article>
+    <article class="item"><span class="item-tag">inverse square</span><p>You stepped twice as far from the lamp and lost 75%.<br><b>You kept a quarter. The exam will ask about the other three.</b></p></article>
+    <article class="item"><span class="item-tag">colour temp</span><p>Why is 9000 K "cool" if it's hotter?<br><b>Because your bathroom tap has been lying to you your whole life.</b></p></article>
+    <article class="item"><span class="item-tag">f-stops</span><p>f/22 walks into a bar. It's very dark.<br><b>But everything from the door to the back wall is in focus.</b></p></article>
+    <article class="item"><span class="item-tag">LCD black</span><p>LCD black isn't black.<br><b>It's dark grey wearing a confident expression.</b></p></article>
+    <article class="item"><span class="item-tag">OLED</span><p>OLED has the best picture in the room.<br><b>Enjoy it. The blue is already leaving.</b></p></article>
+    <article class="item"><span class="item-tag">DLP</span><p>A DLP chip only knows on and off.<br><b>It fakes every shade of grey by flickering faster than you can complain.</b></p></article>
+    <article class="item"><span class="item-tag">screen gain</span><p>High-gain screens are brilliant.<br><b>As long as everyone sits exactly where you're standing.</b></p></article>
+    <article class="item"><span class="item-tag">keystone</span><p>Electronic keystone squares your picture.<br><b>By quietly deleting pixels. Use lens shift.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · all fifteen review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">Straight from the end of your chapter. <b>15 HP.</b></p>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE PROJECTION SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 15 / 15 — it glows at 6500 K, smugly.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 15</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+    <p class="lede">Four blocks, sixteen lines.</p>
+  </div>
+  <div class="sheet">
+    <h4>💡 light &amp; colour</h4>
+    <ol>
+      <li>Electromagnetic radiation is categorised by <b>wavelength</b>. Visible light = <b>380–750 nm</b>; <b>red is long, violet is short</b>.</li>
+      <li><b>Incident lands, reflected leaves. Feet are American.</b> Incident/illuminance = <b>lux</b> (SI) &amp; <b>foot-candle</b> (US). Reflected/luminance = <b>nit</b> (SI) &amp; <b>foot-lambert</b> (US).</li>
+      <li><b>Candela</b> = luminous intensity (Latin for candle). <b>Lumen</b> = luminous flux, the unit for projector output; the quoted method is <b>ANSI</b>.</li>
+      <li><b>A quarter left means three quarters lost.</b> Double the distance → 1/4 intensity → the exam says <b>decreases by 75%</b>. ×3 → 1/9 · ×5 → 1/25.</li>
+      <li><b>Hue, Value, Saturation</b> (Munsell). <b>Light adds RGB, paint subtracts RYB</b>; print inks are CMY.</li>
+      <li><b>Hot is blue, cool is orange</b> — colour temperature in <b>kelvin, never degrees</b>. <b>CRI 100 means it burns</b> (only incandescence); cameras struggle below <b>60</b>.</li>
+    </ol>
+    <h4>📷 capture &amp; signal</h4>
+    <ol start="7">
+      <li><b>Short lens, wide view.</b> Focal length = lens to sensor when focused. <b>Big number, small hole, deep field</b> — and dim scenes have <b>shallow</b> depth of field.</li>
+      <li>Shutter regulates <b>how long the imager accepts light</b> and affects <b>only the imager, not the output frame rate</b>. Imagers are <b>CMOS</b> or <b>CCD</b>.</li>
+      <li><b>R, G, B, H, V — three colours and two edges</b>, so full-bandwidth RGBHV needs <b>five cables</b>. <b>Switch in the gap</b> (vertical interval) <b>or you crash</b>.</li>
+      <li><b>i</b> = interlaced, odd lines then even, at <b>half</b> the vertical rate. <b>p</b> = progressive, one pass. Horizontal scan rate is always the <b>higher frequency</b>.</li>
+    </ol>
+    <h4>🔌 connections &amp; displays</h4>
+    <ol start="11">
+      <li><b>DVI, HDMI, DisplayPort</b> are the three majors — <b>HDMI is DVI plus sound and rules</b> (audio, EDID, HDCP, Ethernet). <b>SDI</b> = BNC 75 Ω coax, no content protection. <b>HDBaseT</b> = one Cat5e + 100 W.</li>
+      <li><b>Native resolution = horizontal rows × vertical columns of pixels.</b> <b>VESA</b> sets resolutions and defines <b>EDID</b>. Bandwidth = <b>pixels × frames, halve it, triple it</b> → 1920×1080×60 = <b>186.6 MHz</b>.</li>
+      <li><b>Through, off, or out.</b> Transmissive = <b>rear projection</b> + backlit LCD · reflective = front projection · emissive = LED/OLED/microLED. <b>Light meets the polarizer first</b>, and LCD black is really dark grey.</li>
+      <li><b>First decide what you want to display.</b> Aspect ratio = <b>width / height</b>; 4:3 = 1.33:1, 16:9 = 1.77:1; portrait <b>reverses</b> it.</li>
+    </ol>
+    <h4>📽 projection &amp; setup</h4>
+    <ol start="15">
+      <li><b>It's reFRACTION, not reFLECTION</b> — the four optic factors are <b>refraction, dispersion, spherical aberration, curvature of field</b>. <b>More gain, less room</b>: higher gain = <b>brighter</b> but narrower; matte white = <b>unity gain 1.0</b>.</li>
+      <li><b>Seven, fifteen, fifty, eighty</b> — passive / BDM / ADM / full-motion video. <b>Lens shift keeps the pixels.</b> <b>Centering positions, clock sizes, phase sharpens</b> (bad phase = <b>fuzzy detail</b>). <b>L = SH × SW × AI.</b> <b>Brightness sets the black, contrast sets the white.</b></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>💡 Café Lumen · CTS Ch.5 · video systems</span>
+  <span>Anna &amp; Digi have opened a cinema <span class="kmj">(=^･ω･^=)📽</span></span>
+</footer>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  /* ── gadget 01 · inverse square law for light ── */
+  const ilIn=document.getElementById("il-r");
+  if (ilIn){
+    const cv=document.getElementById("il"), g=cv.getContext("2d"), W=1000, H=270;
+    const dOut=document.getElementById("il-d"), left=document.getElementById("il-left"),
+          lost=document.getElementById("il-lost"), area=document.getElementById("il-area"),
+          vd=document.getElementById("il-v"), say=document.getElementById("il-say");
+    function draw(){
+      const d=(+ilIn.value)/10;                 // 1.0 → 5.0 × the reference distance
+      const frac=1/(d*d), pct=frac*100;
+      g.clearRect(0,0,W,H);
+      const sx=70, sy=H/2, span=W-200;
+      // the spreading cone
+      const halfAt=x=>18+(x/span)*150;
+      g.fillStyle=css("--sun"); g.globalAlpha=.20;
+      g.beginPath();
+      g.moveTo(sx,sy-18); g.lineTo(sx+span,sy-halfAt(span));
+      g.lineTo(sx+span,sy+halfAt(span)); g.lineTo(sx,sy+18); g.closePath(); g.fill();
+      g.globalAlpha=1;
+      // reference square at 1× and the spread square at d×
+      const xr=sx+span*(1/5), hr=halfAt(span*(1/5));
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=3; g.setLineDash([8,8]);
+      g.strokeRect(xr-2, sy-hr, 4+hr*0.1, hr*2); g.setLineDash([]);
+      const xd=sx+span*(d/5), hd=halfAt(span*(d/5));
+      g.fillStyle=css("--mint"); g.globalAlpha=.40;
+      g.fillRect(xd-4, sy-hd, 8, hd*2); g.globalAlpha=1;
+      g.strokeStyle=css("--line"); g.lineWidth=4; g.strokeRect(xd-4, sy-hd, 8, hd*2);
+      // grid of squares showing the area multiplying
+      const n=Math.round(d), cell=26;
+      g.strokeStyle=css("--line"); g.lineWidth=2;
+      for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+        const gx=W-40-n*cell+c*cell, gy=sy-(n*cell)/2+r*cell;
+        g.fillStyle=css("--sun"); g.globalAlpha=Math.max(.12, frac);
+        g.fillRect(gx,gy,cell-2,cell-2); g.globalAlpha=1;
+        g.strokeRect(gx,gy,cell-2,cell-2);
+      }
+      // the lamp
+      g.fillStyle=css("--sun"); g.strokeStyle=css("--line"); g.lineWidth=4;
+      g.beginPath(); g.arc(sx,sy,20,0,6.2832); g.fill(); g.stroke();
+      g.fillStyle=css("--ink"); g.font="800 20px ui-monospace,Consolas,monospace"; g.textAlign="center";
+      g.fillText(pct>=10?pct.toFixed(0)+"%":pct.toFixed(1)+"%", xd, sy-hd-14);
+      g.font="700 14px ui-monospace,Consolas,monospace"; g.fillStyle=css("--ink-soft");
+      g.fillText(d.toFixed(1)+"×", xd, sy+hd+26);
+      g.textAlign="left";
+      dOut.textContent=d.toFixed(1)+" ×";
+      left.textContent=pct>=10?pct.toFixed(0)+"%":pct.toFixed(1)+"%";
+      lost.textContent=(100-pct).toFixed(0)+"%";
+      area.textContent=(d*d).toFixed(1)+" ×";
+      const isDouble=Math.abs(d-2)<0.06;
+      vd.className="verdict "+(d>=2?"bad":"ok");
+      vd.textContent=d.toFixed(1)+"× distance";
+      say.innerHTML = isDouble
+        ? "<b>Double the distance: a quarter left, three quarters lost.</b> That's the 75% the exam asks about."
+        : d<1.05 ? "At 1× the light covers one square. Slide right and watch it spread."
+        : "Area went up <b>"+(d*d).toFixed(1)+"×</b>, so intensity fell to <b>1/"+(d*d).toFixed(1)+"</b> of what it was.";
+    }
+    ilIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 02 · colour temperature ── */
+  const ctIn=document.getElementById("ct-r");
+  if (ctIn){
+    const sw=document.getElementById("ct-sw"), out=document.getElementById("ct-out"),
+          vd=document.getElementById("ct-v"), say=document.getElementById("ct-say");
+    // Tanner Helland's blackbody approximation, clamped to 0-255
+    function kelvinRGB(k){
+      const t=k/100; let r,g,b;
+      if(t<=66){ r=255; g=99.47*Math.log(t)-161.12; }
+      else { r=329.7*Math.pow(t-60,-0.1332); g=288.12*Math.pow(t-60,-0.0755); }
+      if(t>=66) b=255; else if(t<=19) b=0; else b=138.52*Math.log(t-10)-305.04;
+      const c=v=>Math.max(0,Math.min(255,Math.round(v)));
+      return [c(r),c(g),c(b)];
+    }
+    function draw(){
+      const k=+ctIn.value, [r,g,b]=kelvinRGB(k);
+      sw.style.background="rgb("+r+","+g+","+b+")";
+      out.textContent=k+" K";
+      const warm=k<4000, cool=k>6500;
+      vd.className="verdict "+(cool?"ok":"bad");
+      vd.textContent=warm?"warm / orange":cool?"cool / blue":"neutral";
+      say.innerHTML = k<2200 ? "≈ <b>candle flame</b>. Very low kelvin, very orange."
+        : k<3600 ? "≈ <b>tungsten lamp (3200 K)</b> — the classic studio warm white."
+        : k<5000 ? "Neutral-ish. Between tungsten and daylight."
+        : k<6800 ? "≈ <b>daylight (5600 K)</b>. What cameras usually white-balance to."
+        : "≈ <b>blue sky / overcast shade</b>. High kelvin reads distinctly blue — <b>hot is blue</b>.";
+    }
+    ctIn.addEventListener("input",draw); draw();
+  }
+
+  /* ── gadget 03 · aperture & depth of field ── */
+  const apIn=document.getElementById("ap-r");
+  if (apIn){
+    const cv=document.getElementById("ap"), g=cv.getContext("2d"), W=1000, H=300;
+    const out=document.getElementById("ap-out"), open=document.getElementById("ap-open"),
+          light=document.getElementById("ap-light"), dof=document.getElementById("ap-dof"),
+          vd=document.getElementById("ap-v"), say=document.getElementById("ap-say");
+    const STOPS=[1.4,2,2.8,4,5.6,8,11,16];
+    function draw(){
+      const i=+apIn.value, f=STOPS[i];
+      // each stop halves the light; f/1.4 is the reference "8×"
+      const rel=Math.pow(2,(7-i)/1);
+      g.clearRect(0,0,W,H);
+      // ── the iris, drawn as a hexagonal blade opening ──
+      const cx=190, cy=H/2, R=98, r=R*Math.pow(0.78,i);
+      g.fillStyle=css("--line"); g.beginPath(); g.arc(cx,cy,R,0,6.2832); g.fill();
+      g.fillStyle=css("--sun"); g.beginPath();
+      for(let a=0;a<6;a++){ const t=a/6*6.2832-Math.PI/2;
+        const x=cx+r*Math.cos(t), y=cy+r*Math.sin(t); a?g.lineTo(x,y):g.moveTo(x,y); }
+      g.closePath(); g.fill();
+      g.strokeStyle=css("--paper"); g.lineWidth=4; g.stroke();
+      g.fillStyle=css("--paper"); g.font="800 26px ui-monospace,Consolas,monospace"; g.textAlign="center";
+      g.fillText("f/"+f, cx, cy+R+34);
+      // ── the depth-of-field bench ──
+      const bx=380, bw=W-bx-40, by=cy;
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=3;
+      g.beginPath(); g.moveTo(bx,by+70); g.lineTo(bx+bw,by+70); g.stroke();
+      // focus band widens as the aperture shrinks
+      const band=(0.10+i*0.115)*bw, mid=bx+bw*0.5;
+      g.fillStyle=css("--mint"); g.globalAlpha=.35;
+      g.fillRect(mid-band/2, by-90, band, 160); g.globalAlpha=1;
+      g.strokeStyle=css("--mint"); g.lineWidth=4;
+      g.strokeRect(mid-band/2, by-90, band, 160);
+      // three subjects: near, focused, far
+      [[bx+bw*0.14,"near"],[mid,"subject"],[bx+bw*0.86,"far"]].forEach(([x,label])=>{
+        const inFocus = Math.abs(x-mid) <= band/2;
+        g.fillStyle=inFocus?css("--berry"):css("--ink-faint");
+        g.globalAlpha=inFocus?1:.45;
+        g.beginPath(); g.arc(x,by,inFocus?22:26,0,6.2832); g.fill();
+        g.globalAlpha=1;
+        g.strokeStyle=css("--line"); g.lineWidth=inFocus?4:2; g.stroke();
+        g.fillStyle=css("--ink-soft"); g.font="700 14px ui-monospace,Consolas,monospace";
+        g.textAlign="center"; g.fillText(label, x, by+96);
+      });
+      g.fillStyle=css("--mint"); g.font="800 16px ui-monospace,Consolas,monospace";
+      g.fillText("IN FOCUS", mid, by-104);
+      g.textAlign="left";
+      out.textContent="f/"+f;
+      open.textContent = i<=1?"wide open":i<=3?"medium":i<=5?"small":"tiny";
+      light.textContent = rel>=1 ? rel.toFixed(0)+"×" : "1×";
+      dof.textContent = i<=1?"very shallow":i<=3?"moderate":i<=5?"deep":"very deep";
+      vd.className="verdict "+(i>=4?"ok":"bad");
+      vd.textContent = i<=1?"shallow field":i<=3?"moderate":"deep field";
+      say.innerHTML = i<=1
+        ? "<b>Wide open.</b> Loads of light, but only the subject is sharp — near and far have gone soft."
+        : i>=6 ? "<b>Tiny hole, huge depth of field.</b> Everything is sharp — but you need a lot of light to get here."
+        : "Each stop <b>halves or doubles</b> the light. Watch the focus band grow as the hole shrinks.";
+    }
+    apIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 04 · computer output bandwidth ── */
+  const bwH=document.getElementById("bw-h");
+  if (bwH){
+    const bwV=document.getElementById("bw-v"), bwF=document.getElementById("bw-f"),
+          pre=document.getElementById("bw-preset"), tp=document.getElementById("bw-tp"),
+          half=document.getElementById("bw-half"), out=document.getElementById("bw-out"),
+          vd=document.getElementById("bw-badge"),
+          say=document.getElementById("bw-say");
+    const mhz=v=>(v/1e6).toFixed(1)+" MHz";
+    function calc(){
+      const h=+bwH.value||0, v=+bwV.value||0, f=+bwF.value||0;
+      const total=h*v, halved=(total*f)/2, bw=halved*3;
+      tp.textContent=total.toLocaleString();
+      half.textContent=mhz(halved);
+      out.textContent=mhz(bw);
+      const px=total;
+      vd.className="verdict "+(bw>500e6?"bad":"ok");
+      vd.textContent = px>=8e6?"UHD":px>=3.5e6?"QHD+":px>=2e6?"HD":px>=900e3?"720p":"SD";
+      say.innerHTML = (h===1920&&v===1080&&f===60)
+        ? "Your textbook's worked example: <b>1920 × 1080 × 60 = 186.6 MHz</b>. Red, green and blue each carry this."
+        : "<b>("+total.toLocaleString()+" × "+f+") ÷ 2 × 3 = "+mhz(bw)+"</b> — halve for worst-case black/white, triple for the third harmonic.";
+    }
+    [bwH,bwV,bwF].forEach(el=>el.addEventListener("input",calc));
+    pre.addEventListener("change",()=>{const p=pre.value.split(",");
+      bwH.value=p[0]; bwV.value=p[1]; bwF.value=p[2]; calc();});
+    calc();
+  }
+
+  /* ── gadget 05 · required contrast ratio ── */
+  const crPick=document.getElementById("cr-pick");
+  if (crPick){
+    const demo=document.getElementById("cr-demo"), vd=document.getElementById("cr-v"),
+          say=document.getElementById("cr-say");
+    const CR={
+      passive:{r:7,  n:"Passive viewing",
+        s:"Content that <b>doesn't need detail retained</b> — informal or non-critical video and data. Minimum <b>7:1</b>."},
+      bdm:{r:15, n:"Basic decision-making",
+        s:"The viewer makes decisions from the image, but <b>doesn't need every element resolved</b> — classrooms, boardrooms, presentations. Minimum <b>15:1</b>."},
+      adm:{r:50, n:"Analytical decision-making",
+        s:"<b>Fully engaged down to pixel level</b> — medical imaging, engineering drawings, fine art, forensics. Minimum <b>50:1</b>."},
+      fmv:{r:80, n:"Full-motion video",
+        s:"Every element the cinematographer intended must be discernible — home theatre, screening rooms, broadcast post. <b>The highest at 80:1.</b>"}
+    };
+    let cur="bdm";
+    function draw(){
+      const C=CR[cur];
+      demo.innerHTML="";
+      for(let i=0;i<6;i++){
+        // six steps from system black (1) up to peak white (ratio), on a perceptual curve
+        const lvl=Math.pow(C.r, i/5), norm=Math.pow(lvl/C.r, 1/2.2);
+        const v=Math.round(255*norm);
+        const d=document.createElement("div");
+        d.style.background="rgb("+v+","+v+","+v+")";
+        d.style.color = v>128 ? "#111" : "#eee";
+        d.textContent = i===0?"black":i===5?C.r+"×":"";
+        demo.appendChild(d);
+      }
+      vd.className="verdict "+(C.r>=50?"bad":"ok");
+      vd.textContent=C.r+":1";
+      say.innerHTML="<b>"+C.n+"</b> — "+C.s;
+    }
+    crPick.addEventListener("click", e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.c;
+      crPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+      draw();
+    });
+    crPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed", x.dataset.c===cur?"true":"false"));
+    draw();
+  }
+
+  /* ── boss fight · 15 questions ── */
+  const QS=[
+    {q:"Electromagnetic radiation is categorized by its _____.",
+     o:["Spectrum","Visibility","Vectors","Wavelength"],a:3,
+     fb:"<b>Wavelength is the filing system.</b> The spectrum is the whole range; wavelength is what sorts it."},
+    {q:"Generally, a _____ measurement of incident light is taken at a task area like a video screen.",
+     o:["Lumen","LED","Foot-candle","Lux"],a:3,
+     fb:"<b>Lux</b> — the SI unit of illuminance, 1 lumen/m². Foot-candle measures the same thing in US customary units, so the question is really asking for the international one."},
+    {q:"Illumination decreases by _____ when the distance from a light source is doubled.",
+     o:["95 percent","75 percent","50 percent","25 percent"],a:1,
+     fb:"<b>A quarter left means three quarters lost.</b> Double the distance → 1/4 the intensity → <b>75% gone</b>. \"50 percent\" is sitting there to catch you."},
+    {q:"The amount of ambient light in a displayed environment _____.",
+     o:["Negatively affects the quality of the displayed image","Does not affect the quality of the displayed image","Improves the quality of the displayed image","Complements the quality of the displayed image"],a:0,
+     fb:"<b>Ambient light is the enemy of contrast.</b> It bounces into the viewing area and washes the picture out."},
+    {q:"The native resolution of a display device is defined by its _____.",
+     o:["Contrast ratio","Horizontal rows and vertical columns of pixels","Horizontal and vertical sync signals","Aspect ratio"],a:1,
+     fb:"<b>Rows and columns of pixels</b> — literally 1920×1080. Feed a display its native resolution and you avoid scaling entirely."},
+    {q:"According to the Projected Image System Contrast Ratio standard, what is the minimum contrast ratio required for viewing full-motion video?",
+     o:["16:9","15:1","2.39:1","80:1"],a:3,
+     fb:"<b>Seven, fifteen, fifty, eighty.</b> Full-motion video is the most demanding at <b>80:1</b>. Note 16:9 and 2.39:1 are aspect ratios, not contrast ratios."},
+    {q:"Four factors related to primary optics that influence the quality of the projected image are _____.",
+     o:["Reflection, curvature, spherical aberration, and dispersion of field","Reflection, dispersion, spherical aberration, and curvature of field","Refraction, presentation, spherical aberration, and curvature of field","Refraction, dispersion, spherical aberration, and curvature of field"],a:3,
+     fb:"<b>It's reFRACTION, not reFLECTION</b> — light goes <em>through</em> a lens. Then dispersion, spherical aberration and curvature of <em>field</em>."},
+    {q:"Three of the major formats of digital signal connections are _____.",
+     o:["DVI, HDVI, and DisplayPort","DMI, HDVI, and DisplayPort","DVI, HDMI, and DisplayPort","DMI, HDMI, and DisplayPort"],a:2,
+     fb:"<b>DVI, HDMI, DisplayPort.</b> Every wrong option smuggles in a fake acronym — <b>DMI</b> and <b>HDVI</b> don't exist. Read the letters."},
+    {q:"To measure the bandwidth of an image, you will need a _____.",
+     o:["Spectrum analyzer","Frequency analyzer","Output monitor","Bandwidth monitor"],a:0,
+     fb:"<b>A spectrum analyzer.</b> ⚠ Heads up — this term never actually appears in the chapter body, only in this question. Just memorise it: bandwidth is a <em>range of frequencies</em>, and a spectrum analyzer is the instrument that shows a spectrum of frequencies."},
+    {q:"Rear-screen display applications are considered _____.",
+     o:["Remissive","Emissive","Transmissive","Reflective"],a:2,
+     fb:"<b>Through, off, or out.</b> Rear projection sends light <em>through</em> a translucent screen = <b>transmissive</b>. (\"Remissive\" isn't a thing.)"},
+    {q:"LCDs first pass light through a _____, which blocks certain light waves.",
+     o:["Transistor mask","Polarizer","Pixel grid","Resistor network"],a:1,
+     fb:"<b>Light meets the polarizer first</b> — fine parallel lines acting like a net, blocking every wave not parallel to them."},
+    {q:"When selecting a display type, what should be your first step?",
+     o:["Decide if you should use an analog or digital display","Figure out what type of mount you will need","Determine the distance of the farthest viewer","Determine what you want to display"],a:3,
+     fb:"<b>First decide what you want to display.</b> The content decides how big the image must be, which then decides screen size and placement."},
+    {q:"The _____ the gain number of a projection screen, the _____ the image.",
+     o:["Higher; brighter","Lower; sharper","Higher; softer","Lower; brighter"],a:0,
+     fb:"<b>More gain, less room.</b> Higher gain = <b>brighter</b> on-axis — at the cost of a narrower viewing angle. Matte white is unity gain 1.0."},
+    {q:"What quality would the image have if the phase setting of a display needs adjusting?",
+     o:["Blurry only at the image center","Oversaturation of red and green","Edge of image in sharp focus","Fuzzy details"],a:3,
+     fb:"<b>Centering positions, clock sizes, phase sharpens.</b> Bad phase misaligns the pixel mapping, so <b>fine detail goes noisy and fuzzy</b>."},
+    {q:"The formula for an ANSI lumen rating is _____.",
+     o:["L = SH × SW × AI","L = SH × SW × AH","L = SH × SA × SF","L = SH × SW × AS"],a:0,
+     fb:"<b>Screen Height × Screen Width × Average Illuminance.</b> Screen height times screen width is just the <em>area</em> — then multiply by the nine-zone average."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const TAUNT=["it glows at 6500 K, smugly.","…a pixel flickered.","its blacks look grey now.",
+      "banding is showing.","the colour wheel is slowing.","chromatic fringes everywhere.",
+      "it's losing focus.","keystone error detected.","the lamp is dimming.","contrast is collapsing.",
+      "it can't hold white balance.","blue channel failing.","one zone left lit.","barely a lumen…",
+      "almost — hit it!","DEFEATED! ✧ 15 / 15 ✧"];
+    let score=0, done=new Set();
+    function updateHP(){
+      const leftHP=QS.length-score;
+      hp.style.width=(leftHP/QS.length*100)+"%";
+      hp.className="hpfill"+(leftHP<=4?" dying":leftHP<=8?" hurt":"");
+      hpt.textContent="HP "+leftHP+" / "+QS.length+" — "+TAUNT[score];
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / '+QS.length+'</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    /* compact the HP bar once it lifts off and starts floating */
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+
+})();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café Nyquist</title>
+<meta name="description" content="CTS Chapter 3 — analog and digital signals, taught by two café cats. 8 levels, 3 interactive gadgets and a 7-HP boss.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFF3E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241823" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Café Nyquist">
+<meta property="og:description" content="CTS Chapter 3 — analog and digital signals, taught by two café cats. 8 levels, 3 interactive gadgets and a 7-HP boss.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%E2%98%95%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0}img,svg,canvas{max-width:100%}</style>
+</head>
+<body>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
+.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 3</span>
+      <h1><small>CTS ☆ CHAPTER 3</small>Café<br>Nyquist</h1>
+      <p class="hero-sub">Analog &amp; digital signals, explained by two café cats who agree on
+        <b>absolutely nothing</b>. Anna paints in watercolour. Digi builds in LEGO.
+        The whole chapter is those two arguing. <span class="kmj">( ˃̵ᴗ˂̵ )</span></p>
+      <nav class="chips">
+        <a class="chip" href="#cats">🐾 the cats</a>
+        <a class="chip" href="#sampling">📸 sampling</a>
+        <a class="chip" href="#depth">🖍 bit depth</a>
+        <a class="chip" href="#rate">⚡ bit rate</a>
+        <a class="chip" href="#song">🎵 the song</a>
+        <a class="chip" href="#squeeze">🎂 compression</a>
+        <a class="chip" href="#cup">☕ cup vs recipe</a>
+        <a class="chip" href="#noise">📠 noise</a>
+        <a class="chip" href="#quiz">⚔️ boss fight</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120" fill="none">
+        <use href="#anna"/>
+      </svg>
+      <svg class="bob2" viewBox="0 0 120 120" fill="none">
+        <use href="#digi"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<!-- ══ cat sprite definitions ══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · CATS ══════════════ -->
+<section id="cats">
+  <div class="head">
+    <span class="lv">Lv.1 · analog vs digital waveforms</span>
+    <h2>Two cats, one café <span class="kao">(=^･ω･^=)</span></h2>
+    <p class="lede">Anna sits in the sunbeam and her fur ripples <em>continuously</em>. Digi sits on the
+      windowsill and only ever does one of two things: on, or off. Hold that picture and half the chapter
+      is already done.</p>
+  </div>
+
+  <div class="duo">
+    <article class="cat-card analog">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+        <div><div class="cat-name">Anna Log</div><div class="cat-role">CONTINUOUS · SMOOTH</div></div>
+      </div>
+      <ul class="cat-list">
+        <li>She's a <b>dimmer switch</b> — every position between off and full is available.</li>
+        <li>One unbroken flowing line, amplitude changing over time.</li>
+        <li><em>Analogous</em> to a real physical thing: sound pressure, image brightness.</li>
+        <li>Weakness: she picks up every speck of dirt she walks past. Forever.</li>
+      </ul>
+    </article>
+    <article class="cat-card digital">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+        <div><div class="cat-name">Digi Tal</div><div class="cat-role">DISCRETE · STEPPED</div></div>
+      </div>
+      <ul class="cat-list">
+        <li>He's a <b>ceiling-fan switch</b> — speed 1, 2, 3. Nothing in between. Ever.</li>
+        <li>A row of rectangles snapping between high (1) and low (0).</li>
+        <li>Not a copy of the world — a <em>list of numbers describing</em> it.</li>
+        <li>Superpower: a smudged number is still readable. He never degrades.</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+    <div class="bubble">Nnnh, I contain <b>infinite</b> values between off and on… every single one of them…
+      it's exhausting, honestly <span class="kmj">(´｡• ᵕ •｡`)</span></div>
+  </div>
+  <div class="say right">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">I contain <b>two</b>. One is on. Zero is off. I sleep very well.</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Anna slides. Digi steps.</q>
+    <p class="why"><b>Analog</b> = <b>a</b>ll the values in between. <b>Digital</b> = <b>d</b>iscrete,
+      <b>d</b>efinite, just 1 and 0. If a question says "a signal with many varying states" — that's Anna,
+      that's analog.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap #1</span>
+    In a digital signal <b>one is ON</b> and <b>zero is OFF</b>. This is literally question 1 and half the
+    room still writes it backwards. Remember: <b>1 stands up. 0 is taking a nap.</b>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · SAMPLING ══════════════ -->
+<section id="sampling">
+  <div class="head">
+    <span class="lv">Lv.2 · sampling &amp; the Nyquist–Shannon theorem</span>
+    <h2>How the café takes an order <span class="kao">📸</span></h2>
+    <p class="lede">Anna hums a tune. Digi can't hear humming — he can only write numbers on a ticket. So he
+      takes a <b>snapshot of how loud she is</b>, over and over, and writes each one down. That snapshot is a
+      <b>sample</b>. How often he takes it is the <b>sampling rate</b>, in hertz.</p>
+  </div>
+
+  <div class="say right">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">If I snap fast enough, I can rebuild your whole song from dots alone.
+      <b>More than twice</b> your highest note. That's the rule. Nya.</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Double the top, or the tune gets chopped.</q>
+    <p class="why"><b>Nyquist–Shannon:</b> you can rebuild the signal only if you sample at <b>more than
+      twice the highest frequency</b> present. Humans hear up to 20 kHz → you need more than 40 kHz →
+      the CD uses <b>44.1 kHz</b>. Blu-ray goes 48, 96 or 192 kHz.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · drag it under 2× and break the song</span>
+      <span class="verdict ok" id="nyq-verdict">SAFE ✓</span>
+    </div>
+    <div class="screen"><canvas id="nyq" width="1000" height="260"></canvas></div>
+    <div class="ctl">
+      <label for="nyq-r">samples per cycle</label>
+      <input type="range" id="nyq-r" min="1" max="12" step="0.1" value="6">
+      <output id="nyq-out">6.0×</output>
+    </div>
+    <p class="gsay" id="nyq-say">Plenty of dots! Join them up and Anna's tune comes back perfectly.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🎬 nerd corner</span>
+    <b>Why wagon wheels spin backwards in old films.</b> The wheel turns faster than the camera grabs frames,
+    so the frames tell a slower story than the truth. Same crime: <b>you sampled too slowly</b>.
+    Digi calls it <b>aliasing</b>. Anna calls it lying.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · BIT DEPTH ══════════════ -->
+<section id="depth">
+  <div class="head">
+    <span class="lv">Lv.3 · bit depth</span>
+    <h2>How many crayons in the box <span class="kao">🖍</span></h2>
+    <p class="lede">Sampling rate is <b>how often</b> Digi looks. Bit depth is <b>how precisely</b> he can
+      describe what he saw. One bit gives him two words: on, off. Sixteen bits give him 65,536 words.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Rate is the clock. Depth is the crayon box.</q>
+    <p class="why"><b>Rate → accuracy</b> (did it catch the right frequency?). <b>Depth → precision</b>
+      (did it catch the right level?). Every extra bit <b>doubles the crayon box</b>: 2<sup>n</sup> states.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · the grayscale ramp from Figure 3-4</span>
+      <span class="verdict bad" id="bd-states">16 states</span>
+    </div>
+    <div class="ramp" id="bd-ramp"></div>
+    <div class="ctl">
+      <label for="bd-r">bit depth</label>
+      <input type="range" id="bd-r" min="1" max="8" step="1" value="4">
+      <output id="bd-out">4-bit</output>
+    </div>
+    <p class="gsay" id="bd-say">4-bit is the classic 16-colour display — and the 16-shade grey ramp in your book.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:var(--sp-6)">
+    <table>
+      <thead><tr><th>depth</th><th>maths</th><th>states</th><th>what that is in real life</th></tr></thead>
+      <tbody>
+        <tr><td>1-bit</td><td>2¹</td><td>2</td><td>Black &amp; white. Digi's entire personality.</td></tr>
+        <tr><td>2-bit</td><td>2²</td><td>4</td><td>00, 01, 10, 11</td></tr>
+        <tr><td>3-bit</td><td>2³</td><td>8</td><td>8 states</td></tr>
+        <tr><td>4-bit</td><td>2⁴</td><td>16</td><td>16-colour display · the ramp above</td></tr>
+        <tr><td>8-bit</td><td>2⁸</td><td>256</td><td>256 colours</td></tr>
+        <tr class="hi"><td>16-bit</td><td>2¹⁶</td><td>65,536</td><td>★ standard audio CD resolution</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap #2</span>
+    Bit depth is the number of <b>STATES</b> — not signals, not speeds, not rates.
+    Digi only knows how to <b>st</b>ack <b>st</b>ates. Both words start the same way, so if you can say
+    "stacked states" you'll pick C every time.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · BIT RATE ══════════════ -->
+<section id="rate">
+  <div class="head">
+    <span class="lv">Lv.4 · bit rate · bps vs Bps</span>
+    <h2>How fast the beans pour <span class="kao">⚡</span></h2>
+    <p class="lede">Bit rate is how much information flows per second, in bits per second. And it's just the
+      two things you already know, multiplied together.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Snaps × Shades × Speakers.</q>
+    <p class="why">Snaps = sample rate. Shades = bit depth. Speakers = channels.
+      CD audio: 44,100 × 16 × 2 = <b>1.411 Mbps</b>. This is the one number worth having memorised
+      walking into the exam.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h"><span class="gadget-t">🎛 gadget 03 · the till</span></div>
+    <div class="ctl">
+      <label for="br-preset">preset</label>
+      <select id="br-preset">
+        <option value="44100,16,2">Audio CD (stereo)</option>
+        <option value="48000,24,2">Blu-ray audio 48 kHz</option>
+        <option value="192000,24,2">High-res 192 kHz</option>
+        <option value="8000,8,1">Legacy telephone</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="br-sr">rate</label><input type="number" id="br-sr" value="44100" min="1" step="100" style="width:7.5rem">
+      <label for="br-bd">depth</label><input type="number" id="br-bd" value="16" min="1" max="32" style="width:4.5rem">
+      <label for="br-ch">channels</label><input type="number" id="br-ch" value="2" min="1" max="16" style="width:4.5rem">
+    </div>
+    <div class="readout">
+      <div><span>bit rate</span><b id="br-bps">1.411 Mbps</b></div>
+      <div><span>in bytes</span><b id="br-Bps">176.4 kBps</b></div>
+      <div><span>one minute</span><b id="br-min">10.6 MB</b></div>
+    </div>
+  </div>
+
+  <div class="duo" style="margin-top:var(--sp-6)">
+    <div class="stats">
+      <div class="stats-h"><span>order #B-1411</span><span>CD audio</span></div>
+      <div class="stats-b">
+        <div class="row"><span class="row-k">sample rate</span><span class="row-d"></span><span class="row-v">44,100 Hz</span></div>
+        <div class="row"><span class="row-k">bit depth</span><span class="row-d"></span><span class="row-v">16 bits</span></div>
+        <div class="row"><span class="row-k">channels</span><span class="row-d"></span><span class="row-v">× 2</span></div>
+        <div class="row tot"><span class="row-k">BIT RATE</span><span class="row-d"></span><span class="row-v">1.411 Mbps</span></div>
+      </div>
+      <div class="stats-f">UHD 4K video needs vastly more — which is why bandwidth is the whole job.</div>
+    </div>
+    <div class="stats">
+      <div class="stats-h"><span>careful now</span><span>bps vs Bps</span></div>
+      <div class="stats-b">
+        <div class="row"><span class="row-k">lowercase b · bits</span><span class="row-d"></span><span class="row-v">bps</span></div>
+        <div class="row"><span class="row-k">UPPERCASE B · bytes</span><span class="row-d"></span><span class="row-v">Bps</span></div>
+        <div class="row tot"><span class="row-k">1 byte</span><span class="row-d"></span><span class="row-v">8 bits</span></div>
+      </div>
+      <div class="stats-f">Bps → bps: ×8 · bps → Bps: ÷8 · <b>Big B, big bite — 8 bits per bite.</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 5 · SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">Lv.5 · the earworm</span>
+    <h2>The Café Nyquist round <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">Rate, depth, bit rate and the golden rule — in four lines you can genuinely sing.
+      Round singing works because the repetition does the memorising for you.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ SONG GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · Frère Jacques</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>♪ <b style="color:var(--berry)">Sampling RATE, sampling RATE</b> — how <b style="color:var(--berry)">OFTEN?</b> how <b style="color:var(--berry)">OFTEN?</b></p>
+      <p>♪ <b style="color:var(--berry)">Bit depth, bit depth</b> — how <b style="color:var(--berry)">PRE-CISE?</b> how <b style="color:var(--berry)">PRE-CISE?</b></p>
+      <p>♪ <b style="color:var(--berry)">Rate times depth times channels,</b> rate times depth times channels —</p>
+      <p>♪ that's your <b style="color:var(--berry)">BIT RATE, BITS PER SEC!</b></p>
+    </div>
+    <p class="why">And the Nyquist chant, clapped on the capitals:
+      <b>TWEN-ty K of hear-ing · FOR-ty K of sam-pling · FOUR-ty-FOUR point ONE for CDs.</b></p>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+    <div class="bubble">Sing it out loud <b>three times right now</b>, then close the page and sing it again
+      from memory. Three minutes of feeling ridiculous buys you four exam answers ✧</div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · COMPRESSION ══════════════ -->
+<section id="squeeze">
+  <div class="head">
+    <span class="lv">Lv.6 · lossless vs lossy compression</span>
+    <h2>Two ways to shrink a cake <span class="kao">🎂</span></h2>
+    <p class="lede">Digi's tickets are getting long. One uncompressed HD frame is about 6.2 MB; thirty of those
+      a second is roughly <b>11 GB a minute</b>. Something has to give.</p>
+  </div>
+
+  <div class="duo">
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">LOSSLESS</div>
+        <div class="cat-role">FOLD IT · NOTHING THROWN AWAY</div></div></div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Spot repeated patterns, store the pattern once,
+        then <b>rebuild the original perfectly</b>. Smaller savings, zero loss.</p>
+      <ul class="cat-list">
+        <li><b>ZIP · FLAC · PNG · MPEG-2 · JPEG2000</b></li>
+        <li>The <em>only</em> acceptable choice for text and financial transactions.</li>
+      </ul>
+    </article>
+    <article class="cat-card" style="--tone:var(--berry);--tone-soft:var(--berry-soft)">
+      <div class="cat-top"><div><div class="cat-name">LOSSY</div>
+        <div class="cat-role">EAT THE CRUMBS NOBODY NOTICES</div></div></div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Exploits the fact that your brain <b>can't perceive
+        every detail anyway</b> and throws that detail away. Huge savings, real loss.</p>
+      <ul class="cat-list">
+        <li><b>MP3 · JPEG · HEVC · H.264 (AVC)</b></li>
+        <li>Perfect for audio, video and images. Never for a spreadsheet.</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Lossless for Ledgers. Lossy for Lazy senses.</q>
+    <p class="why">If a human <b>eye or ear</b> is the final judge, you can cheat it → <b>lossy</b>.
+      If a <b>number</b> is the final judge (text, money, spreadsheets), you may not lose a single bit →
+      <b>lossless</b>. Question 4 is exactly this, and the answer is "audio, video, and images."</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔢 the number trick</span>
+    Plain <b>JPEG</b> is lossy — but <b>JPEG2000</b> is lossless. Plain MPEG is lossy — but <b>MPEG-2</b>
+    sits on the lossless list. <b>Add a number, keep the detail.</b> This is the only part of those two
+    lists people actually get wrong.
+  </div>
+
+  <div class="stats" style="margin-top:var(--sp-6)">
+    <div class="stats-h"><span>why compression exists</span><span>the 300:1 receipt</span></div>
+    <div class="stats-b">
+      <div class="row"><span class="row-k">one HD frame · 1920×1080 · 3 × 8-bit</span><span class="row-d"></span><span class="row-v">≈ 6.2 MB</span></div>
+      <div class="row"><span class="row-k">at 30 fps, per minute</span><span class="row-d"></span><span class="row-v">≈ 11 GB</span></div>
+      <div class="row"><span class="row-k">uncompressed stream</span><span class="row-d"></span><span class="row-v">1.5 Gbps</span></div>
+      <div class="row"><span class="row-k">same thing over H.264</span><span class="row-d"></span><span class="row-v">5 Mbps</span></div>
+      <div class="row tot"><span class="row-k">COMPRESSION RATIO</span><span class="row-d"></span><span class="row-v">≈ 300 : 1</span></div>
+    </div>
+    <div class="stats-f">Encoding is the slow, expensive half — which is exactly where streaming delay comes from.</div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · CUP VS RECIPE ══════════════ -->
+<section id="cup">
+  <div class="head">
+    <span class="lv">Lv.7 · digital media formats</span>
+    <h2>The cup and the recipe <span class="kao">☕</span></h2>
+    <p class="lede">The single most confusing pair in the chapter — and in a café it's completely obvious.</p>
+  </div>
+
+  <div class="menu">
+    <article class="item keep">
+      <span class="item-tag">container</span>
+      <h3 class="item-name">The cup ☕</h3>
+      <p>The <b>structure the data sits in</b>. It also holds the <b>metadata</b> — the little label on the
+        side saying how the drink is arranged and which recipe was used.</p>
+      <p><b>AVI</b> = <b>A</b>udio <b>V</b>ideo <b>I</b>nterleaved. It's a cup. It doesn't brew anything.</p>
+    </article>
+    <article class="item toss">
+      <span class="item-tag">codec</span>
+      <h3 class="item-name">The recipe 📝</h3>
+      <p>The <b>method</b> for encoding (compressing) and decoding (decompressing) what goes in the cup.
+        Sometimes it must be installed on the machine before it can pour.</p>
+      <p><b>CODEC</b> = <b>CO</b>der + <b>DEC</b>oder. The word literally contains its own definition.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>An AVI cup can hold an MPEG brew.</q>
+    <p class="why">One container, many possible codecs inside — which is exactly why people mix the two
+      words up, and why some names refer to both. VLC is famous because it knows a huge number of recipes.</p>
+  </div>
+
+  <div class="say right">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">I once ordered a latte in a <b>soup bowl</b>. Technically valid. The container never
+      said no. …That's your whole memory of "the container is just the structure."</div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · NOISE ══════════════ -->
+<section id="noise">
+  <div class="head">
+    <span class="lv">Lv.8 · noise, transmission &amp; generation loss</span>
+    <h2>The photocopy cat <span class="kao">📠 (╥﹏╥)</span></h2>
+    <p class="lede">Here's the story that carries the last three exam questions.</p>
+  </div>
+
+  <!-- ── beat 1 · Anna ── -->
+  <div class="story" style="--tone:var(--lav)">
+    <div class="story-text">
+      <p class="story-lead"><span>🎨</span><span>Anna posts a painting.</span></p>
+      <div class="beat"><span class="beat-i">📮</span>
+        <p>Anna paints her own portrait and posts it across the country. Every few hundred kilometres a
+          tired clerk <span class="hl">photocopies it and sends the copy onward</span> — because the paint
+          keeps fading, and the copier is the only way to make it bold again.</p></div>
+      <div class="beat"><span class="beat-i">☕</span>
+        <p>But the copier faithfully enlarges the coffee ring, the smudge, and the dust on the glass too.
+          After enough re-amplification, <span class="hl-p">the portrait <em>is</em> the smudges</span>.</p></div>
+      <div class="beat"><span class="beat-i">📉</span>
+        <p>That's an analog signal down a long cable: <span class="hl">every repeater amplifier boosts the
+          noise along with the signal</span>, until the two are indistinguishable.</p></div>
+    </div>
+
+    <figure class="fig" style="--tone:var(--lav)">
+      <span class="fig-t">📠 generation loss</span>
+      <svg viewBox="0 0 220 196" role="img"
+           aria-label="Three analog copies stacked: copy 1 is a clean wave, copy 10 has noise specks, copy 100 is almost entirely noise.">
+        <rect x="4" y="6" width="212" height="50" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="21" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">COPY 1 · clean</text>
+        <path d="M14 40 Q28 26 42 40 T70 40 T98 40 T126 40 T154 40 T182 40 T206 40"
+              stroke="var(--lav)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M100 58 L119 65 L100 72 Z" fill="var(--sun)" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round"/>
+        <text x="14" y="70" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">re-amp</text>
+
+        <rect x="4" y="78" width="212" height="50" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="93" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">COPY 10 · noisy</text>
+        <path d="M14 112 Q28 98 42 112 T70 112 T98 112 T126 112 T154 112 T182 112 T206 112"
+              stroke="var(--lav)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <g fill="var(--berry)"><rect x="24" y="104" width="3" height="3"/><rect x="42" y="119" width="3" height="3"/>
+          <rect x="60" y="101" width="3" height="3"/><rect x="80" y="118" width="3" height="3"/>
+          <rect x="100" y="103" width="3" height="3"/><rect x="122" y="120" width="3" height="3"/>
+          <rect x="144" y="102" width="3" height="3"/><rect x="166" y="119" width="3" height="3"/>
+          <rect x="190" y="105" width="3" height="3"/></g>
+        <path d="M100 130 L119 137 L100 144 Z" fill="var(--sun)" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round"/>
+        <text x="14" y="142" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">re-amp</text>
+
+        <rect x="4" y="150" width="212" height="42" rx="8" fill="var(--berry-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="164" font-family="monospace" font-size="10" font-weight="700" fill="var(--berry)">COPY 100 · lost</text>
+        <path d="M14 178 L22 168 L29 188 L37 170 L45 186 L53 168 L61 184 L69 171 L77 189 L85 167 L93 185
+                 L101 172 L109 188 L117 168 L125 184 L133 173 L141 166 L149 186 L157 171 L165 189 L173 168
+                 L181 183 L189 172 L197 186 L206 178"
+              stroke="var(--berry)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+      </svg>
+      <figcaption>Every clerk copies the smudges too. By copy 100 there's no portrait left — only smudge.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ── beat 2 · Digi ── -->
+  <div class="story" style="--tone:var(--mint)">
+    <div class="story-text">
+      <p class="story-lead"><span>🔢</span><span>Digi posts a list of numbers.</span></p>
+      <div class="beat"><span class="beat-i">📋</span>
+        <p>Digi doesn't post a painting at all. He posts <span class="hl-m">a list of numbers</span>.
+          His page gets exactly as grubby as Anna's — coffee ring and all.</p></div>
+      <div class="beat"><span class="beat-i">🧐</span>
+        <p>But the clerk doesn't photocopy it. The clerk <span class="hl">reads it, decides whether each
+          mark was meant to be high or low, and types a clean new page</span>. Coffee ring gone. ✨</p></div>
+      <div class="beat"><span class="beat-i">♾️</span>
+        <p>That's why simple processing circuitry can regenerate a digital signal with the noise stripped
+          off — and why <span class="hl-m">the hundredth copy is identical to the first</span>.</p></div>
+    </div>
+
+    <figure class="fig" style="--tone:var(--mint)">
+      <span class="fig-t">✨ regeneration</span>
+      <svg viewBox="0 0 220 190" role="img"
+           aria-label="A noisy digital square wave passes through a decision step asking high or low, and comes out as a perfectly clean square wave.">
+        <rect x="4" y="6" width="212" height="58" rx="8" fill="var(--panel)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="21" font-family="monospace" font-size="10" font-weight="700" fill="var(--ink-soft)">NOISY IN</text>
+        <path d="M14 56 H34 V36 H62 V56 H88 V36 H120 V56 H146 V36 H176 V56 H206"
+              stroke="var(--mint)" stroke-width="3" fill="none" stroke-linejoin="round"/>
+        <g stroke="var(--berry)" stroke-width="2" stroke-linecap="round">
+          <path d="M24 50 v8"/><path d="M46 30 v9"/><path d="M70 51 v8"/><path d="M96 31 v8"/>
+          <path d="M112 33 v7"/><path d="M132 52 v7"/><path d="M158 30 v9"/><path d="M186 53 v7"/></g>
+
+        <rect x="26" y="74" width="168" height="32" rx="9" fill="var(--sun-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="110" y="95" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700"
+              fill="var(--ink)">HIGH or LOW?</text>
+        <path d="M110 106 v8 M104 112 l6 6 l6 -6" stroke="var(--line)" stroke-width="3"
+              fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <rect x="4" y="124" width="212" height="58" rx="8" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="139" font-family="monospace" font-size="10" font-weight="700" fill="var(--mint)">CLEAN OUT ✓</text>
+        <path d="M14 174 H34 V154 H62 V174 H88 V154 H120 V174 H146 V154 H176 V174 H206"
+              stroke="var(--mint)" stroke-width="4" fill="none" stroke-linejoin="round"/>
+      </svg>
+      <figcaption>It only has to answer one question per mark. A smudged 7 is still a 7.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A smudged 7 is still a 7.</q>
+    <p class="why">And the analog half: <b>every copy catches a cold.</b> Warped tape, scratched disc, shed
+      oxide, one more generation of duplication — analog gets worse every time and never recovers.
+      Digital copying is just re-reading numbers, so quality never moves.</p>
+  </div>
+
+  <div class="duo" style="margin-top:var(--sp-6)">
+    <div class="stats">
+      <div class="stats-h"><span>Anna's problem</span><span>ANALOG</span></div>
+      <div class="stats-b">
+        <div class="row"><span class="row-k">picks up noise from</span><span class="row-d"></span><span class="row-v">every cable, connector, device</span></div>
+        <div class="row"><span class="row-k">each re-amplification</span><span class="row-d"></span><span class="row-v">boosts the noise too</span></div>
+        <div class="row"><span class="row-k">each copy generation</span><span class="row-d"></span><span class="row-v">worse than the last</span></div>
+        <div class="row tot"><span class="row-k">EVENTUALLY</span><span class="row-d"></span><span class="row-v">signal ≈ noise</span></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stats-h"><span>Digi's advantage</span><span>DIGITAL</span></div>
+      <div class="stats-b">
+        <div class="row"><span class="row-k">circuitry decides</span><span class="row-d"></span><span class="row-v">high or low?</span></div>
+        <div class="row"><span class="row-k">then retransmits</span><span class="row-d"></span><span class="row-v">a clean signal</span></div>
+        <div class="row"><span class="row-k">copy #100</span><span class="row-d"></span><span class="row-v">= copy #1</span></div>
+        <div class="row tot"><span class="row-k">ONLY REAL ENEMY</span><span class="row-d"></span><span class="row-v">physical damage</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage · ten seconds of nonsense per concept</span>
+    <h2>Notes taped behind the espresso machine <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">analog</span><p>Why did the analog signal go to therapy?<br><b>It couldn't stop absorbing everyone else's noise.</b></p></article>
+    <article class="item"><span class="item-tag">digital</span><p>Why is Digi impossible to gossip about?<br><b>Every version of the story comes back identical.</b></p></article>
+    <article class="item"><span class="item-tag">nyquist</span><p>Why did the sample rate get thrown out of the café?<br><b>It couldn't keep up with the conversation — and started making things up.</b></p></article>
+    <article class="item"><span class="item-tag">bit depth</span><p>1-bit ordered a coffee.<br><b>"Do you want it?" "Yes." "How much?" "…Yes."</b></p></article>
+    <article class="item"><span class="item-tag">bps vs Bps</span><p>Capital B walked in and ordered eight of everything.<br><b>Because a byte is always eight bits.</b></p></article>
+    <article class="item"><span class="item-tag">lossy</span><p>MP3 is the friend who retells your story at 90% length.<br><b>You'd never notice — until you play it on the good speakers.</b></p></article>
+    <article class="item"><span class="item-tag">codec</span><p>CODEC is the least mysterious word in AV.<br><b>It's just COder + DECoder in a trench coat.</b></p></article>
+    <article class="item"><span class="item-tag">container</span><p>AVI has never encoded anything in its life.<br><b>It's a cup. Cups don't cook.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · the seven review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">Straight from the end of your chapter. Every correct answer damages the boss. Get all
+      seven and the Exam Slime is defeated.</p>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE EXAM SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 7 / 7 — it looks smug.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 7</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ 11 · CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+  </div>
+  <div class="sheet">
+    <ol>
+      <li><b>Anna slides, Digi steps.</b> Analog = continuous, many varying states. Digital = discrete on/off.</li>
+      <li><b>One is on, zero is off.</b> Always. Question 1, every time.</li>
+      <li><b>Double the top, or the tune gets chopped.</b> Nyquist: sample above 2× the highest frequency. 20 kHz hearing → 44.1 kHz CD.</li>
+      <li><b>Rate is the clock, depth is the crayon box.</b> Rate → accuracy. Depth → precision.</li>
+      <li><b>Bit depth = number of STATES</b>, and it's <code>2ⁿ</code>. 1-bit = 2, 4-bit = 16, 8-bit = 256, <b>16-bit = 65,536 = CD</b>.</li>
+      <li><b>Snaps × Shades × Speakers.</b> <code>44,100 × 16 × 2 = 1.411 Mbps</code>.</li>
+      <li><b>Big B, big bite — 8 bits per byte.</b> Bps → bps is ×8.</li>
+      <li><b>Lossless for Ledgers</b> (ZIP, FLAC, PNG, MPEG-2, JPEG2000) — text and money only.<br><b>Lossy for Lazy senses</b> (MP3, JPEG, HEVC, H.264/AVC) — audio, video, images.</li>
+      <li><b>Add a number, keep the detail.</b> JPEG lossy → JPEG2000 lossless.</li>
+      <li><b>The cup and the recipe.</b> Container = structure + metadata (AVI). Codec = <b>CO</b>der + <b>DEC</b>oder.</li>
+      <li><b>A smudged 7 is still a 7</b> (digital regenerates clean) — but <b>every copy catches a cold</b> (analog noise compounds with every re-amplification and every generation).</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>☕ Café Nyquist · CTS Ch.3 · analog &amp; digital signals</span>
+  <span>Anna &amp; Digi are still not speaking <span class="kmj">(｡•́︿•̀｡)</span></span>
+</footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+
+  /* ══ 8-BIT CAFÉ SCENE ══════════════════════════════════════
+     Drawn at 124 logical pixels tall, then blown up by CSS with
+     image-rendering:pixelated — so every pixel is a real pixel. */
+  const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  /* ── gadget 01 · Nyquist ── */
+  const nq = document.getElementById("nyq");
+  if (nq){
+    const ctx=nq.getContext("2d"), W=1000, H=260, CY=H/2, AMP=78, CYCLES=3;
+    const rIn=document.getElementById("nyq-r"), rOut=document.getElementById("nyq-out"),
+          vd=document.getElementById("nyq-verdict"), say=document.getElementById("nyq-say");
+    const wave = x => CY - AMP*Math.sin(2*Math.PI*CYCLES*x/W);
+    function draw(){
+      const spc=parseFloat(rIn.value);
+      ctx.clearRect(0,0,W,H);
+      ctx.strokeStyle=css("--ink-faint"); ctx.lineWidth=2; ctx.setLineDash([8,8]);
+      ctx.beginPath(); ctx.moveTo(0,CY); ctx.lineTo(W,CY); ctx.stroke(); ctx.setLineDash([]);
+      // Anna's true wave
+      ctx.strokeStyle=css("--lav"); ctx.lineWidth=6; ctx.lineCap="round"; ctx.globalAlpha=.55;
+      ctx.beginPath();
+      for(let x=0;x<=W;x+=2){ x?ctx.lineTo(x,wave(x)):ctx.moveTo(x,wave(x)); }
+      ctx.stroke(); ctx.globalAlpha=1;
+      // Digi's samples
+      const N=Math.max(2,Math.round(spc*CYCLES)), pts=[];
+      for(let i=0;i<=N;i++){ const x=i*W/N; pts.push([x,wave(x)]); }
+      ctx.strokeStyle=css("--line"); ctx.lineWidth=8; ctx.lineJoin="round";
+      ctx.beginPath(); pts.forEach((p,i)=> i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+      ctx.strokeStyle=css("--mint"); ctx.lineWidth=4;
+      ctx.beginPath(); pts.forEach((p,i)=> i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+      for(const p of pts){
+        ctx.beginPath(); ctx.arc(p[0],p[1],7,0,6.2832);
+        ctx.fillStyle=css("--sakura"); ctx.fill();
+        ctx.strokeStyle=css("--line"); ctx.lineWidth=3; ctx.stroke();
+      }
+      rOut.textContent=spc.toFixed(1)+"×";
+      const ok=spc>2;
+      vd.className="verdict "+(ok?"ok":"bad");
+      vd.textContent=ok?"SAFE ✓":"ALIASING ✗";
+      say.innerHTML = ok
+        ? (spc>4 ? "Plenty of dots! Join them up and Anna's tune comes back perfectly."
+                 : "Just above 2× — it works, but there's no margin at all. This is why 20 kHz hearing gets 44.1 kHz, not exactly 40.")
+        : "<b>Below 2× — look closely!</b> The green line is now telling a <b>different, slower</b> story than the purple one. That's aliasing: Digi didn't just lose detail, he invented a frequency that was never there.";
+    }
+    rIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 02 · bit depth ── */
+  const bdIn=document.getElementById("bd-r");
+  if (bdIn){
+    const ramp=document.getElementById("bd-ramp"), out=document.getElementById("bd-out"),
+          st=document.getElementById("bd-states"), say=document.getElementById("bd-say");
+    const notes={1:"1-bit is black and white — two states, and that's the entire box.",
+      2:"Four states. Better than nothing, worse than useful.",
+      3:"Eight states — you can see the banding from across the room.",
+      4:"4-bit is the classic 16-colour display — and the 16-shade grey ramp in your book.",
+      5:"32 states. The steps are shrinking…",
+      6:"64 states.",7:"128 states — nearly smooth now.",
+      8:"8-bit = 256 states. Every extra bit doubled the box, and here it finally looks continuous again."};
+    function draw(){
+      const n=+bdIn.value, steps=Math.pow(2,n), stops=[];
+      for(let i=0;i<steps;i++){
+        const v=Math.round(255*i/(steps-1||1)),
+              a=(i/steps*100).toFixed(3), b=((i+1)/steps*100).toFixed(3);
+        stops.push("rgb("+v+","+v+","+v+") "+a+"%, rgb("+v+","+v+","+v+") "+b+"%");
+      }
+      ramp.style.background="linear-gradient(to right,"+stops.join(",")+")";
+      out.textContent=n+"-bit";
+      st.textContent=steps.toLocaleString()+" state"+(steps>1?"s":"");
+      st.className="verdict "+(n>=8?"ok":"bad");
+      say.textContent=notes[n];
+    }
+    bdIn.addEventListener("input",draw); draw();
+  }
+
+  /* ── gadget 03 · the till ── */
+  const sr=document.getElementById("br-sr");
+  if (sr){
+    const bd=document.getElementById("br-bd"), ch=document.getElementById("br-ch"),
+          pre=document.getElementById("br-preset"), oB=document.getElementById("br-bps"),
+          oY=document.getElementById("br-Bps"), oM=document.getElementById("br-min");
+    const fmt=(v,u)=> v>=1e9?(v/1e9).toFixed(3)+" G"+u : v>=1e6?(v/1e6).toFixed(3)+" M"+u
+                    : v>=1e3?(v/1e3).toFixed(1)+" k"+u : Math.round(v)+" "+u;
+    function calc(){
+      const bits=(+sr.value||0)*(+bd.value||0)*(+ch.value||0);
+      oB.textContent=fmt(bits,"bps");
+      oY.textContent=fmt(bits/8,"Bps");
+      oM.textContent=((bits*60/8)/1e6).toFixed(1)+" MB";
+    }
+    [sr,bd,ch].forEach(el=>el.addEventListener("input",calc));
+    pre.addEventListener("change",()=>{const p=pre.value.split(",");sr.value=p[0];bd.value=p[1];ch.value=p[2];calc();});
+    calc();
+  }
+
+  /* ── boss fight ── */
+  const QS=[
+    {q:"In a digital signal, the on state is represented by _____, and the off state is represented by _____.",
+     o:["Two; one","One; two","Zero; one","One; zero"],a:3,
+     fb:"<b>One is on, zero is off.</b> One stands up; zero is taking a nap. That's Digi's entire vocabulary."},
+    {q:"A signal that has many varying states is called a(n) _____ signal.",
+     o:["Analog","Fluctuating","Dimmer","Digital"],a:0,
+     fb:"<b>Anna slides, Digi steps.</b> Many varying states = the dimmer switch = analog. “Dimmer” is the example, not the name."},
+    {q:"Bit depth is defined as the number of _____ you have in which to describe the value.",
+     o:["Signals","Speeds","States","Rates"],a:2,
+     fb:"<b>Stacked states.</b> Bit depth = states = 2ⁿ. Rate is the clock; depth is the crayon box."},
+    {q:"Lossy compression is particularly suitable for the transmission of _______.",
+     o:["Spreadsheets","Text files","Financial data","Audio, video, and images"],a:3,
+     fb:"<b>Lossless for Ledgers, lossy for Lazy senses.</b> If a human eye or ear is the judge, you can cheat it. If a number is the judge, you can't."},
+    {q:"What is a codec?",
+     o:["A structure of data containment","A formatting system","A program that holds data","A device or processing system that encodes and decodes data"],a:3,
+     fb:"<b>CO</b>der + <b>DEC</b>oder. Option A is the trap — that's the <b>container</b>, the cup. The codec is the recipe."},
+    {q:"As noise is introduced along a(n) _____ signal path, processing circuitry can determine whether the signal is intended to be high or low and then retransmit a solid signal without the imposed noise.",
+     o:["Digital","Dirty","Analog","Clean"],a:0,
+     fb:"<b>A smudged 7 is still a 7.</b> Only digital can be read, judged high-or-low, and retyped clean."},
+    {q:"Noise overcomes the signal after many generations of re-amplification of a(n) _____ signal.",
+     o:["Digital","Analog","Low","High"],a:1,
+     fb:"<b>Every copy catches a cold.</b> The photocopy cat: each repeater amplifier boosts the smudges too, until the portrait <em>is</em> the smudges."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const TAUNT=["it looks smug.","…it felt that one.","it's sweating now.","it stopped smiling.",
+                 "it's wobbling badly!","it is begging.","almost!","DEFEATED! ✧ full marks ✧"];
+    let score=0, done=new Set();
+    function updateHP(){
+      const left=7-score, pct=left/7*100;
+      hp.style.width=pct+"%";
+      hp.className="hpfill"+(left<=2?" dying":left<=4?" hurt":"");
+      hpt.textContent="HP "+left+" / 7 — "+TAUNT[score];
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / 7</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    /* compact the HP bar once it lifts off and starts floating */
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

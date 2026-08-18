@@ -1,0 +1,989 @@
+<title>Neko Notes Kit</title>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG design system
+   Copy this whole token block into any new chapter page.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15; --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15; --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:var(--f-body);font-size:var(--t-base);line-height:1.7;
+  -webkit-font-smoothing:antialiased;background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px,transparent 1.5px);background-size:10px 10px}
+p{margin:0}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);font-weight:800;line-height:1.15;text-wrap:balance}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}}
+.wrap{max-width:74rem;margin:0 auto;padding:0 var(--sp-4)}
+.stack{display:flex;flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}
+
+/* ── masthead ── */
+.mast{position:relative;overflow:hidden;border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block;
+  image-rendering:pixelated;image-rendering:crisp-edges}
+.mast::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;z-index:1;
+  pointer-events:none;background:linear-gradient(to bottom,transparent,var(--ground))}
+.mast-in{position:relative;z-index:2;padding:var(--sp-16) 0 var(--sp-12);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--sp-8);align-items:center}
+@media (max-width:880px){.mast-in{grid-template-columns:1fr}}
+.tab{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--paper);
+  border:var(--bw) solid var(--line);border-radius:var(--r-pill);box-shadow:var(--pop);
+  padding:.35rem .9rem;font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;transform:rotate(-2deg)}
+.mast h1{font-size:clamp(2.6rem,9vw,var(--t-4xl));letter-spacing:-.02em;line-height:.94;
+  margin:var(--sp-4) 0 0;color:var(--paper);
+  text-shadow:var(--bw) var(--bw) 0 var(--line),calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line),calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line),0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line),calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--mint),10px 10px 0 var(--line)}
+.mast-sub{font-family:var(--f-hand);font-size:var(--t-md);max-width:44ch;margin-top:var(--sp-6);
+  background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-4) var(--sp-6);transform:rotate(-.6deg)}
+.mast-sub b{color:var(--sakura)}
+.mast-cats{display:flex;gap:var(--sp-2)}
+.mast-cats svg{width:clamp(90px,15vw,132px);height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block;font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--line);background:var(--sun);
+  border:2px solid var(--line);border-radius:var(--r-pill);padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp);margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5vw,var(--t-2xl))}
+h2 .kao{font-family:var(--f-mono);font-size:.45em;color:var(--sakura);font-weight:400;
+  margin-left:.5em;white-space:nowrap;vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md);color:var(--ink-soft);max-width:var(--measure);margin-top:var(--sp-3)}
+.wave{display:block;width:100%;height:20px;color:var(--line);margin:var(--sp-12) 0;opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ── swatches ── */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12.5rem,100%),1fr));gap:var(--sp-4)}
+.sw{border:var(--bw) solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--paper);
+  box-shadow:var(--pop)}
+.sw-chip{height:74px;display:flex;align-items:flex-end;padding:var(--sp-2) var(--sp-3);
+  font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;
+  border-bottom:var(--bw) solid var(--line)}
+.sw-meta{padding:var(--sp-3);display:flex;flex-direction:column;gap:2px;font-family:var(--f-mono);font-size:var(--t-xs)}
+.sw-meta b{font-family:var(--f-display);font-size:var(--t-sm)}
+.sw-meta span{color:var(--ink-faint);line-height:1.55}
+.sw-meta i{font-style:normal;color:var(--ink-soft)}
+
+/* ── specimens ── */
+.spec{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-3)}
+.spec-tag{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--lav)}
+.spec-stack{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-soft);
+  border-top:2px dashed var(--line);padding-top:var(--sp-3);word-break:break-word}
+.scale{display:flex;flex-direction:column;gap:var(--sp-3)}
+.scale-row{display:flex;align-items:baseline;gap:var(--sp-4);border-bottom:2px dotted var(--panel);padding-bottom:var(--sp-2)}
+.scale-row code{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;color:var(--berry);width:6rem;flex:none}
+.scale-row small{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-faint);margin-left:auto;flex:none}
+.scale-row span{font-family:var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ═══ THE COMPONENTS — identical to the chapter pages ═══ */
+.say{display:flex;gap:var(--sp-3);align-items:flex-end;margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px;height:74px;flex:none}
+.bubble{position:relative;background:var(--paper);border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg);padding:var(--sp-3) var(--sp-6);box-shadow:var(--pop);
+  font-family:var(--f-hand);font-size:var(--t-base);max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:"";position:absolute;bottom:14px;width:0;height:0;border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px);border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px;border-width:6px 11px 6px 0;border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto;right:calc(var(--bw)*-1 - 15px);border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto;right:-11px;border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* the café menu board: wooden frame + wiped board + marker tray */
+.skill{position:relative;background:var(--sun-soft);border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg);box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);overflow:hidden}
+.skill::before{content:"";position:absolute;z-index:0;pointer-events:none;
+  top:12px;left:12px;right:12px;bottom:26px;background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px,var(--panel) 30px 31px);
+  border:2px solid var(--line);border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+.skill::after{content:"";position:absolute;z-index:2;pointer-events:none;
+  left:12px;right:12px;bottom:8px;height:10px;background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px,22px 5px;
+  background-position:right 14px center,right 52px center;background-repeat:no-repeat;
+  border:2px solid var(--line);border-radius:4px}
+.skill > *{position:relative;z-index:1}
+.skill-tag{position:absolute;top:-2px;left:var(--sp-6);z-index:2;background:var(--berry);color:var(--tag-ink);
+  font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.14em;
+  padding:.3rem .8rem;border:var(--bw) solid var(--line);border-top:0;border-radius:0 0 12px 12px}
+.skill q{display:block;font-family:var(--f-display);font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」";line-height:1.3;text-align:center;margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm);color:var(--ink-soft);margin-top:var(--sp-4);
+  border-top:2px dashed var(--line);padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+.note{position:relative;background:var(--paper-2);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-6) var(--sp-6) var(--sp-4);font-family:var(--f-hand);
+  font-size:var(--t-sm);transform:rotate(-.5deg)}
+.note::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  width:88px;height:22px;background:var(--mint-soft);border:2px solid var(--line);border-radius:3px}
+.note b{color:var(--berry)}
+.note-h{display:block;font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--lav);margin-bottom:var(--sp-2)}
+
+.cat-card{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav);--tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint);--tone-soft:var(--mint-soft)}
+.cat-top{display:flex;align-items:center;gap:var(--sp-4);background:var(--tone-soft);
+  border:2px solid var(--line);border-radius:var(--r);padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px;height:88px;flex:none}
+.cat-name{font-family:var(--f-display);font-size:var(--t-xl);color:var(--tone);line-height:1.05}
+.cat-role{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.08em;color:var(--ink-soft)}
+.cat-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-2);font-size:var(--t-sm)}
+.cat-list li{display:flex;gap:var(--sp-2);align-items:baseline}
+.cat-list li::before{content:"★";color:var(--tone);flex:none;font-size:.85em}
+
+.stats{background:var(--night);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);overflow:hidden;font-family:var(--f-mono);font-size:var(--t-sm)}
+.stats-h{display:flex;justify-content:space-between;gap:var(--sp-3);padding:.5rem var(--sp-4);
+  background:var(--sun);color:var(--line);font-size:var(--t-xs);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-2);color:#FFE9D6}
+.row{display:flex;align-items:baseline;gap:var(--sp-2)}
+.row-k{color:#C3A4B0;min-width:0}
+.row-d{flex:1 1 1rem;border-bottom:2px dotted rgba(255,233,214,.28);transform:translateY(-.3em);min-width:.5rem}
+.row-v{color:#FFE9D6;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35);padding-top:var(--sp-2);margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun);font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4);border-top:2px dashed rgba(255,233,214,.28);color:#C3A4B0;font-size:var(--t-xs)}
+
+.gadget{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-4)}
+.gadget-h{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-3);flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.verdict{font-family:var(--f-display);font-size:var(--t-sm);padding:.25rem .8rem;border-radius:var(--r-pill);
+  border:2px solid var(--line);box-shadow:2px 2px 0 var(--stamp);display:inline-block}
+.verdict.ok{background:var(--mint);color:var(--line)}
+.verdict.bad{background:var(--berry);color:var(--tag-ink)}
+.ctl{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono);font-size:var(--t-sm);font-weight:700;color:var(--ink-soft)}
+.ctl output{font-family:var(--f-display);font-size:var(--t-md);color:var(--berry)}
+input[type=range]{flex:1 1 11rem;min-width:9rem;accent-color:var(--sakura);height:1.8rem}
+.ramp{height:58px;border:var(--bw) solid var(--line);border-radius:var(--r);
+  background:linear-gradient(to right,#000 0 6.25%,#111 6.25% 12.5%,#222 12.5% 18.75%,#333 18.75% 25%,
+    #444 25% 31.25%,#555 31.25% 37.5%,#666 37.5% 43.75%,#777 43.75% 50%,#888 50% 56.25%,#999 56.25% 62.5%,
+    #aaa 62.5% 68.75%,#bbb 68.75% 75%,#ccc 75% 81.25%,#ddd 81.25% 87.5%,#eee 87.5% 93.75%,#fff 93.75% 100%)}
+
+.opt{display:flex;align-items:baseline;gap:var(--sp-3);text-align:left;width:100%;font-family:var(--f-body);
+  font-size:var(--t-base);color:var(--ink);background:var(--paper-2);border:2px solid var(--line);
+  border-radius:var(--r);padding:.55rem var(--sp-4);cursor:pointer;box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .12s,background .16s}
+.opt:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--stamp);background:var(--sun-soft)}
+.opt .key{font-family:var(--f-mono);font-size:var(--t-sm);font-weight:700;color:var(--ink-soft)}
+.opt.right{background:var(--mint);color:var(--line)}.opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry);color:var(--tag-ink)}.opt.wrong .key{color:var(--tag-ink)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,16rem);gap:var(--sp-6);align-items:start}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex;flex-direction:column;gap:var(--sp-4);max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display);font-size:var(--t-lg);color:var(--tone,var(--sakura));
+  display:flex;align-items:baseline;gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em;line-height:1}
+.beat{display:flex;gap:var(--sp-3);align-items:flex-start}
+.beat-i{font-size:1.35rem;line-height:1.35;flex:none;width:1.6em;text-align:center}
+.hl,.hl-p,.hl-m{padding:0 .14em;border-radius:3px;
+  background:linear-gradient(transparent 56%,var(--sun-soft) 56% 94%,transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%,var(--sakura-soft) 56% 94%,transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%,var(--mint-soft) 56% 94%,transparent 94%)}
+.fig{margin:0;background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-3)}
+.fig-t{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tone,var(--sakura))}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption{font-family:var(--f-hand);font-size:var(--t-sm);color:var(--ink-soft);
+  border-top:2px dashed var(--line);padding-top:var(--sp-2)}
+
+.boss{background:var(--night);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg);padding:var(--sp-6);display:flex;align-items:center;gap:var(--sp-4);
+  flex-wrap:wrap;color:#FFE9D6}
+.boss svg{width:70px;height:70px;flex:none}
+.boss-info{flex:1 1 14rem;min-width:0}
+.boss-name{font-family:var(--f-display);font-size:var(--t-md);color:var(--sun)}
+.hpbar{height:20px;background:rgba(255,233,214,.16);border:2px solid #FFE9D6;border-radius:var(--r-pill);
+  overflow:hidden;margin-top:var(--sp-2)}
+.hpfill{height:100%;background:var(--mint)}
+.hpfill.hurt{background:var(--sun)}.hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;margin-top:var(--sp-1);color:#C3A4B0}
+
+.chip{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;padding:.3rem .7rem;
+  border-radius:var(--r-pill);background:var(--paper);border:2px solid var(--line);
+  box-shadow:2px 2px 0 var(--stamp);display:inline-block;text-decoration:none;color:var(--ink)}
+.sheet{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg);padding:var(--sp-6)}
+.sheet ol{margin:0;padding-left:1.4rem;display:flex;flex-direction:column;gap:var(--sp-3)}
+.sheet li::marker{font-family:var(--f-display);color:var(--sakura);font-weight:800}
+.sheet li b{color:var(--berry)}
+
+/* ── demo scaffolding ── */
+.demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,19rem);gap:var(--sp-6);
+  align-items:start;padding:var(--sp-8) 0;border-top:2px dashed var(--line)}
+@media (max-width:920px){.demo{grid-template-columns:1fr}}
+.demo-note{font-size:var(--t-sm);color:var(--ink-soft);display:flex;flex-direction:column;gap:var(--sp-3)}
+.demo-note h4{font-family:var(--f-mono);font-size:var(--t-sm);letter-spacing:.06em;color:var(--berry)}
+.demo-note code{font-family:var(--f-mono);font-size:.88em;background:var(--sun-soft);
+  border:2px solid var(--line);border-radius:8px;padding:.02em .35em;color:var(--ink)}
+.when{border-left:4px solid var(--mint);padding-left:var(--sp-3)}
+.whennot{border-left:4px solid var(--berry);padding-left:var(--sp-3)}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr));gap:var(--sp-4)}
+.rule{background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-4) var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-2)}
+.rule b{font-family:var(--f-display);font-size:var(--t-md);color:var(--sakura)}
+.rule p{font-size:var(--t-sm);color:var(--ink-soft)}
+pre{margin:0;overflow-x:auto;background:var(--night);color:#FFE9D6;border:var(--bw) solid var(--line);
+  border-radius:var(--r);box-shadow:var(--pop);padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono);font-size:var(--t-sm);line-height:1.75}
+pre .c{color:#C3A4B0}pre .p{color:#FFB84D}
+footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var(--bw) dashed var(--line);
+  display:flex;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;
+  font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;color:var(--ink-soft)}
+</style>
+
+<header class="mast">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap mast-in">
+    <div>
+      <span class="tab">design system · v2.0</span>
+      <h1>Neko Notes<br>Kit</h1>
+      <p class="mast-sub">The house style for CTS study notes. Chibi café, sticker outlines, screentone dots,
+        and two cats who <b>disagree about everything</b>. Copy the token block, use the twelve parts, and every
+        chapter will look like it came from the same notebook ✧</p>
+    </div>
+    <div class="mast-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi"/></svg>
+    </div>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/><ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/><rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+
+<main class="wrap">
+
+<!-- ── PRINCIPLES ── -->
+<section>
+  <div class="head">
+    <span class="lv">why it looks like this</span>
+    <h2>Five rules holding it together <span class="kao">(๑˃ᴗ˂)ﻭ</span></h2>
+  </div>
+  <div class="rules">
+    <div class="rule"><b>Cute, but the facts stay exact</b>
+      <p>The jokes and kaomoji are the sugar. Every number, definition and list is quoted straight from the
+        textbook, unchanged. Nothing gets softened for the sake of a gag.</p></div>
+    <div class="rule"><b>Facts get set in mono</b>
+      <p>Numbers and specs live in <code>--f-mono</code> inside dark <code>.stats</code> panels. Explanations
+        are in the round body face. Cat dialogue and margin notes are in the handwriting face. You can find
+        the examinable bits by squinting.</p></div>
+    <div class="rule"><b>Colour carries meaning</b>
+      <p>Lavender is always <em>analog</em>. Mint is always <em>digital</em> or <em>correct</em>. Berry is
+        <em>wrong</em> or <em>lossy</em>. Sun is emphasis and never a category. Never recolour a part for variety.</p></div>
+    <div class="rule"><b>Everything is a sticker</b>
+      <p>3px outline, hard offset shadow, no soft blur anywhere. If a thing has no outline, it's not a
+        component — it's a mistake.</p></div>
+    <div class="rule"><b>No walls of prose</b>
+      <p>Any passage over ~60 words gets the <code>.story</code> treatment: one beat per idea, an emoji
+        waypoint in the gutter, a highlight on the sentence that answers the question, and a figure in the
+        rail beside it. A dense paragraph reads as "nothing here" and gets skipped.</p></div>
+    <div class="rule"><b>One SKILL GET per concept</b>
+      <p>The gold card appears at most once per section and holds a single memorable line. Two mnemonics for
+        one idea is zero mnemonics.</p></div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ── COLOUR ── -->
+<section>
+  <div class="head">
+    <span class="lv">colour</span>
+    <h2>Pastel café, ink outlines <span class="kao">🎨</span></h2>
+    <p class="lede">Saturated kawaii pastels against a plum-brown outline — never pure black, which reads
+      harsh next to pink.</p>
+  </div>
+
+  <h3 style="margin-bottom:var(--sp-4)">Accents — these carry meaning</h3>
+  <div class="swatches">
+    <div class="sw"><div class="sw-chip" style="background:var(--sun);color:var(--line)">--sun</div>
+      <div class="sw-meta"><b>Honey sun</b><span><i>#FF9F1A</i> · light</span><span><i>#FFB84D</i> · dark</span><span>Emphasis, SKILL GET cards, stat headers. Never a category.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--sakura);color:#fff">--sakura</div>
+      <div class="sw-meta"><b>Sakura pink</b><span><i>#FF6F91</i> · light</span><span><i>#FF8FAB</i> · dark</span><span>Cat blush, sample dots, links, decorative highlights.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--lav);color:#fff">--lav</div>
+      <div class="sw-meta"><b>Lavender</b><span><i>#8A6BD9</i> · light</span><span><i>#B39BF5</i> · dark</span><span>Always analog. Anna Log, continuous waves, question numbers.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--mint);color:var(--line)">--mint</div>
+      <div class="sw-meta"><b>Mint</b><span><i>#12B39A</i> · light</span><span><i>#3FD8BC</i> · dark</span><span>Always digital, correct, lossless, full HP.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--berry);color:#fff">--berry</div>
+      <div class="sw-meta"><b>Berry</b><span><i>#EE3D5C</i> · light</span><span><i>#FF7089</i> · dark</span><span>Wrong answer, lossy, aliasing, exam trap, danger HP.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--sky);color:var(--line)">--sky</div>
+      <div class="sw-meta"><b>Sky</b><span><i>#54B8E8</i> · light</span><span><i>#7FD0F5</i> · dark</span><span>Spare. Reserved for a future third category.</span></div></div>
+  </div>
+
+  <h3 style="margin:var(--sp-8) 0 var(--sp-4)">Grounds &amp; ink</h3>
+  <div class="swatches">
+    <div class="sw"><div class="sw-chip" style="background:var(--ground);color:var(--ink)">--ground</div>
+      <div class="sw-meta"><b>Page</b><span><i>#FFF3E4</i> / <i>#241823</i></span><span>Body background + the screentone dot pattern.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--paper);color:var(--ink)">--paper</div>
+      <div class="sw-meta"><b>Sticker white</b><span><i>#FFFFFF</i> / <i>#33222F</i></span><span>Cards, bubbles, gadgets, quiz.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--paper-2);color:var(--ink)">--paper-2</div>
+      <div class="sw-meta"><b>Sticky note</b><span><i>#FFF0F3</i> / <i>#3C2634</i></span><span>Insets: notes, quiz options.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--night);color:#FFE9D6">--night</div>
+      <div class="sw-meta"><b>Night panel</b><span><i>#3B2430</i> / <i>#150E15</i></span><span>Stat blocks, boss bar, code. Dark in both themes.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--line);color:#fff">--line</div>
+      <div class="sw-meta"><b>Outline plum</b><span><i>#4A2B33</i> / <i>#0F0A12</i></span><span>Every border + every hard shadow. Also the body text colour.</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:var(--panel);color:var(--ink)">--panel</div>
+      <div class="sw-meta"><b>Cream panel</b><span><i>#FFE9CF</i> / <i>#42293A</i></span><span>Canvas beds, table rules.</span></div></div>
+  </div>
+
+  <div class="note" style="margin-top:var(--sp-8)">
+    <span class="note-h">🌙 about dark mode</span>
+    Dark isn't an inversion — it's <b>the café at midnight</b>. The ground goes plum-brown rather than grey,
+    and every pastel brightens so it still pops against it. The outline goes <b>darker</b> (#0F0A12), because
+    a sticker outline must always be the darkest thing on the card.
+  </div>
+
+  <div class="note" style="margin-top:var(--sp-6)">
+    <span class="note-h">🔤 text on a coloured chip</span>
+    Never put <b>white</b> on a saturated accent — white on berry measures only <b>3.8 : 1</b> in light mode
+    and fails AA. Use <code>--tag-ink</code> (#2A0E14), the one ink that clears 4.5 : 1 on berry in
+    <b>both</b> themes. And never colour a chip with <code>--line</code> on <code>--paper</code> text:
+    in dark mode both are dark, so the label vanishes. Level tags use <code>--sun</code> + <code>--line</code>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ── TYPE ── -->
+<section>
+  <div class="head">
+    <span class="lv">typography</span>
+    <h2>Four voices <span class="kao">✎</span></h2>
+    <p class="lede">All four are system stacks — nothing loads over the network, so nothing silently falls
+      back to Times.</p>
+  </div>
+
+  <div class="stack g-4">
+    <div class="spec">
+      <span class="spec-tag">display · headings &amp; mnemonics</span>
+      <div style="font-family:var(--f-display);font-size:var(--t-2xl);line-height:1.1">Anna slides, Digi steps</div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Heavy and rounded. On the hero it gets a
+        full 8-way outline via <code>text-shadow</code> plus a coloured drop — that's the anime title-card look.</p>
+      <div class="spec-stack">--f-display: "Arial Rounded MT Bold", "Segoe UI", system-ui, -apple-system, "Trebuchet MS", sans-serif</div>
+    </div>
+    <div class="spec">
+      <span class="spec-tag">body · explanations</span>
+      <div style="font-size:var(--t-md);max-width:var(--measure)">Digi can't hear humming — he can only write
+        numbers on a ticket. So he takes a snapshot of how loud Anna is, over and over.</div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Trebuchet is the roundest readable system sans.
+        17px, line-height 1.7, measure capped at 62 characters.</p>
+      <div class="spec-stack">--f-body: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, Verdana, sans-serif</div>
+    </div>
+    <div class="spec">
+      <span class="spec-tag">hand · cat dialogue &amp; margin notes</span>
+      <div style="font-family:var(--f-hand);font-size:var(--t-md)">Nnnh, I contain infinite values between off
+        and on… it's exhausting, honestly <span class="kmj">(´｡• ᵕ •｡`)</span></div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Yes, it's Comic Sans. It is the correct call here:
+        it reads instantly as "someone scribbled this in the margin", which is exactly the job. It never touches
+        a heading or a number.</p>
+      <div class="spec-stack">--f-hand: "Comic Sans MS", "Chalkboard SE", "Marker Felt", "Trebuchet MS", cursive</div>
+    </div>
+    <div class="spec">
+      <span class="spec-tag">mono · every hard fact</span>
+      <div style="font-family:var(--f-mono);font-size:var(--t-lg);font-weight:700;font-variant-numeric:tabular-nums">44,100 × 16 × 2 = 1.411 Mbps</div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Numbers, specs, labels, level tags, table cells.
+        Tabular figures on so columns of digits line up.</p>
+      <div class="spec-stack">--f-mono: "Cascadia Mono", Consolas, ui-monospace, "SF Mono", "Roboto Mono", Menlo, monospace</div>
+    </div>
+  </div>
+
+  <h3 style="margin:var(--sp-8) 0 var(--sp-4)">The scale</h3>
+  <div class="scale">
+    <div class="scale-row"><code>--t-4xl</code><span style="font-size:var(--t-4xl)">Page title</span><small>4.2rem</small></div>
+    <div class="scale-row"><code>--t-2xl</code><span style="font-size:var(--t-2xl)">Section heading</span><small>2.6rem</small></div>
+    <div class="scale-row"><code>--t-xl</code><span style="font-size:var(--t-xl)">Cat name / mnemonic</span><small>1.95rem</small></div>
+    <div class="scale-row"><code>--t-lg</code><span style="font-size:var(--t-lg)">Sub-heading</span><small>1.45rem</small></div>
+    <div class="scale-row"><code>--t-md</code><span style="font-size:var(--t-md);font-family:var(--f-body)">Lede &amp; question text</span><small>1.18rem</small></div>
+    <div class="scale-row"><code>--t-base</code><span style="font-size:var(--t-base);font-family:var(--f-body)">Body copy</span><small>1.0625rem</small></div>
+    <div class="scale-row"><code>--t-sm</code><span style="font-size:var(--t-sm);font-family:var(--f-mono)">Stat rows, captions</span><small>0.85rem</small></div>
+    <div class="scale-row"><code>--t-xs</code><span style="font-size:var(--t-xs);font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase">Level tags &amp; labels</span><small>0.72rem</small></div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ── COMPONENTS ── -->
+<section>
+  <div class="head">
+    <span class="lv">components</span>
+    <h2>Twelve parts, one job each <span class="kao">🧩</span></h2>
+    <p class="lede">When a chapter needs something new, check whether an existing part can stretch before
+      adding a tenth.</p>
+  </div>
+
+  <!-- cats -->
+  <div class="demo">
+    <div class="duo">
+      <article class="cat-card analog">
+        <div class="cat-top">
+          <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+          <div><div class="cat-name">Anna Log</div><div class="cat-role">CONTINUOUS · SMOOTH</div></div>
+        </div>
+        <ul class="cat-list"><li>Curves only. Her tail is a sine wave.</li><li>Always lavender.</li></ul>
+      </article>
+      <article class="cat-card digital">
+        <div class="cat-top">
+          <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+          <div><div class="cat-name">Digi Tal</div><div class="cat-role">DISCRETE · STEPPED</div></div>
+        </div>
+        <ul class="cat-list"><li>Right angles only. His tail is a staircase.</li><li>Always mint.</li></ul>
+      </article>
+    </div>
+    <div class="demo-note">
+      <h4>.cat-card + the sprites</h4>
+      <p>The mascots. Same chibi silhouette drawn twice: one in <b>pure curves</b>, one in <b>pure right
+        angles</b> — right down to the blush (ellipse vs rectangle) and the mouth. That contrast <em>is</em>
+        the analog/digital lesson, which is why the cats aren't decoration.</p>
+      <p>Both live in a hidden <code>&lt;svg&gt;&lt;defs&gt;</code> block and are placed with
+        <code>&lt;use href="#anna"&gt;</code>, so one edit updates every appearance on the page.</p>
+      <p class="when"><b>Reuse them</b> across chapters as the two poles of any either/or — they're already
+        colour-coded in the reader's head.</p>
+    </div>
+  </div>
+
+  <!-- speech -->
+  <div class="demo">
+    <div>
+      <div class="say">
+        <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+        <div class="bubble">Nnnh, I contain <b>infinite</b> values between off and on… <span class="kmj">(´｡• ᵕ •｡`)</span></div>
+      </div>
+      <div class="say right">
+        <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+        <div class="bubble">I contain <b>two</b>. One is on. Zero is off. I sleep very well.</div>
+      </div>
+    </div>
+    <div class="demo-note">
+      <h4>.say / .bubble</h4>
+      <p>Cat dialogue. The tail is two stacked CSS triangles — the outer one is the outline, the inner one
+        fills. Add <code>.right</code> to flip the cat to the other side and mirror the tail.</p>
+      <p class="when"><b>Use</b> to voice the intuition <em>before</em> the formal definition, or to nudge
+        the reader ("sing it three times now").</p>
+      <p><b>Always wrap a kaomoji in <code>.kmj</code></b> — they contain literal spaces, so a face like
+        <span class="kmj">(´｡• ᵕ •｡`)</span> will otherwise break across two lines and read as garbage.
+        <code>.kmj</code> is just <code>white-space:nowrap</code>; heading faces get it via <code>.kao</code>.</p>
+      <p class="whennot"><b>Not for</b> facts. Nothing examinable should exist only inside a bubble.</p>
+    </div>
+  </div>
+
+  <!-- pixel hero -->
+  <div class="demo">
+    <div style="position:relative;overflow:hidden;border:var(--bw) solid var(--line);
+                border-radius:var(--r-lg);box-shadow:var(--pop-lg);height:210px">
+      <canvas class="scene" id="scene2" aria-hidden="true"></canvas>
+    </div>
+    <div class="demo-note">
+      <h4>.scene — the 8-bit hero</h4>
+      <p>A pixel-art café drawn on a canvas that is only <b>124 logical pixels tall</b>, then blown up by CSS
+        with <code>image-rendering:pixelated</code>. Every pixel on screen is a real pixel — nothing is
+        faked with a filter.</p>
+      <p>Animated: clouds drift, birds flap across, steam curls off the chimney, the windows flicker, and
+        the OPEN sign pulses. Day and night are two full palettes, swapped by theme.</p>
+      <p class="when"><b>Use</b> as the header of every chapter — it is the one place atmosphere beats
+        information.</p>
+      <p class="whennot"><b>Not</b> behind body text. Headline type only, and only with the outlined
+        <code>h1</code> treatment.</p>
+    </div>
+  </div>
+
+  <!-- skill -->
+  <div class="demo">
+    <div class="skill">
+      <span class="skill-tag">★ SKILL GET!</span>
+      <q>Double the top, or the tune gets chopped.</q>
+      <p class="why"><b>Nyquist–Shannon:</b> sample at more than twice the highest frequency present.
+        20 kHz hearing → more than 40 kHz → the CD's 44.1 kHz.</p>
+    </div>
+    <div class="demo-note">
+      <h4>.skill — the menu board</h4>
+      <p>The mnemonic, served on the café's menu board: a wooden frame, a wiped writing surface with faint
+        ruled lines, and a marker tray along the bottom rail with a pink and a mint marker in it. The berry
+        tab notches into the top edge; the line itself sits in Japanese corner brackets 「 」.</p>
+      <p>The board is a plain <code>--paper</code> surface on purpose — the mnemonic is the single most
+        re-read sentence in the chapter, so <b>nothing patterned may sit behind that text</b>. Decoration
+        stays on the frame and the tray, outside the reading area.</p>
+      <p class="when"><b>Use</b> once per section, right after the concept is introduced.</p>
+      <p class="whennot"><b>Never</b> two in a row — they cancel each other out.</p>
+      <p>Variant: swap the background to <code>--lav-soft</code> and the tab to <code>♪ SONG GET!</code>
+        for a chant or song — the frame recolours, the board stays readable.</p>
+    </div>
+  </div>
+
+  <!-- note -->
+  <div class="demo">
+    <div class="note">
+      <span class="note-h">⚠ exam trap #2</span>
+      Bit depth is the number of <b>STATES</b> — not signals, not speeds, not rates. Digi only knows how to
+      <b>st</b>ack <b>st</b>ates.
+    </div>
+    <div class="demo-note">
+      <h4>.note</h4>
+      <p>The sticky note, taped on with a strip of mint washi and tilted half a degree. Handwriting face.
+        Holds jokes, exam traps, nerd trivia.</p>
+      <p class="when"><b>Use</b> for anything a reader in a hurry could skip and lose nothing.</p>
+      <p>Label it with <code>.note-h</code>: <code>⚠ exam trap</code>, <code>🎬 nerd corner</code>,
+        <code>🔢 the number trick</code>.</p>
+    </div>
+  </div>
+
+  <!-- story rail -->
+  <div class="demo">
+    <div class="story" style="--tone:var(--lav)">
+      <div class="story-text">
+        <p class="story-lead"><span>🎨</span><span>Anna posts a painting.</span></p>
+        <div class="beat"><span class="beat-i">📮</span>
+          <p>Every few hundred kilometres a tired clerk <span class="hl">photocopies it and sends the copy
+            onward</span> — the paint keeps fading, and the copier is the only way to make it bold again.</p></div>
+        <div class="beat"><span class="beat-i">☕</span>
+          <p>But it enlarges the coffee ring too. After enough re-amplification,
+            <span class="hl-p">the portrait <em>is</em> the smudges</span>.</p></div>
+      </div>
+      <figure class="fig" style="--tone:var(--lav)">
+        <span class="fig-t">📠 generation loss</span>
+        <svg viewBox="0 0 220 118" role="img" aria-label="A clean wave above a badly degraded one.">
+          <rect x="4" y="6" width="212" height="46" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+          <text x="14" y="20" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">COPY 1</text>
+          <path d="M14 38 Q28 26 42 38 T70 38 T98 38 T126 38 T154 38 T182 38 T206 38"
+                stroke="var(--lav)" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M100 54 L119 61 L100 68 Z" fill="var(--sun)" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="4" y="72" width="212" height="42" rx="8" fill="var(--berry-soft)" stroke="var(--line)" stroke-width="3"/>
+          <text x="14" y="86" font-family="monospace" font-size="10" font-weight="700" fill="var(--berry)">COPY 100</text>
+          <path d="M14 100 L22 92 L29 110 L37 94 L45 108 L53 92 L61 106 L69 95 L77 111 L85 91 L93 107
+                   L101 96 L109 110 L117 92 L125 106 L133 97 L141 90 L149 108 L157 95 L165 111 L173 92
+                   L181 105 L189 96 L197 108 L206 100"
+                stroke="var(--berry)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+        </svg>
+        <figcaption>By copy 100 there's no portrait left — only smudge.</figcaption>
+      </figure>
+    </div>
+    <div class="demo-note">
+      <h4>.story — the long-paragraph pattern</h4>
+      <p><b>Never ship a wall of prose.</b> Two dense paragraphs read as "nothing here" and get skipped, no
+        matter how good the writing is. Any passage over roughly 60 words gets broken into this shape:</p>
+      <p class="when"><b>1 · One beat per idea.</b> Each <code>.beat</code> is a short paragraph with an emoji
+        in the gutter. The emoji is a <em>waypoint</em> — the eye lands on it and knows a new idea started.</p>
+      <p class="when"><b>2 · A <code>.story-lead</code> on top</b> naming what the passage is about, so a
+        skimmer gets the point without reading the body.</p>
+      <p class="when"><b>3 · A figure in the rail</b>, sitting beside the prose it explains. Draw the actual
+        mechanism, not decoration — these two redraw the textbook's own Figures 3-5 and 3-6.</p>
+      <p class="whennot"><b>Cap it at three or four beats.</b> More than that isn't a story, it's a list —
+        use <code>.cat-list</code> or a table instead.</p>
+    </div>
+  </div>
+
+  <!-- highlighter -->
+  <div class="demo">
+    <div style="background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r);
+                box-shadow:var(--pop);padding:var(--sp-6);font-size:var(--t-md)">
+      <p>The clerk <span class="hl">reads it and types a clean new page</span>, so
+        <span class="hl-m">the hundredth copy is identical to the first</span> — whereas
+        <span class="hl-p">the portrait <em>is</em> the smudges</span>.</p>
+    </div>
+    <div class="demo-note">
+      <h4>.hl / .hl-p / .hl-m — the highlighter</h4>
+      <p>A marker swipe that sits <b>behind</b> the text as a gradient band from 56% to 94% height, so it
+        never touches the letterforms and the ink colour never changes. In dark mode the band goes dark and
+        the light text still reads.</p>
+      <p class="when"><b>Sun</b> for the sentence that answers the question. <b>Mint</b> for the digital
+        upside. <b>Pink</b> for the one phrase you want quoted back in the exam.</p>
+      <p class="whennot"><b>At most two per paragraph.</b> Highlighting everything highlights nothing —
+        and don't stack it on top of <code>&lt;b&gt;</code>; pick one.</p>
+    </div>
+  </div>
+
+  <!-- stats -->
+  <div class="demo">
+    <div class="stats">
+      <div class="stats-h"><span>order #B-1411</span><span>CD audio</span></div>
+      <div class="stats-b">
+        <div class="row"><span class="row-k">sample rate</span><span class="row-d"></span><span class="row-v">44,100 Hz</span></div>
+        <div class="row"><span class="row-k">bit depth</span><span class="row-d"></span><span class="row-v">16 bits</span></div>
+        <div class="row"><span class="row-k">channels</span><span class="row-d"></span><span class="row-v">× 2</span></div>
+        <div class="row tot"><span class="row-k">BIT RATE</span><span class="row-d"></span><span class="row-v">1.411 Mbps</span></div>
+      </div>
+      <div class="stats-f">The footnote, caveat, or thing the exam actually asks.</div>
+    </div>
+    <div class="demo-note">
+      <h4>.stats</h4>
+      <p>The RPG stat block — a dark panel with a honey header and dotted leader lines. Any set of numbers
+        that belongs together: a calculation, a spec sheet, two positions compared.</p>
+      <p class="when"><b>Use for</b> numbers you must memorise. The <code>.tot</code> row is the punchline.</p>
+      <p class="whennot"><b>Not for</b> prose. If it needs a full sentence, it isn't a stat block.</p>
+    </div>
+  </div>
+
+  <!-- gadget -->
+  <div class="demo">
+    <div class="gadget">
+      <div class="gadget-h">
+        <span class="gadget-t">🎛 gadget 02 · grayscale ramp</span>
+        <span class="verdict bad">16 states</span>
+      </div>
+      <div class="ramp"></div>
+      <div class="ctl">
+        <label for="demo-r">bit depth</label>
+        <input type="range" id="demo-r" min="1" max="8" value="4" disabled>
+        <output>4-bit</output>
+      </div>
+      <p style="font-family:var(--f-hand);font-size:var(--t-sm);color:var(--ink-soft)">4-bit is the classic
+        16-colour display — and the 16-shade grey ramp in your book.</p>
+    </div>
+    <div class="demo-note">
+      <h4>.gadget</h4>
+      <p>The interactive instrument, and the most important part of the system. A title, a live
+        <code>.verdict</code> pill, a screen, one control, and a handwritten reaction line that changes with
+        the value.</p>
+      <p class="when"><b>Every chapter needs at least one thing the reader can push until it goes wrong.</b>
+        A slider that visibly breaks the wave below 2× teaches Nyquist in four seconds.</p>
+    </div>
+  </div>
+
+  <!-- boss -->
+  <div class="demo">
+    <div class="stack g-4">
+      <div class="boss">
+        <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+        <div class="boss-info">
+          <div class="boss-name">👾 THE EXAM SLIME</div>
+          <div class="hpbar"><div class="hpfill hurt" style="width:57%"></div></div>
+          <div class="hptext">HP 4 / 7 — it stopped smiling.</div>
+        </div>
+      </div>
+      <div class="stack g-2">
+        <button class="opt right" type="button"><span class="key">D</span><span>One; zero</span></button>
+        <button class="opt wrong" type="button"><span class="key">C</span><span>Zero; one</span></button>
+        <button class="opt" type="button"><span class="key">A</span><span>Two; one</span></button>
+      </div>
+    </div>
+    <div class="demo-note">
+      <h4>.boss + .opt</h4>
+      <p>The chapter's own review questions, reframed as a boss fight. Each correct answer takes 1 HP off the
+        slime; the bar goes mint → sun → berry as it drops, and the taunt line under it changes every hit.</p>
+      <p>Options are buttons, not radios — one click reveals and locks. Correct goes mint, chosen-wrong goes
+        berry, and the right answer lights up beside it so a wrong guess still teaches.</p>
+      <p>The bar is <code>position:sticky</code> inside the quiz section, so it <b>floats at the top of the
+        screen for the whole fight</b> — you always see the damage you're doing. A zero-height sentinel above
+        it drives a <code>.stuck</code> class that shrinks it from 138px to 70px once it lifts off, so a
+        floating bar never eats the screen.</p>
+      <p class="whennot"><b>Never</b> use mint or berry decoratively — the reader has learned they mean right
+        and wrong.</p>
+    </div>
+  </div>
+
+  <!-- sheet -->
+  <div class="demo">
+    <div class="sheet">
+      <ol>
+        <li><b>Anna slides, Digi steps.</b></li>
+        <li><b>Double the top, or the tune gets chopped.</b></li>
+        <li><b>Snaps × Shades × Speakers.</b></li>
+      </ol>
+    </div>
+    <div class="demo-note">
+      <h4>.sheet</h4>
+      <p>Closes every chapter: the whole thing compressed into one numbered list of the mnemonics, in the
+        order they appeared. It's the only place numbering is allowed, because it's the only place the order
+        is a real sequence to recite.</p>
+      <p class="when"><b>Cap it at 12 lines.</b> If it runs longer, the chapter has too many hooks.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ── USING IT ── -->
+<section>
+  <div class="head">
+    <span class="lv">starting a new chapter</span>
+    <h2>The recipe card <span class="kao">📝</span></h2>
+  </div>
+  <div class="duo" style="align-items:start">
+    <pre><span class="c">// 1. paste the :root token block
+// 2. paste all three theme blocks
+// 3. paste the &lt;defs&gt; cat sprites
+// 4. then the chapter, in this order:</span>
+
+&lt;header class=<span class="p">"hero"</span>&gt;     <span class="c">// title card + rays</span>
+&lt;section&gt;
+  &lt;span class=<span class="p">"lv"</span>&gt;        <span class="c">// Lv.N · topic</span>
+  &lt;div class=<span class="p">"say"</span>&gt;       <span class="c">// cat intuition first</span>
+  &lt;div class=<span class="p">"skill"</span>&gt;     <span class="c">// ★ the mnemonic</span>
+  &lt;div class=<span class="p">"gadget"</span>&gt;    <span class="c">// push it till it breaks</span>
+  &lt;div class=<span class="p">"stats"</span>&gt;     <span class="c">// the numbers</span>
+  &lt;div class=<span class="p">"note"</span>&gt;      <span class="c">// the joke / the trap</span>
+&lt;div class=<span class="p">"wave"</span>&gt;        <span class="c">// divider, repeat</span>
+&lt;section&gt;                <span class="c">// ♪ the song</span>
+&lt;section&gt;                <span class="c">// ⚔️ boss fight</span>
+&lt;div class=<span class="p">"sheet"</span>&gt;       <span class="c">// every mnemonic, in order</span></pre>
+    <div class="stack g-4">
+      <div class="stats">
+        <div class="stats-h"><span>per chapter</span><span>checklist</span></div>
+        <div class="stats-b">
+          <div class="row"><span class="row-k">SKILL GET cards</span><span class="row-d"></span><span class="row-v">1 per concept</span></div>
+          <div class="row"><span class="row-k">song or chant</span><span class="row-d"></span><span class="row-v">exactly 1</span></div>
+          <div class="row"><span class="row-k">gadgets</span><span class="row-d"></span><span class="row-v">1–3</span></div>
+          <div class="row"><span class="row-k">jokes / traps</span><span class="row-d"></span><span class="row-v">1 per section</span></div>
+          <div class="row"><span class="row-k">max prose before a break</span><span class="row-d"></span><span class="row-v">~60 words</span></div>
+          <div class="row"><span class="row-k">boss HP</span><span class="row-d"></span><span class="row-v">= question count</span></div>
+          <div class="row tot"><span class="row-k">CHEAT SHEET</span><span class="row-d"></span><span class="row-v">≤ 12 lines</span></div>
+        </div>
+        <div class="stats-f">Quiz questions come from the textbook, never invented.</div>
+      </div>
+      <div class="note">
+        <span class="note-h">⚠ the one bug to avoid</span>
+        Don't give the <b>section</b> and the quiz <b>container</b> the same id. <code>getElementById</code>
+        grabs the section, <code>innerHTML=""</code> wipes the boss bar and the heading, and the questions
+        quietly appear with no HP bar above them. Anchor is <b>#quiz</b>, container is <b>#quizlist</b>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>🐾 Neko Notes Kit v2.0 · house style for CTS study notes</span>
+  <span>first used in Café Nyquist · Chapter 3</span>
+</footer>
+</main>
+
+<script>
+/* ══ 8-BIT CAFÉ SCENE ══════════════════════════════════════
+   Drives every .scene canvas on the page. Drawn at 124 logical
+   pixels tall, blown up by CSS image-rendering:pixelated.      */
+(function(){
+  "use strict";
+  const darkMQ=matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ=matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark=()=>{const t=document.documentElement.getAttribute("data-theme");
+    return t?t==="dark":darkMQ.matches;};
+
+  const DAY={sky:["#CFEBDC","#DDF2E4","#EAF7EA"],cloud:"#F5FCF6",star:null,moon:null,
+    far:"#63B79E",mid:"#2F8E79",near:"#1B6A59",trunk:"#8A5A44",
+    ground:"#F0D9AE",grass:"#3FA07F",road:"#CBBBA9",dash:"#F6F0E7",kerb:"#8E4632",
+    wood:"#C46A4A",woodDark:"#8E4632",roof:"#B4553C",sign:"#DE9068",signIn:"#F2C39F",
+    glass:"#2E5C55",glow:"#FFD27A",lamp:"#FFC24D",bird:"#3B4A46",steam:"#FFFFFF",
+    bush:"#2E8F70",neon:"#EE3D5C"};
+  const NIGHT={sky:["#181233","#20183F","#2A1E4D"],cloud:"#2D2151",star:"#FFF3C4",moon:"#FFE9B0",
+    far:"#2B5B54",mid:"#1D4642",near:"#122F2E",trunk:"#452C27",
+    ground:"#33232E",grass:"#1C3B34",road:"#241B24",dash:"#4B3A46",kerb:"#54291F",
+    wood:"#8A4636",woodDark:"#54291F",roof:"#733729",sign:"#9E5740",signIn:"#C57C58",
+    glass:"#13302D",glow:"#FFCE6E",lamp:"#FFB84D",bird:"#0F0A12",steam:"#9FB6C8",
+    bush:"#1E4838",neon:"#FF7089"};
+
+  function makeScene(cv){
+    const g=cv.getContext("2d"), H=124, HORIZON=90, ROAD=112;
+    let W=240, raf=null;
+    const px=(x,y,w,h,c)=>{g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)));};
+    const rnd=i=>{const s=Math.sin(i*127.1+0.7)*43758.5453;return s-Math.floor(s);};
+    const dither=(y,c)=>{for(let x=y%2;x<W;x+=2) px(x,y,1,1,c);};
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){const hw=Math.max(1,Math.round(halfW*(i+2)/h));
+        px(cx-hw,baseY-h+i,hw*2,2,col);}
+      if(trunkCol) px(cx-1,baseY-2,2,3,trunkCol);
+    }
+    const cloud=(x,y,c)=>{px(x,y,18,4,c);px(x+4,y-3,10,3,c);px(x+11,y+2,11,3,c);};
+
+    function render(t){
+      const P=isDark()?NIGHT:DAY;
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+      if(P.star){
+        for(let i=0;i<46;i++){const sx=Math.floor(rnd(i)*W),sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i)>0.74) px(sx,sy,1,1,P.star);}
+        px(W-34,12,10,10,P.moon);px(W-31,9,6,3,P.moon);px(W-31,22,6,3,P.moon);px(W-30,11,5,5,P.sky[0]);
+      }
+      for(let i=0;i<3;i++) cloud(((t/1000*(4+i*2)+i*97)%(W+72))-36,11+i*12,P.cloud);
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,HORIZON-6,22+Math.floor(rnd(x*0.37+3)*14),7,P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,HORIZON-2,30+Math.floor(rnd(x*0.71+7)*18),10,P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7,HORIZON+1,38+Math.floor(rnd(x*1.13+11)*20),13,P.near,P.trunk);
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      const bw=86,cx=Math.round(W*0.63),bx=Math.round(cx-bw/2);
+      const flick=0.86+0.14*Math.sin(t/380);
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);
+      px(bx+6,HORIZON-49,6,9,P.woodDark); px(bx+5,HORIZON-51,8,2,P.wood);
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);
+      px(bx,HORIZON-32,bw,32,P.wood);
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);
+      g.globalAlpha=flick; px(bx+8,HORIZON-27,20,12,P.glow); px(bx+32,HORIZON-27,20,12,P.glow); g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark); px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark); px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark); px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);
+      if(Math.sin(t/600)>-0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark);
+      px(bx-5,HORIZON-34,3,4,P.woodDark);
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+      px(bx-32,HORIZON-9,15,2,P.wood);
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood); px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood); px(bx-12,HORIZON-4,2,4,P.woodDark);
+      for(let i=0;i<7;i++){const x=bx-12+i*16; px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);}
+      for(let i=0;i<7;i++){const life=((t/1000*0.5+i/7)%1); g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3,HORIZON-52-life*24,life<0.5?1:2,life<0.5?1:2,P.steam);}
+      g.globalAlpha=1;
+      px(0,ROAD,W,H-ROAD,P.road); px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3)+i*83)%(W+40))-20, y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+    const frame=t=>{render(t); raf=requestAnimationFrame(frame);};
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height||!r.width) return;
+      W=Math.max(150,Math.round(r.width*(H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize",resize);
+    darkMQ.addEventListener("change",()=>render(performance.now()));
+    reduceMQ.addEventListener("change",start);
+    start();
+  }
+  document.querySelectorAll(".scene").forEach(makeScene);
+})();
+</script>

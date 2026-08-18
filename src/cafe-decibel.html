@@ -1,0 +1,2430 @@
+<title>Café Decibel</title>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
+.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+
+/* ═══ CH4 ADDITIONS ═══════════════════════════════════════ */
+
+/* the signal chain — a row of stages with levels */
+.chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chain-step{flex:1 1 8.5rem; min-width:0; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-1); position:relative}
+.chain-step .cs-i{font-size:1.5rem; line-height:1}
+.chain-step .cs-n{font-family:var(--f-display); font-size:var(--t-sm); line-height:1.2}
+.chain-step .cs-v{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--tone,var(--berry))}
+.chain-step.mic{--tone:var(--lav)} .chain-step.line{--tone:var(--sun)} .chain-step.spk{--tone:var(--berry)}
+.chain-arrow{align-self:center; font-family:var(--f-mono); font-weight:700; color:var(--ink-faint); flex:none}
+@media (max-width:720px){.chain-arrow{display:none}}
+
+/* a compact spec list used for mic types, processors, applications */
+.specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr)); gap:var(--sp-4)}
+.spec-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-5,1.25rem) var(--sp-5,1.25rem);
+  display:flex; flex-direction:column; gap:var(--sp-2); border-top:5px solid var(--tone,var(--sakura))}
+.spec-card h4{font-family:var(--f-display); font-size:var(--t-md)}
+.spec-card .sc-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tone,var(--sakura))}
+.spec-card p{font-size:var(--t-sm); color:var(--ink-soft)}
+.spec-card ul{margin:0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.spec-card b{color:var(--ink)}
+
+/* versus block — two poles side by side */
+.vs{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:var(--sp-4);
+  align-items:center; margin-top:var(--sp-4)}
+@media (max-width:760px){.vs{grid-template-columns:1fr} .vs-mid{justify-self:center}}
+.vs-mid{font-family:var(--f-display); font-size:var(--t-lg); color:var(--paper);
+  background:var(--line); border-radius:50%; width:2.6em; height:2.6em;
+  display:grid; place-items:center; flex:none}
+
+/* the polar-pattern picker */
+.picker{display:flex; flex-wrap:wrap; gap:var(--sp-2)}
+.pick{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.04em;
+  padding:.35rem .7rem; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp); cursor:pointer;
+  transition:transform .12s, background .16s}
+.pick:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pick[aria-pressed="true"]{background:var(--sakura); color:var(--tag-ink); transform:translate(-1px,-1px)}
+
+/* dB / value readouts inside gadgets */
+.dial{display:flex; gap:var(--sp-3); flex-wrap:wrap}
+.dial div{background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 7rem}
+.dial span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.dial b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* grouped cheat sheet */
+.sheet h4{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--paper); background:var(--sakura); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.2rem .8rem; display:inline-block; margin:var(--sp-6) 0 var(--sp-3)}
+.sheet h4:first-child{margin-top:0}
+
+/* a wide callout for the one big formula of a section */
+.formula{background:var(--night); color:#FFE9D6; border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono); font-size:var(--t-md); font-weight:700; text-align:center;
+  overflow-x:auto; margin-top:var(--sp-4)}
+.formula em{color:var(--sun); font-style:normal}
+.formula small{display:block; font-size:var(--t-xs); color:#C3A4B0; font-weight:400; margin-top:var(--sp-2)}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 4</span>
+      <h1><small>CTS ☆ CHAPTER 4</small>Café<br>Decibel</h1>
+      <p class="hero-sub">Audio systems, from a vibrating string all the way to a loudspeaker.
+        This one is <b>five times the size</b> of Chapter 3 — so it's been cut into
+        <b>11 levels</b>, five gadgets you can break, and a 15-HP boss.
+        Bring coffee. <span class="kmj">( •̀ω•́ )✧</span></p>
+      <nav class="chips">
+        <a class="chip" href="#waves">〰️ 1 · waves</a>
+        <a class="chip" href="#decibel">📊 2 · decibels</a>
+        <a class="chip" href="#inverse">📉 3 · inverse square</a>
+        <a class="chip" href="#digital">💾 4 · digital audio</a>
+        <a class="chip" href="#acoustics">🧱 5 · acoustics</a>
+        <a class="chip" href="#mics">🎙 6 · microphones</a>
+        <a class="chip" href="#levels">🔌 7 · signal levels</a>
+        <a class="chip" href="#devices">🎛 8 · devices</a>
+        <a class="chip" href="#speakers">🔊 9 · loudspeakers</a>
+        <a class="chip" href="#monitor">📈 10 · monitoring</a>
+        <a class="chip" href="#apps">🏟 11 · applications</a>
+        <a class="chip" href="#song">🎵 the song</a>
+        <a class="chip" href="#quiz">⚔️ boss ×15</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · SOUND WAVES ══════════════ -->
+<section id="waves">
+  <div class="head">
+    <span class="lv">Lv.1 · sound waves</span>
+    <h2>Squeeze the air <span class="kao">〰️</span></h2>
+    <p class="lede">Sound is <b>waves of compression moving through a compressible medium</b>. Something
+      vibrates, shoves the air next to it, and that shove travels. The air itself doesn't fly across the
+      room — the <em>squeeze</em> does.</p>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+    <div class="bubble">Drop a rock in a pond ⟶ rings travel out, water stays put. Sound is that,
+      but <b>spherical</b> and made of squeezes. And in space? Nothing to squeeze.
+      <b>That's why nobody can hear you scream.</b> 🚀</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Wavelength is a ruler. Frequency is a clock.</q>
+    <p class="why"><b>Wavelength</b> = the <em>distance</em> between two points one full cycle apart —
+      measured in metres. <b>Frequency</b> = how many cycles happen <em>per second</em> — measured in hertz.
+      One is space, one is time, and they're locked together by the speed of sound.</p>
+  </div>
+
+  <div class="formula">
+    wavelength = <em>speed ÷ frequency</em>  ·  λ = 343 / f
+    <small>speed of sound in air at 20 °C / 68 °F, at sea level = 343 m/s (1,125 ft/s)</small>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🤓 nerd bait</span>
+    <b>343 = 7 × 7 × 7.</b> The speed of sound is a perfect cube. You will never forget it again,
+    and it's the number every wavelength question hangs off.
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · how big is a sound?</span>
+      <span class="verdict ok" id="wl-band">midrange</span>
+    </div>
+    <div class="screen"><canvas id="wl" width="1000" height="230"></canvas></div>
+    <div class="ctl">
+      <label for="wl-r">frequency</label>
+      <input type="range" id="wl-r" min="0" max="1000" step="1" value="500">
+      <output id="wl-f">1.00 kHz</output>
+    </div>
+    <div class="dial">
+      <div><span>wavelength</span><b id="wl-lam">343 mm</b></div>
+      <div><span>that's about</span><b id="wl-cmp" style="font-size:var(--t-md)">a dinner plate</b></div>
+      <div><span>octave band</span><b id="wl-oct">1 kHz</b></div>
+    </div>
+    <p class="gsay" id="wl-say">The canvas shows a <b>5-metre</b> slice of air, drawn to scale.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--sun)">
+    <div class="story-text">
+      <p class="story-lead"><span>🎹</span><span>Why we count in octaves.</span></p>
+      <div class="beat"><span class="beat-i">👂</span>
+        <p>Your ear responds to frequency <span class="hl">logarithmically</span>. 220→440 Hz sounds like
+          the <em>same</em> jump as 440→880 Hz, even though one adds 220 Hz and the other adds 440 Hz.</p></div>
+      <div class="beat"><span class="beat-i">8️⃣</span>
+        <p>So we band the spectrum by <span class="hl-p">doubling</span>, and call each band an
+          <b>octave</b> — from <em>octavus</em>, Latin for eight, because the Western scale splits each
+          band into eight tones.</p></div>
+      <div class="beat"><span class="beat-i">🔟</span>
+        <p>Human hearing (20 Hz – 20 kHz) divides into <span class="hl-m">10 octave bands</span>, each named
+          by its centre frequency. Graphic EQs slice it finer still — into ⅓-octave bands.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--sun)">
+      <span class="fig-t">📏 the same digits, twice</span>
+      <svg viewBox="0 0 220 150" role="img" aria-label="At 20 hertz the wavelength is 17.2 metres; at 20 kilohertz it is 17.2 millimetres.">
+        <rect x="4" y="6" width="212" height="60" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="21" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">20 Hz · LOWEST</text>
+        <path d="M14 46 Q60 22 106 46 T198 46" stroke="var(--lav)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <text x="14" y="61" font-family="monospace" font-size="12" font-weight="700" fill="var(--ink)">17.2 metres</text>
+        <rect x="4" y="78" width="212" height="60" rx="8" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="93" font-family="monospace" font-size="10" font-weight="700" fill="var(--mint)">20 kHz · HIGHEST</text>
+        <path d="M14 116 q3 -9 6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0
+                 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0"
+              stroke="var(--mint)" stroke-width="3" fill="none"/>
+        <text x="14" y="133" font-family="monospace" font-size="12" font-weight="700" fill="var(--ink)">17.2 millimetres</text>
+      </svg>
+      <figcaption>Same digits, different unit — a freebie your brain will happily keep.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Low and long. High and short.</q>
+    <p class="why">Wavelength and frequency are <b>inversely proportional</b>. The lowest frequencies have
+      the longest wavelengths (20 Hz = 17.2 m, longer than a bus) and the highest have the shortest
+      (20 kHz = 17.2 mm, thinner than your thumb).</p>
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Harmonics — why a guitar isn't a banjo 🪕</h3>
+  <div class="story" style="--tone:var(--sakura)">
+    <div class="story-text">
+      <div class="beat"><span class="beat-i">🎸</span>
+        <p>Pluck a string tuned to A = <b>220 Hz</b> and it doesn't only make 220 Hz. It also rings at
+          440, 660, 880, 1100, 1320… — <span class="hl">whole-number multiples</span> of the fundamental.
+          Those are its <b>harmonics</b>.</p></div>
+      <div class="beat"><span class="beat-i">🎻</span>
+        <p>The <em>relative proportions</em> of those harmonics are what make a note sound like a guitar
+          rather than a mandolin, ukulele, balalaika, double-bass or banjo. That character is called
+          <span class="hl-p">timbre</span>.</p></div>
+      <div class="beat"><span class="beat-i">⚠️</span>
+        <p>The trap: <span class="hl-m">the fundamental IS the first harmonic</span>. 220 Hz is harmonic
+          #1, 440 Hz is #2, 660 Hz is #3. Not "the fundamental plus the harmonics".</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--sakura)">
+      <span class="fig-t">🎵 the harmonic ladder</span>
+      <svg viewBox="0 0 220 160" role="img" aria-label="Harmonics of 220 hertz: 220, 440, 660, 880 and 1100 hertz as multiples one through five.">
+        <g font-family="monospace" font-size="11" font-weight="700">
+          <rect x="4" y="6" width="212" height="26" rx="6" fill="var(--sakura-soft)" stroke="var(--line)" stroke-width="3"/>
+          <text x="12" y="24" fill="var(--berry)">1st · 220 Hz</text><text x="150" y="24" fill="var(--ink-soft)">×1</text>
+          <rect x="4" y="36" width="212" height="26" rx="6" fill="var(--paper-2)" stroke="var(--line)" stroke-width="3"/>
+          <text x="12" y="54" fill="var(--ink)">2nd · 440 Hz</text><text x="150" y="54" fill="var(--ink-soft)">×2</text>
+          <rect x="4" y="66" width="212" height="26" rx="6" fill="var(--paper-2)" stroke="var(--line)" stroke-width="3"/>
+          <text x="12" y="84" fill="var(--ink)">3rd · 660 Hz</text><text x="150" y="84" fill="var(--ink-soft)">×3</text>
+          <rect x="4" y="96" width="212" height="26" rx="6" fill="var(--paper-2)" stroke="var(--line)" stroke-width="3"/>
+          <text x="12" y="114" fill="var(--ink)">4th · 880 Hz</text><text x="150" y="114" fill="var(--ink-soft)">×4</text>
+          <rect x="4" y="126" width="212" height="26" rx="6" fill="var(--paper-2)" stroke="var(--line)" stroke-width="3"/>
+          <text x="12" y="144" fill="var(--ink)">5th · 1100 Hz</text><text x="150" y="144" fill="var(--ink-soft)">×5</text>
+        </g>
+      </svg>
+      <figcaption>The fundamental sits on the bottom rung — and it counts as rung one.</figcaption>
+    </figure>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🌀 bonus vocabulary</span>
+    Every complex sound can be broken into a stack of simple sine waves. The maths that does it is
+    <b>Fourier analysis</b>, and its output is the <b>Fourier series</b>. It sits at the heart of
+    <b>every DSP application</b> you'll meet later in this chapter.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · DECIBELS ══════════════ -->
+<section id="decibel">
+  <div class="head">
+    <span class="lv">Lv.2 · logarithms &amp; the decibel</span>
+    <h2>The unit that isn't a unit <span class="kao">📊</span></h2>
+    <p class="lede">Your ears cover a range of about <b>3,000,000 : 1</b> between the quietest sound you can
+      detect and the point it starts to hurt. Writing that on a linear scale is absurd — so audio runs on
+      logarithms.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--lav)">
+    <div class="story-text">
+      <p class="story-lead"><span>🪜</span><span>What a logarithm actually is.</span></p>
+      <div class="beat"><span class="beat-i">🔢</span>
+        <p>The log of a number is <span class="hl">how many times 10 must be multiplied by itself</span> to
+          get there. log(1,000) = 3, because 10×10×10. log(100,000,000) = 8. log(0.0001) = −4.</p></div>
+      <div class="beat"><span class="beat-i">📏</span>
+        <p>On a normal ruler, every mark adds <em>one</em>. On a log ruler, every mark <span class="hl-p">
+          multiplies by ten</span>. That's how you fit a range of millions onto one page.</p></div>
+      <div class="beat"><span class="beat-i">🧠</span>
+        <p>And it isn't just hearing — the <b>Weber–Fechner law</b> says <span class="hl-m">all our senses
+          work this way</span>. Sensation is proportional to the log of the stimulus.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--lav)">
+      <span class="fig-t">📏 linear vs logarithmic</span>
+      <svg viewBox="0 0 220 130" role="img" aria-label="A linear scale counting 1 to 5 above a logarithmic scale counting 10, 100, 1000, 10000.">
+        <text x="10" y="18" font-family="monospace" font-size="10" font-weight="700" fill="var(--ink-soft)">LINEAR · +1 each step</text>
+        <line x1="12" y1="38" x2="208" y2="38" stroke="var(--line)" stroke-width="3"/>
+        <g font-family="monospace" font-size="10" font-weight="700" fill="var(--ink)">
+          <line x1="12" y1="32" x2="12" y2="44" stroke="var(--line)" stroke-width="3"/><text x="8" y="58">1</text>
+          <line x1="61" y1="32" x2="61" y2="44" stroke="var(--line)" stroke-width="3"/><text x="57" y="58">2</text>
+          <line x1="110" y1="32" x2="110" y2="44" stroke="var(--line)" stroke-width="3"/><text x="106" y="58">3</text>
+          <line x1="159" y1="32" x2="159" y2="44" stroke="var(--line)" stroke-width="3"/><text x="155" y="58">4</text>
+          <line x1="208" y1="32" x2="208" y2="44" stroke="var(--line)" stroke-width="3"/><text x="204" y="58">5</text>
+        </g>
+        <text x="10" y="86" font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">LOGARITHMIC · ×10 each step</text>
+        <line x1="12" y1="104" x2="208" y2="104" stroke="var(--lav)" stroke-width="3"/>
+        <g font-family="monospace" font-size="10" font-weight="700" fill="var(--lav)">
+          <line x1="12" y1="98" x2="12" y2="110" stroke="var(--lav)" stroke-width="3"/><text x="4" y="124">10</text>
+          <line x1="77" y1="98" x2="77" y2="110" stroke="var(--lav)" stroke-width="3"/><text x="63" y="124">100</text>
+          <line x1="142" y1="98" x2="142" y2="110" stroke="var(--lav)" stroke-width="3"/><text x="126" y="124">1000</text>
+          <line x1="208" y1="98" x2="208" y2="110" stroke="var(--lav)" stroke-width="3"/><text x="184" y="124">10000</text>
+        </g>
+      </svg>
+      <figcaption>Same distance along the page. Wildly different distance in reality.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Power gets Ten. Volts and Distance get Twenty.</q>
+    <p class="why">A decibel is <b>a logarithmic ratio between two quantities of the same property</b>.
+      Power compares directly, so <code>dB = 10 log(P1/P2)</code>. But voltage, current and distance all get
+      <em>squared</em> on their way to power — so they need <code>dB = 20 log(V1/V2)</code>. Same for
+      <code>20 log(D1/D2)</code>.</p>
+  </div>
+
+  <div class="formula">
+    dB = <em>10 × log(P1 / P2)</em>  ·  power<br>
+    dB = <em>20 × log(V1 / V2)</em>  ·  voltage, current, distance
+    <small>Bel = log(q1/q2), named for Alexander Graham Bell — but the Bel is too big, so 1 dB = 0.1 Bel</small>
+  </div>
+
+  <div class="say right">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">"It's <b>85 dB</b>." …85 dB compared to <b>what?</b> A decibel is a
+      <b>comparison, not an absolute</b>. Saying "it's 10 degrees hotter today" tells you nothing
+      unless you know yesterday. 🌡️</div>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">the big one</span><h4>0 dB SPL</h4>
+      <p>The <b>threshold of human hearing</b> — a pressure of <b>20 µPa</b>. Every SPL figure you ever see
+        is referenced to this.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">voltage refs</span><h4>0 dBu &amp; 0 dBV</h4>
+      <p><b>0 dBu = 775 mV</b> · <b>0 dBV = 1.0 V</b>. And −20 dBu isn't a negative voltage — it's just a
+        voltage <em>less than</em> 775 mV.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">power ref</span><h4>0 dBm</h4>
+      <p><b>0 dBm = 1 mW</b> of electrical power.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>One barely. Three clearly. Ten doubly.</q>
+    <p class="why">The three numbers the exam wants. <b>1 dB</b> = the smallest perceptible change (most
+      people miss it). <b>3 dB</b> = a "just noticeable" change. <b>10 dB</b> = perceived as
+      <em>twice as loud</em> (or half as loud). 85 → 95 dB SPL sounds like double.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · can you even tell?</span>
+      <span class="verdict bad" id="db-verdict">inaudible</span>
+    </div>
+    <div class="screen"><canvas id="db" width="1000" height="200"></canvas></div>
+    <div class="ctl">
+      <label for="db-r">level change</label>
+      <input type="range" id="db-r" min="0" max="20" step="0.5" value="3">
+      <output id="db-out">+3.0 dB</output>
+    </div>
+    <div class="dial">
+      <div><span>power ratio</span><b id="db-p">2.0 ×</b></div>
+      <div><span>voltage ratio</span><b id="db-v">1.41 ×</b></div>
+      <div><span>sounds</span><b id="db-s" style="font-size:var(--t-md)">just noticeable</b></div>
+    </div>
+    <p class="gsay" id="db-say">3 dB is the classic "just noticeable" step.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · INVERSE SQUARE ══════════════ -->
+<section id="inverse">
+  <div class="head">
+    <span class="lv">Lv.3 · the inverse square law</span>
+    <h2>Walk away, lose six <span class="kao">📉</span></h2>
+    <p class="lede">Sound spreads out <b>spherically</b> in every direction. The same energy has to cover a
+      bigger and bigger ball — so the further you stand, the thinner it gets.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Double the distance, drop 6.</q>
+    <p class="why">The <b>inverse square law</b>: sound energy is inversely proportional to the
+      <em>square</em> of the distance. Double the distance → the sphere's area (4πr²) goes up
+      <b>4×</b> → energy at any point falls to <b>a quarter</b> → <b>−6 dB</b>. Halve the distance
+      and you gain 6 dB. This is the <b>"6 dB per doubling" rule</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 03 · step back from the speaker</span>
+      <span class="verdict ok" id="isl-d">1 doubling</span>
+    </div>
+    <div class="screen"><canvas id="isl" width="1000" height="250"></canvas></div>
+    <div class="ctl">
+      <label for="isl-r">distance</label>
+      <input type="range" id="isl-r" min="0" max="600" step="1" value="100">
+      <output id="isl-m">2.0 m</output>
+    </div>
+    <div class="dial">
+      <div><span>level there</span><b id="isl-spl">94.0 dB</b></div>
+      <div><span>change</span><b id="isl-chg">−6.0 dB</b></div>
+      <div><span>doublings</span><b id="isl-n">1</b></div>
+    </div>
+    <p class="gsay" id="isl-say">Reference: <b>100 dB SPL at 1 metre</b>. Every doubling costs you exactly 6 dB.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🌍 it's not just sound</span>
+    The inverse square law applies to <b>everything that radiates from a source</b> — light, radio waves,
+    gravity, magnetism, the electric field. Learn it once, use it in half the remaining chapters.
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ the honest caveat</span>
+    A <b>true</b> 6 dB per doubling only happens in a <b>near-field</b> (within a few wavelengths of the
+    source) or <b>free-field</b> (no reflections) environment. Put it in a real room with walls and the
+    reflections fill in the gap.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · DIGITAL AUDIO ══════════════ -->
+<section id="digital">
+  <div class="head">
+    <span class="lv">Lv.4 · digital audio</span>
+    <h2>Chapter 3 comes back <span class="kao">💾</span></h2>
+    <p class="lede">Good news: you already know most of this. Anna and Digi had this exact argument last
+      chapter — here it is again, wearing an audio hat.</p>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">Same formula as last time, nya — only the <b>name</b> changed. Bit rate is
+      called <b>bandwidth</b> now. <b>Snaps × Shades × Speakers</b>, still. 🐾</div>
+  </div>
+
+  <div class="formula">
+    Bandwidth = <em>Sample Rate × Bit Depth × Channels</em>
+    <small>bits per second = samples per second × bits per sample × number of channels</small>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">sample rate</span><h4>How often 📸</h4>
+      <ul>
+        <li><b>44.1 kHz</b> — CD, set by the <b>Red Book</b> spec (Sony + Philips, <b>1980</b>)</li>
+        <li><b>48 kHz</b> → captures to 24 kHz</li>
+        <li><b>96 kHz</b> → captures to 48 kHz</li>
+        <li><b>192 kHz</b> → captures to 96 kHz</li>
+      </ul>
+      <p>44.1 was a trade-off with 1980 optical disc limits vs Nyquist's "twice the highest frequency".</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">bit depth</span><h4>How precisely 🖍</h4>
+      <ul>
+        <li><b>16-bit</b> → 65,536 levels → <b>~96 dB</b> range (CD)</li>
+        <li><b>24-bit</b> → <b>~144 dB</b> range</li>
+        <li><b>32-bit</b> → <b>~192 dB</b> range</li>
+      </ul>
+      <p>Rounding an infinitely variable analog signal to fixed levels creates <b>quantization error</b>.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Six dB per bit.</q>
+    <p class="why">Three numbers collapse into one rule. 16 × 6 = <b>96 dB</b>. 24 × 6 = <b>144 dB</b>.
+      32 × 6 = <b>192 dB</b>. Every bit of depth buys you roughly <b>6 dB more dynamic range</b> — and
+      you never have to memorise the table again.</p>
+  </div>
+
+  <div class="vs">
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">Lossless audio</div>
+        <div class="cat-role">50–70% SMALLER · NOTHING LOST</div></div></div>
+      <ul class="cat-list">
+        <li><b>FLAC · WavPack · Monkey's Audio · ALAC</b></li>
+        <li>Needs <b>significant processing power</b> → possible latency</li>
+        <li>Good for high-quality recording and remote streaming</li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--berry);--tone-soft:var(--berry-soft)">
+      <div class="cat-top"><div><div class="cat-name">Lossy audio</div>
+        <div class="cat-role">PSYCHOACOUSTIC · DETAIL BINNED</div></div></div>
+      <ul class="cat-list">
+        <li><b>MP3</b> (= MPEG-2 Audio Layer III) · <b>AAC</b></li>
+        <li>320 kbps ≈ <b>75%</b> smaller · 160 kbps ≈ <b>90%</b> smaller than CD's 1.4 Mbps</li>
+        <li>Fine for noisy rooms, background music, voice-only paging</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📦 uncompressed is the pro default</span>
+    Most professional AV <b>doesn't compress at all</b> — it avoids the processing overhead and latency.
+    Uncompressed formats: <b>PCM</b> (like CD audio), <b>AIFF</b>, <b>WAV</b>, <b>MPEG audio</b>,
+    <b>HDMI audio</b>, and <b>AES3</b> (also called <b>AES/EBU</b>).
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Audio over the network 🌐</h3>
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">protocol</span><h4>AVB</h4>
+      <p>An <b>IEEE standard</b>. Uncompressed video plus up to <b>200 channels</b> of 48 kHz/24-bit in
+        real time, using Ethernet frames.</p>
+      <p><b>Needs special AVB-enabled switches</b> — and they're not cheap.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">protocol</span><h4>Dante</h4>
+      <p>Runs over <b>TCP/IP</b>. Over gigabit: up to <b>1,024 channels</b> at 48 kHz/24-bit, or 512 at
+        96 kHz. Over 100 Mbps: 96 channels.</p>
+      <p><b>Fully routable using standard switches and routers.</b> No separate infrastructure.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">the standard</span><h4>AES67</h4>
+      <p>The <b>interoperability standard</b> that simplified the whole mess. Older proprietary options
+        like <b>CobraNet</b> and <b>EtherSound</b> ran audio over Ethernet but not TCP/IP.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>AVB needs special switches. Dante doesn't.</q>
+    <p class="why">That single sentence is the difference the exam cares about. And for streaming:
+      <b>Unicast = one stream each</b> (three clients at 100 kbps really costs you 300 kbps).
+      <b>Multicast = one stream for all</b>, on <b>Class D</b> addresses
+      (224.0.0.0 – 239.255.255.255) — but <b>LAN or private networks only</b>, never the open Internet.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 5 · ACOUSTICS ══════════════ -->
+<section id="acoustics">
+  <div class="head">
+    <span class="lv">Lv.5 · acoustics</span>
+    <h2>What a wall does to a sound <span class="kao">🧱</span></h2>
+    <p class="lede">Acoustics is more than "hang some fabric on a wall." It covers how sound is
+      <b>produced</b>, and its <b>propagation</b> and <b>control</b> — which is exactly how the exam
+      words it.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Sound hits a wall and becomes a RAT.</q>
+    <p class="why">Energy is never destroyed — the law of conservation of energy says so. When sound meets
+      a boundary, some combination of exactly three things happens:
+      <b>R</b>eflected · <b>A</b>bsorbed · <b>T</b>ransmitted. Anna and Digi both chase it.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">R · reflected</span><h4>Bounced back 🪞</h4>
+      <p><b>Direct / specular / hard</b> — mirror-like, coherent, one direction. <b>Angle of incidence =
+        angle of reflection.</b></p>
+      <p><b>Diffuse</b> — scattered in many directions.</p>
+      <p>Which one you get depends on how smooth the surface is <em>relative to the wavelength</em>.
+        Energy stays in the room either way.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">A · absorbed</span><h4>Turned into heat 🔥</h4>
+      <p><b>Porous absorbers</b> — carpet, acoustic tiles, foam, curtains, upholstery, and <b>people</b>.
+        Friction slows the air molecules and the energy becomes <b>low-level heat</b>.</p>
+      <p>Absorption only works over a <b>limited frequency range</b> — everything outside it still
+        reflects or transmits.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">T · transmitted</span><h4>Escaped next door 🚪</h4>
+      <p>Passes through partitions or travels as <b>structure-borne vibration</b>.</p>
+      <p>How much gets through depends on the partition's <b>mass, stiffness, air gaps, design and
+        internal structure</b>.</p>
+    </article>
+  </div>
+
+  <div class="story" style="--tone:var(--sun)">
+    <div class="story-text">
+      <p class="story-lead"><span>🔁</span><span>Echo vs reverberation.</span></p>
+      <div class="beat"><span class="beat-i">➡️</span>
+        <p>Direct sound takes the straight line, so it always arrives <b>first</b>. Reflected sound takes a
+          longer path, so it <span class="hl">always arrives later</span>.</p></div>
+      <div class="beat"><span class="beat-i">👋</span>
+        <p>A single <b>late</b> reflection is an <span class="hl-p">echo</span>.</p></div>
+      <div class="beat"><span class="beat-i">🌊</span>
+        <p>But when a room has many hard surfaces, reflections stay loud and pile up until they arrive
+          from every direction at once. That dense, persistent mass is
+          <span class="hl-m">reverberation</span> — and it needs a <b>large</b> space. A conference room
+          has bad reflections, not true reverb.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--sun)">
+      <span class="fig-t">🪞 direct vs diffuse</span>
+      <svg viewBox="0 0 220 150" role="img" aria-label="A specular reflection bounces at an equal angle; a diffuse reflection scatters in many directions.">
+        <rect x="4" y="6" width="212" height="66" rx="8" fill="var(--lav-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="12" y="20" font-family="monospace" font-size="9" font-weight="700" fill="var(--lav)">SPECULAR · angle in = angle out</text>
+        <line x1="14" y1="62" x2="206" y2="62" stroke="var(--line)" stroke-width="4"/>
+        <path d="M40 28 L110 60" stroke="var(--lav)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M110 60 L180 28" stroke="var(--berry)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M110 34 v26" stroke="var(--ink-faint)" stroke-width="2" stroke-dasharray="4 4"/>
+        <rect x="4" y="80" width="212" height="66" rx="8" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="3"/>
+        <text x="12" y="94" font-family="monospace" font-size="9" font-weight="700" fill="var(--mint)">DIFFUSE · scattered everywhere</text>
+        <line x1="14" y1="136" x2="206" y2="136" stroke="var(--line)" stroke-width="4"/>
+        <path d="M40 102 L110 134" stroke="var(--lav)" stroke-width="3" stroke-linecap="round"/>
+        <g stroke="var(--berry)" stroke-width="2.5" stroke-linecap="round">
+          <path d="M110 134 L60 106"/><path d="M110 134 L96 100"/><path d="M110 134 L130 100"/>
+          <path d="M110 134 L164 104"/><path d="M110 134 L196 118"/></g>
+      </svg>
+      <figcaption>Smooth relative to the wavelength → mirror. Rough → scatter.</figcaption>
+    </figure>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔇 ambient noise</span>
+    <b>Noise is anything other than the desired signal</b> — and the exam's phrasing is that ambient noise
+    <b>interferes with</b> the message (it doesn't block it, and it certainly doesn't enhance it).
+    Sources: HVAC, equipment fans, office kit, phones, people, traffic, weather, corridors, and
+    structure-borne vibration. Limits should be <b>specified per room type</b> — a gym and a boardroom
+    get very different numbers.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · MICROPHONES ══════════════ -->
+<section id="mics">
+  <div class="head">
+    <span class="lv">Lv.6 · sound capture</span>
+    <h2>Microphones <span class="kao">🎙</span></h2>
+    <p class="lede">Sound → electricity → sound. Converting energy from one form to another is called
+      <b>transduction</b>, and a device that does it is a <b>transducer</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Transducers at both ends.</q>
+    <p class="why">The <b>microphone</b> converts acoustic energy → electrical energy. The
+      <b>loudspeaker</b> converts electrical energy → acoustic energy. Both are transducers, sitting at
+      opposite ends of the same electrical path.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-step mic"><span class="cs-i">🗣</span><span class="cs-n">Source vibrates</span><span class="cs-v">acoustic</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step mic"><span class="cs-i">🎙</span><span class="cs-n">Mic transduces</span><span class="cs-v">→ electrical</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step line"><span class="cs-i">🎛</span><span class="cs-n">Signal processed</span><span class="cs-v">line level</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step spk"><span class="cs-i">📢</span><span class="cs-n">Output device</span><span class="cs-v">amplified</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step spk"><span class="cs-i">👂</span><span class="cs-n">Back to sound</span><span class="cs-v">acoustic</span></div>
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">The four types you must know</h3>
+  <div class="vs" style="margin-top:var(--sp-4)">
+    <article class="cat-card" style="--tone:var(--lav);--tone-soft:var(--lav-soft)">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+        <div><div class="cat-name">Dynamic</div><div class="cat-role">TRIPLE D</div></div>
+      </div>
+      <ul class="cat-list">
+        <li><b>D</b>iaphragm + coil moving in a magnet — cuts the flux, induces a voltage</li>
+        <li><b>D</b>urable, economical, handles high SPL</li>
+        <li><b>D</b>oesn't need power at all</li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+        <div><div class="cat-name">Condenser</div><div class="cat-role">TRIPLE C</div></div>
+      </div>
+      <ul class="cat-list">
+        <li><b>C</b>apacitor — diaphragm + backplate, air as insulator</li>
+        <li><b>C</b>harge needed → requires power, and has a built-in preamp</li>
+        <li><b>C</b>risper — lighter diaphragm, more sensitive, better high frequencies</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Dynamic = magnet, no power. Condenser = capacitor, needs power.</q>
+    <p class="why">Everything else follows. The condenser's preamp is powered by the same supply that
+      charges its plates — and it is <b>not</b> the mic preamp in the mixing console.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">type 3</span><h4>Electret</h4>
+      <p><b>A type of condenser.</b> Named for the <b>prepolarised</b> material on the diaphragm or
+        backplate, which holds a <b>permanent fixed charge</b>.</p>
+      <p>That removes the need for high polarising voltage → runs on <b>small batteries or normal phantom
+        power</b>. Physically small, so it's what lavaliers and headmics use.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">type 4</span><h4>MEMS</h4>
+      <p>Built <b>directly onto silicon chips</b> with the same etching used for microprocessors.
+        Variations on condenser or piezo-electric designs.</p>
+      <p>Tiny = <b>not very sensitive</b> (especially at bass) — but they can be built in <b>arrays</b>,
+        and the amps, DSP and even the <b>A-to-D converter can sit on the same chip</b>, giving a
+        <b>direct digital output</b>.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚡ phantom power</span>
+    Remote power for condensers: <b>12 V to 48 V DC, with 48 V the most common</b>. Positive voltage is
+    applied <b>equally to both signal conductors</b> of a balanced circuit, returning through the shield.
+    Because it's equal on both, it <b>doesn't affect the audio and doesn't damage dynamic mics</b>.
+    Usually switchable at the mixer — per channel, per group, or all at once.
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Polar patterns — where a mic listens 🎯</h3>
+  <div class="gadget" style="margin-top:var(--sp-4)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 04 · the pickup patterns</span>
+      <span class="verdict ok" id="pp-name">cardioid</span>
+    </div>
+    <div class="picker" id="pp-pick">
+      <button class="pick" type="button" data-p="omni">omnidirectional</button>
+      <button class="pick" type="button" data-p="cardioid" aria-pressed="true">cardioid</button>
+      <button class="pick" type="button" data-p="hyper">hypercardioid</button>
+      <button class="pick" type="button" data-p="super">supercardioid</button>
+      <button class="pick" type="button" data-p="bi">bidirectional</button>
+    </div>
+    <div class="screen"><canvas id="pp" width="1000" height="380"></canvas></div>
+    <p class="gsay" id="pp-say">The mic points <b>up</b>. Filled area = where it hears you.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">omnidirectional</span><h4>Everything, equally</h4>
+      <p>Pickup is <b>uniform in all directions</b>. Good when you want the whole room — an interview,
+        say.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">cardioid</span><h4>The heart ❤️</h4>
+      <p>Pickup <b>primarily from the front</b>. Rejects the sides, with the <b>most rejection at the
+        rear</b>. Named for its heart-shaped plot.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">hypercardioid</span><h4>Tighter</h4>
+      <p><b>More directional than cardioid</b> — rejects more from the side. Trade-off: <b>some sound is
+        picked up directly at the rear</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">supercardioid</span><h4>Tighter still</h4>
+      <p><b>Better directionality than hypercardioid</b>, as its side rejection is better. It also has
+        <b>more rear pickup</b> than the hypercardioid.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">bidirectional</span><h4>Figure-eight 8️⃣</h4>
+      <p>Equal pickup in <b>opposite</b> directions, with <b>little or no pickup from the sides</b>.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ heads up — a wording clash</span>
+    Your textbook ranks <b>supercardioid as more directional than hypercardioid</b>. Most of the audio
+    industry says the opposite (hyper is tighter, and super has <em>less</em> rear pickup).
+    <b>Answer the way your book words it</b> — but don't be thrown if a manufacturer's datasheet
+    disagrees. I've drawn the standard shapes above and quoted your book's descriptions verbatim.
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">spec 1</span><h4>Sensitivity</h4>
+      <p>How <b>efficiently</b> a mic converts acoustic → electrical. Same SPL in, more volts out = more
+        sensitive. <b>Condensers are more sensitive than dynamics.</b></p>
+      <p>Example: <b>−54.5 dBV/Pa</b>. And <b>1 Pa = 94 dB SPL</b>, the usual reference (sometimes
+        74 dB SPL = 0.1 Pa).</p>
+      <p>Low sensitivity ≠ low quality — a singer working close needs a dynamic that won't distort; a
+        presenter a metre back needs a sensitive one.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">spec 2</span><h4>Frequency response</h4>
+      <p>Electrical output across the audible spectrum — the range from lowest to highest the mic can
+        transduce. It's what makes a mic "sound like" itself.</p>
+      <p>Best <b>on-axis</b>. Move off-axis on a directional mic and you lose level <b>and</b> the
+        frequency response changes. Plotted together, that's a <b>polar plot</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">spec 3</span><h4>Impedance</h4>
+      <p><b>Impedance</b> = opposition to current in an <b>AC</b> circuit (audio is AC).
+        <b>Resistance</b> = the same but for DC. Both in <b>ohms (Ω)</b>.</p>
+      <p><b>The one-tenth rule:</b> output impedance should be <b>≤ 1/10</b> of the input it feeds.
+        Pro mic <b>≤ 200 Ω</b> → input <b>≥ 2 kΩ</b>.</p>
+      <p>Low-Z ≤ 200 Ω (some to 600 Ω) · High-Z &gt; 25 kΩ. <b>Pro gear is low impedance</b> — less noise,
+        much longer cable runs.</p>
+    </article>
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Physical designs 🎤</h3>
+  <div class="menu">
+    <article class="item"><span class="item-tag">handheld</span><p>Speech or singing. Has <b>internal shock mounting</b> because it's constantly moved.</p></article>
+    <article class="item"><span class="item-tag">boundary</span><p>Surface-mount, against a table, floor or wall. The surface's reflectivity affects it. <b>Ceiling mounting gives the poorest performance</b> — far from talkers, close to HVAC and projectors.</p></article>
+    <article class="item"><span class="item-tag">gooseneck</span><p>Flexible stem on lecterns and tables. Shock mounts available to isolate vibration.</p></article>
+    <article class="item"><span class="item-tag">shotgun</span><p>Named for its shape and <b>long narrow polar pattern</b>. Film and TV — on a fishpole, studio boom, or camera.</p></article>
+    <article class="item"><span class="item-tag">instrument</span><p>Condenser or dynamic depending on loudness and range. Some use direct mechanical or magnetic pickups.</p></article>
+    <article class="item"><span class="item-tag">lavalier &amp; headmic</span><p>Worn by the user. Size, appearance and colour are critical — so they're <b>usually electret</b>.</p></article>
+    <article class="item"><span class="item-tag">beamforming array</span><p>Many condenser or MEMS capsules + DSP to form <b>narrow beams that can be electronically steered</b>. Wall, table or ceiling. Meeting rooms and lecterns.</p></article>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">wireless</span><h4>Radio mics 📻</h4>
+      <p><b>RF</b> transmission instead of cable (some systems use <b>IR</b>). Handheld with integrated or
+        plug-on transmitter; lav/headmic into a <b>bodypack</b>; receiver tuned to that frequency.</p>
+      <p>Selectable frequencies avoid interference, cross-talk and intermodulation.
+        <b>Spread-spectrum frequency hopping</b> minimises cross-talk and stops eavesdropping.</p>
+      <p><b>Even the best wireless link is less reliable and less noise-immune than a cable.</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">cables</span><h4>Shielded twisted pair</h4>
+      <ul>
+        <li>A <b>twisted pair</b> of insulated copper conductors — the twisting gives <b>common-mode noise
+          rejection</b></li>
+        <li>An <b>aluminium foil or braided copper shield</b> around them</li>
+        <li>A protective <b>insulated jacket</b></li>
+      </ul>
+      <p>Terminated with a <b>3-pin XLR</b>: <b>socket (female) at the mic end, plug (male) at the
+        processing end</b>. Many circuits at once = a <b>multicore</b> or <b>snake</b>.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>X plus L-R. Left and Right, with an X in front.</q>
+    <p class="why">The exam offers you <b>XRL</b>, <b>RXL</b> and <b>LRX</b> to see if you'll blink.
+      L and R are already the two letters your brain owns in audio — just remember the <b>X goes
+      first</b>. <b>XLR.</b></p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📡 spectrum management</span>
+    Running several wireless systems at once — mics, in-ear monitors, comms — requires
+    <b>frequency coordination</b>. A <b>full-spectrum frequency allocation plan</b> is a required part of
+    any install, and must respect <b>local frequency regulations</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · SIGNAL LEVELS ══════════════ -->
+<section id="levels">
+  <div class="head">
+    <span class="lv">Lv.7 · audio signal levels</span>
+    <h2>Millivolts to many volts <span class="kao">🔌</span></h2>
+    <p class="lede">Four levels, in order, getting bigger. Get these in your head as a staircase and the
+      whole signal chain makes sense.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-step mic"><span class="cs-i">🎙</span><span class="cs-n">Mic level</span><span class="cs-v">a few mV</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step line"><span class="cs-i">🔺</span><span class="cs-n">Preamp lifts it</span><span class="cs-v">mic → line</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step line"><span class="cs-i">🎚</span><span class="cs-n">Line, pro</span><span class="cs-v">~1 V · 600 Ω</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step line"><span class="cs-i">🏠</span><span class="cs-n">Line, consumer</span><span class="cs-v">316 mV · 10 kΩ</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step spk"><span class="cs-i">🔊</span><span class="cs-n">Loudspeaker</span><span class="cs-v">4 V → 100 V+</span></div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Millivolts, one volt, many volts.</q>
+    <p class="why"><b>Mic</b> = a few millivolts, weak and vulnerable to interference — so a
+      <b>microphone preamplifier</b> lifts it to line level before anything else touches it.
+      <b>Line level</b> (~1 V pro, 316 mV consumer) is <b>where all routing and processing happens</b>.
+      <b>Loudspeaker level</b> is the power amp's output: 4 V+ typical, 70/100 V distributed,
+      100 V+ in huge venues.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔎 spotting consumer line level</span>
+    Consumer gear gives itself away with <b>3.5 mm (⅛ in) stereo jacks</b> and <b>RCA (phono)</b>
+    connectors, referenced to <b>10 kΩ at 1 kHz</b>. Pro line level references <b>600 Ω at 1 kHz</b>.
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">compatibility</span><h4>What not to plug in 💥</h4>
+      <p>Plug a <b>mic straight into a power amp</b> and you'll get almost nothing — mic level is far too
+        weak on its own.</p>
+      <p>Plug a <b>power amp output into a mic or line input</b> and you will <b>almost certainly damage
+        components</b>.</p>
+      <p><b>Powered / active loudspeakers</b> build the whole lot in: mic preamps if they have mic inputs,
+        internal processing at line level, and the power amp.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">vocabulary</span><h4>Gain words 🎚</h4>
+      <ul>
+        <li><b>Gain</b> — increasing the level (the amount of amplification)</li>
+        <li><b>Attenuation</b> — decreasing the level</li>
+        <li><b>Gain adjustment</b> — <em>any</em> change you make to a level</li>
+        <li><b>Gain control</b> — the general ability to make those adjustments</li>
+        <li><b>Unity gain</b> — neither gain nor attenuation; the signal passes through <b>unchanged</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap</span>
+    "A technician <b>changes</b> the level of a signal" → that's a <b>gain adjustment</b>, not
+    attenuation. Attenuation is only the <em>downward</em> half. <b>Unity = unchanged.</b>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · DEVICES ══════════════ -->
+<section id="devices">
+  <div class="head">
+    <span class="lv">Lv.8 · audio devices</span>
+    <h2>The box that does the work <span class="kao">🎛</span></h2>
+    <p class="lede">Mixers, dynamics processors, filters, EQ, delay, DSP and amplifiers — everything
+      between the microphone and the loudspeaker.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">mixers</span><h4>Combine, control, route, process</h4>
+      <p>That's the job, in the book's own four words. Usually <b>more inputs than outputs</b> — an
+        <b>8×2</b> mixer is 8 in, 2 out. Also called a mixing console, audio console or mixing desk.</p>
+      <p>Any mixer with mic inputs <b>has mic preamps</b>. Multiple <b>gain stages</b> between in and out
+        let the operator balance the sources.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">automatic mixers</span><h4>Gate vs gain-share</h4>
+      <p><b>Gated automatic</b> — opens and closes channels like an <b>on/off switch</b>.</p>
+      <p><b>Gain-sharing automatic</b> — turns up channels in use and attenuates the rest, like a
+        <b>volume knob</b>.</p>
+      <p><b>Speech only.</b> Music needs a live operator. And don't confuse <b>automatic</b> mixers with
+        <b>automated</b> mixers — the latter are computer-driven with stored presets.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Above the line: Compress and Limit. Below the line: Expand and Gate.</q>
+    <p class="why">The entire dynamics family in one sentence. <b>Compressors and limiters</b> act on
+      signals <em>above</em> the threshold. <b>Expanders and gates</b> act on signals <em>below</em> it.
+      All four are <b>dynamic processors</b> — they change the <b>dynamic range</b>, the gap between the
+      loudest and quietest parts.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 05 · the dynamics bench</span>
+      <span class="verdict ok" id="dy-acts">acts ABOVE</span>
+    </div>
+    <div class="picker" id="dy-pick">
+      <button class="pick" type="button" data-d="comp" aria-pressed="true">compressor</button>
+      <button class="pick" type="button" data-d="limit">limiter</button>
+      <button class="pick" type="button" data-d="expand">expander</button>
+      <button class="pick" type="button" data-d="gate">gate</button>
+    </div>
+    <div class="screen"><canvas id="dy" width="1000" height="260"></canvas></div>
+    <div class="ctl">
+      <label for="dy-r">threshold</label>
+      <input type="range" id="dy-r" min="10" max="90" step="1" value="55">
+      <output id="dy-out">55%</output>
+    </div>
+    <p class="gsay" id="dy-say">Purple = input, mint = output. The dashed line is the threshold.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">above threshold</span><h4>Compressor</h4>
+      <ul><li>Reduces the level of all signals <b>above</b> an adjustable threshold — keeps loud things
+        from being too loud</li>
+        <li>Amount set by an adjustable <b>ratio</b></li>
+        <li><b>Reduces</b> dynamic range</li>
+        <li>Used to <b>prevent distortion</b></li></ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">above threshold</span><h4>Limiter</h4>
+      <ul><li><b>Extreme compression.</b> Prevents high-amplitude signals getting through at all</li>
+        <li>Triggered by <b>peaks and spikes</b> — a dropped microphone — and reacts fast</li>
+        <li><b>More aggressive ratio</b> than a compressor</li>
+        <li>Used to <b>prevent damage to loudspeakers</b></li></ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">below threshold</span><h4>Expander</h4>
+      <ul><li>Properly a <b>downward</b> expander</li>
+        <li>Reduces the level of all signals <b>below</b> the threshold</li>
+        <li><b>Increases</b> dynamic range</li>
+        <li>Used to <b>reduce unwanted background noise</b></li></ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">below threshold</span><h4>Gate</h4>
+      <ul><li>An <b>extreme downward expander</b></li>
+        <li><b>Mutes</b> everything below the threshold</li>
+        <li>Signals must <b>exceed</b> the threshold to pass</li>
+        <li>Used to <b>automatically turn off unused microphones</b></li></ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A filter is named for what it lets through.</q>
+    <p class="why">A <b>low-pass</b> filter <em>passes the lows</em> and attenuates the highs. A
+      <b>high-pass</b> filter <em>passes the highs</em> and attenuates the lows. A <b>notch</b> filter
+      notches out one narrow band. The name is a guest list, not a hit list.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">equalizers</span><h4>Graphic vs parametric</h4>
+      <p>EQs <b>boost (gain) or cut (attenuate) a range of frequencies</b>.</p>
+      <p><b>Graphic</b> — the ⅓-octave type with <b>30 or 31 sliders</b> at fixed frequencies and fixed
+        bandwidths. Named because the sliders form a rough picture of the curve.</p>
+      <p><b>Parametric</b> — boost and cut <b>plus</b> adjustable <b>centre frequency</b> and
+        <b>bandwidth (the filter's Q)</b>. More flexible.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">delay</span><h4>Waiting for the sound ⏱</h4>
+      <p>Sound travels <b>343 m/s</b>. The electrical signal travels about <b>150,000 km/s</b> — roughly
+        <b>half a million times faster</b>.</p>
+      <p>So under-balcony loudspeakers get the signal essentially instantly while the main speakers' sound
+        is still in the air. Result: an <b>echo</b>. Fix: <b>delay the under-balcony feed</b> so both
+        arrive together.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">DSP</span><h4>One box, many jobs</h4>
+      <p>A microprocessor doing maths on the digital audio stream: <b>mixing, automated level control,
+        filtering, EQ, limiting, compression/expansion, delay, pitch shifting, echo cancellation,
+        feedback suppression, temporal manipulation, matrix routing, loudspeaker processing</b>.</p>
+      <p>One DSP can replace a rack of gear. Usually programmed from an external computer (serial, USB,
+        Ethernet) or increasingly a <b>web interface</b>.</p>
+      <p><b>Everything it does costs time</b> — that's <b>latency</b>, measured in milliseconds, and it
+        must be part of your selection criteria.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">power amps</span><h4>The last box ⚡</h4>
+      <p><b>The amplifier is the last device before the loudspeakers.</b> It raises line level (~1 V) to
+        loudspeaker level.</p>
+      <p>Connected with <b>heavier-gauge stranded wire</b>, <b>unshielded</b>, sized by distance and
+        current. The pro connector is the <b>Speakon</b> — rugged, locking, and used exclusively for
+        loudspeaker connections.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · LOUDSPEAKERS ══════════════ -->
+<section id="speakers">
+  <div class="head">
+    <span class="lv">Lv.9 · loudspeakers</span>
+    <h2>The end of the line <span class="kao">🔊</span></h2>
+    <p class="lede">Acoustic energy became electrical at the microphone. Here it becomes acoustic again.
+      Most loudspeakers are simply <b>acoustic drivers mounted in an enclosure</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>The crossover is the traffic cop, not the car.</q>
+    <p class="why">No single driver can cover the whole spectrum accurately or efficiently, so cabinets
+      use several. A <b>crossover</b> is an <b>electrical frequency-dividing device / network circuit</b>
+      that sends each driver only the frequencies it handles well. The exam offers you three answers that
+      describe the <em>loudspeaker</em> instead — don't take the bait.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">drivers</span><h4>Who plays what 🎚</h4>
+      <ul>
+        <li><b>Tweeters</b> — high frequencies</li>
+        <li><b>Horns</b> — mid to high</li>
+        <li><b>Cone / midrange</b> — midrange</li>
+        <li><b>Woofers</b> — low</li>
+        <li><b>Subwoofers</b> — lower still</li>
+      </ul>
+      <p>The crossover can sit <b>before amplification</b>, or on the amp's input to a multidriver cabinet.
+        Low-power cabinets often use an <b>unpowered (passive)</b> crossover network inside.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">sensitivity</span><h4>Efficiency, not accuracy</h4>
+      <p>How well it converts electrical → acoustic. Written like <b>88 dB / 1 W @ 1 m</b> — meaning
+        <b>88 dB SPL measured 1 metre away with 1 watt in</b>.</p>
+      <p>As with mics, <b>sensitivity is not a measure of accuracy</b>. Speakers are picked for a job.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">coverage</span><h4>Response &amp; polar patterns</h4>
+      <p>Best <b>on-axis</b>; off-axis loses level <b>and</b> changes frequency response — same as
+        directional mics.</p>
+      <p>A quoted dispersion pattern only holds over a <b>limited high-to-mid range</b>. Low frequencies
+        spread out fast because of their long wavelengths, so controlling them needs <b>very large
+        waveguides and enclosures</b>. Plotted together = a <b>polar plot</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">impedance</span><h4>4, 8 or 16 Ω</h4>
+      <p>A <b>nominal</b> rating — impedance is frequency-dependent, so it isn't true across the whole
+        range.</p>
+      <p>Know the <b>total impedance of the load</b> on your amplifier to: achieve optimum volume, avoid
+        wasting power, <b>avoid overloading and damaging the amplifier</b>, prevent loudspeaker damage,
+        reduce distortion and noise, and avoid uneven distribution.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🎯 three jobs a loudspeaker does</span>
+    <b>Communication</b> (PA, intercom, evacuation, radio) · <b>Sound reinforcement</b> (lectures,
+    presentations, concerts, theatre, artist foldback) · <b>Sound reproduction</b> (playback of recorded
+    material and soundtracks). Built for portability or permanent install.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · MONITORING ══════════════ -->
+<section id="monitor">
+  <div class="head">
+    <span class="lv">Lv.10 · monitoring, circuits &amp; feedback</span>
+    <h2>Keeping it clean <span class="kao">📈</span></h2>
+    <p class="lede">You know the chain and the levels. Now: how to check them, how to keep noise out, and
+      how to stop the squeal.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Analog has headroom. Digital has a brick wall.</q>
+    <p class="why">With <b>analog</b> metering, aim for around <b>0 dBu (775 mV)</b> — and it's fine to
+      pop above it now and then. With <b>digital</b> metering you must <b>never exceed 0 dBFS</b>
+      (<b>F</b>ull <b>S</b>cale). Anything past it is <b>clipped and distorted</b>, permanently.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--sun)">
+    <div class="story-text">
+      <p class="story-lead"><span>🔍</span><span>Setting levels, in order.</span></p>
+      <div class="beat"><span class="beat-i">1️⃣</span>
+        <p><b>Before</b> any power amp goes on, check you're getting <span class="hl">clean signals on
+          every mixer channel</span> you'll use. Set the mic preamp and every other gain stage, verifying
+          nothing distorts — meters plus headphones.</p></div>
+      <div class="beat"><span class="beat-i">2️⃣</span>
+        <p>Then: <span class="hl-p">amp inputs all the way down → amp on → slowly bring the inputs up</span>
+          until you reach the SPL you want.</p></div>
+      <div class="beat"><span class="beat-i">3️⃣</span>
+        <p>Verify nothing is distorted, by listening <b>and</b> monitoring. Too low gives you
+          <span class="hl-m">poor signal-to-noise</span>; too high gives you distortion.</p></div>
+      <div class="beat"><span class="beat-i">💡</span>
+        <p>Golden rule: <b>never leave any single gain stage at maximum</b> — it drives up noise and
+          distortion through the whole path.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--sun)">
+      <span class="fig-t">🚦 what the LEDs mean</span>
+      <svg viewBox="0 0 220 130" role="img" aria-label="Three indicator LEDs: signal present in green, overload in amber, clip in red.">
+        <rect x="4" y="6" width="212" height="34" rx="8" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="26" cy="23" r="9" fill="var(--mint)" stroke="var(--line)" stroke-width="3"/>
+        <text x="46" y="28" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">SIGNAL PRESENT</text>
+        <rect x="4" y="48" width="212" height="34" rx="8" fill="var(--sun-soft)" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="26" cy="65" r="9" fill="var(--sun)" stroke="var(--line)" stroke-width="3"/>
+        <text x="46" y="70" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">OVERLOAD</text>
+        <rect x="4" y="90" width="212" height="34" rx="8" fill="var(--berry-soft)" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="26" cy="107" r="9" fill="var(--berry)" stroke="var(--line)" stroke-width="3"/>
+        <text x="46" y="112" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">CLIP</text>
+      </svg>
+      <figcaption>A red flashing LED almost always means distortion. And yes — read the manual.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Two wires that disagree cancel the noise.</q>
+    <p class="why">In a <b>balanced</b> circuit the signal travels on <b>two identical parallel wires</b>.
+      At the receiver they're combined: the wanted signal adds up stronger, and any interference picked up
+      by <em>both</em> wires cancels out. That cancellation is <b>common mode rejection</b>. It costs more,
+      and pro audio uses it <b>wherever possible</b>.</p>
+  </div>
+
+  <div class="vs">
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">Balanced</div>
+        <div class="cat-role">TWO SIGNAL WIRES + SHIELD</div></div></div>
+      <ul class="cat-list">
+        <li>Common mode rejection cancels interference</li>
+        <li>Shielded twisted pair, conductors twisted around each other</li>
+        <li>Connector: the <b>3-pin XLR</b></li>
+        <li>Long cable runs are fine</li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--berry);--tone-soft:var(--berry-soft)">
+      <div class="cat-top"><div><div class="cat-name">Unbalanced</div>
+        <div class="cat-role">ONE SIGNAL WIRE · "SINGLE-ENDED"</div></div></div>
+      <ul class="cat-list">
+        <li>No inverted twin → <b>every</b> picked-up noise reaches the output</li>
+        <li>The shield doubles as the return path</li>
+        <li>Connectors: <b>RCA (phono)</b> and <b>3.5 mm jack</b></li>
+        <li><b>Severely limited in distance</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ the TRS trap</span>
+    A three-section <b>3.5 mm TRS</b> jack looks like it might be balanced — it isn't. It carries
+    <b>two separate unbalanced signals</b> (left and right) plus a common return.
+    <b>Count the pins:</b> unbalanced gear has one pin per signal plus a return; balanced uses the 3-pin XLR.
+  </div>
+
+  <div class="story" style="--tone:var(--berry)">
+    <div class="story-text">
+      <p class="story-lead"><span>📢</span><span>Feedback — the squeal.</span></p>
+      <div class="beat"><span class="beat-i">🔁</span>
+        <p>Acoustic feedback is the howl you get when <span class="hl">a system's output is fed back into
+          its input</span> — the loudspeakers are picked up by the microphones and re-amplified, over and
+          over. A system doing this is called <b>unstable</b>.</p></div>
+      <div class="beat"><span class="beat-i">⚠️</span>
+        <p>Two causes only: <span class="hl-p">a mic too close to the front of a loudspeaker</span>, or
+          <span class="hl-p">gain turned up too high somewhere</span>.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--berry)">
+      <span class="fig-t">🔇 the five defences</span>
+      <svg viewBox="0 0 220 150" role="img" aria-label="A loop from loudspeaker back into microphone, showing the feedback path.">
+        <rect x="4" y="6" width="212" height="140" rx="8" fill="var(--berry-soft)" stroke="var(--line)" stroke-width="3"/>
+        <rect x="22" y="46" width="42" height="34" rx="6" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <text x="30" y="68" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">MIC</text>
+        <rect x="152" y="46" width="46" height="34" rx="6" fill="var(--paper)" stroke="var(--line)" stroke-width="3"/>
+        <text x="158" y="68" font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)">SPKR</text>
+        <path d="M66 63 H148" stroke="var(--line)" stroke-width="3"/>
+        <path d="M142 58 l7 5 l-7 5" fill="var(--line)"/>
+        <path d="M175 84 C175 118 45 118 45 88" stroke="var(--berry)" stroke-width="4" fill="none" stroke-dasharray="7 5"/>
+        <path d="M40 94 l5 -8 l5 8" fill="var(--berry)"/>
+        <text x="62" y="118" font-family="monospace" font-size="11" font-weight="700" fill="var(--berry)">the loop 🔁</text>
+        <text x="14" y="34" font-family="monospace" font-size="9" font-weight="700" fill="var(--ink-soft)">output re-enters the input = howl</text>
+      </svg>
+      <figcaption>Break the loop anywhere and the squeal stops.</figcaption>
+    </figure>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">best practice</span><h4>Five ways to kill feedback</h4>
+      <ul>
+        <li>Keep each <b>microphone as close to its source</b> as possible</li>
+        <li>Keep loudspeakers <b>in front of</b>, and as <b>far from</b>, the mics as practical</li>
+        <li>Use <b>directional microphones</b> with suitable polar patterns</li>
+        <li>Use loudspeakers whose coverage hits <b>only the audience area</b></li>
+        <li>Keep <b>all gains at the minimum</b> needed</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 11 · APPLICATIONS ══════════════ -->
+<section id="apps">
+  <div class="head">
+    <span class="lv">Lv.11 · audio system applications</span>
+    <h2>Six systems in the wild <span class="kao">🏟</span></h2>
+    <p class="lede">The whole chain, assembled into the six systems the chapter names.</p>
+  </div>
+
+  <div class="menu">
+    <article class="item keep"><span class="item-tag">1 · sound reinforcement / PA</span>
+      <h3 class="item-name">Make it louder 📣</h3>
+      <p>If it can't be heard unamplified, you add mics, mixers, processors, amps and speakers.
+        Two flavours: <b>music</b> reinforcement needs <b>full bandwidth</b> and high SPL;
+        <b>speech</b> reinforcement can get away with less, because <b>the human voice has limited
+        bandwidth</b>.</p>
+      <p>In live production it's often just called a <b>PA (public address)</b> system.</p></article>
+
+    <article class="item"><span class="item-tag">2 · mix-minus</span>
+      <h3 class="item-name">Everything except 🚫</h3>
+      <p>A reinforcement system where <b>some elements are deliberately left out</b>. Used where feedback
+        is likely because mics and loudspeakers are close together.</p>
+      <p>You build a separate subsystem per loudspeaker <b>zone</b>, and each one mixes the mics
+        <b>minus</b> the ones that would cause local echo or feedback. Also used for musicians' local
+        <b>foldback</b>.</p></article>
+
+    <article class="item"><span class="item-tag">3 · intercom &amp; paging</span>
+      <h3 class="item-name">Two-way vs one-way 📞</h3>
+      <p><b>Intercom = two-way</b>, like a telephone. A central unit with local stations and possibly
+        satellite/remote stations.</p>
+      <p><b>Paging = one-way only.</b> From supermarket announcements up to emergency notification —
+        where the emphasis is on <b>coverage and intelligibility</b>.</p></article>
+
+    <article class="item"><span class="item-tag">4 · playback</span>
+      <h3 class="item-name">No microphones 💿</h3>
+      <p>Like music reinforcement but with <b>no mics at all</b> — it just plays prerecorded material and
+        data streams. One well-designed system often covers speech reinforcement, music reinforcement
+        <b>and</b> playback.</p></article>
+
+    <article class="item"><span class="item-tag">5 · conferencing</span>
+      <h3 class="item-name">Talking to elsewhere 🌍</h3>
+      <p>Multi-mic modules on tables or suspended from the ceiling; big groups get individual mics as part
+        of a larger AV system. Typically includes DSP-based <b>acoustic echo cancellation, gating and
+        level compression</b>.</p>
+      <p><b>Audio for videoconferencing</b> is the same thing, with the mics placed <b>more
+        discreetly</b>.</p></article>
+
+    <article class="item toss"><span class="item-tag">6 · sound masking</span>
+      <h3 class="item-name">The backwards one 🤫</h3>
+      <p>Every other system tries to <b>minimise</b> background noise. Sound masking
+        <b>deliberately adds it</b> — to reduce the intelligibility of distant conversations and give
+        <b>speech privacy</b>. It also covers up distractions from mechanical systems and street noise.</p></article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🤫 remember the odd one out</span>
+    If a question asks which system <b>wants</b> noise, it is always <b>sound masking</b>. It is the only
+    one in the entire chapter that adds noise on purpose.
+  </div>
+</section>
+
+<!-- ══════════════ SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">the earworm · sing it once, properly</span>
+    <h2>The Signal Chain Song <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">The whole path from mouth to loudspeaker, in order, to a tune you have known since you
+      were three.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ SONG GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · Twinkle Twinkle Little Star</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>♪ <b style="color:var(--berry)">Mi-cro-phone</b> picks up the air,</p>
+      <p>♪ <b style="color:var(--berry)">Pre-amp</b> lifts it, mic to line,</p>
+      <p>♪ <b style="color:var(--berry)">Mix</b> it, <b style="color:var(--berry)">gate</b> it, <b style="color:var(--berry)">E-Q</b>, <b style="color:var(--berry)">de-lay</b>,</p>
+      <p>♪ <b style="color:var(--berry)">D-S-P</b> will save the day,</p>
+      <p>♪ <b style="color:var(--berry)">Pow-er amp</b> makes line go loud,</p>
+      <p>♪ <b style="color:var(--berry)">Loud-speak-er</b> gives it to the crowd!</p>
+    </div>
+    <p class="why">Six lines, six phrases, and the amplifier lands in second-to-last place —
+      which is exactly where the exam asks you to put it.</p>
+  </div>
+
+  <div class="board" style="margin-top:var(--sp-6)">
+    <h3>Four chants for the walk in 🥁</h3>
+    <div class="lyric">
+      <p class="lyric-line"><strong>ONE barely · THREE clearly · TEN doubly</strong> — the decibel steps</p>
+      <p class="lyric-line"><strong>DOUBLE the distance · DROP six</strong> — the inverse square law</p>
+      <p class="lyric-line"><strong>SIX dB per BIT</strong> — 16→96, 24→144, 32→192</p>
+      <p class="lyric-line"><strong>R · A · T</strong> — Reflected, Absorbed, Transmitted</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage</span>
+    <h2>Notes taped behind the espresso machine <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">space</span><p>Why is space the worst venue in the galaxy?<br><b>Nothing to squeeze. No compression, no sound, no refunds.</b></p></article>
+    <article class="item"><span class="item-tag">decibels</span><p>"It's 85 dB in here!"<br><b>Compared to WHAT? A decibel with no reference is just a number wearing a hat.</b></p></article>
+    <article class="item"><span class="item-tag">inverse square</span><p>Why did the sound engineer take two steps back?<br><b>To lose exactly 6 dB. Two more and it's 12.</b></p></article>
+    <article class="item"><span class="item-tag">condenser</span><p>Why won't the condenser mic get out of bed?<br><b>Nobody sent phantom power.</b></p></article>
+    <article class="item"><span class="item-tag">dynamic</span><p>The dynamic mic has been dropped nine times.<br><b>It's fine. It never needed you anyway.</b></p></article>
+    <article class="item"><span class="item-tag">gate</span><p>A gate is a bouncer with one rule.<br><b>Below the threshold? You're not coming in.</b></p></article>
+    <article class="item"><span class="item-tag">filters</span><p>The low-pass filter is named for who it lets IN.<br><b>Like a guest list, not a hit list.</b></p></article>
+    <article class="item"><span class="item-tag">crossover</span><p>The crossover is not a loudspeaker.<br><b>It's the traffic cop standing in front of the loudspeakers.</b></p></article>
+    <article class="item"><span class="item-tag">feedback</span><p>Why did the PA start screaming?<br><b>It heard itself. Nobody handles that well.</b></p></article>
+    <article class="item"><span class="item-tag">sound masking</span><p>Every audio system fights noise except one.<br><b>Sound masking shows up and adds more on purpose.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · all fifteen review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">Straight from the end of your chapter — and this one has <b>15 HP</b>.</p>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE AUDIO SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 15 / 15 — it hums at 60 Hz, smugly.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 15</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+    <p class="lede">Too big for one list, so it's grouped. Four blocks, sixteen lines.</p>
+  </div>
+  <div class="sheet">
+    <h4>🌊 sound itself</h4>
+    <ol>
+      <li><b>Propagation</b> is how sound moves through air. It's compression waves needing a compressible medium — <b>no medium, no sound</b>.</li>
+      <li><b>Wavelength is a ruler, frequency is a clock.</b> Wavelength = distance between two points exactly one cycle apart. <code>λ = 343/f</code>, and <b>343 = 7³</b>.</li>
+      <li><b>Low and long, high and short.</b> 20 Hz = 17.2 m · 20 kHz = 17.2 mm. <b>10 octave bands</b>, each a doubling.</li>
+      <li><b>The fundamental IS the first harmonic.</b> Harmonics are whole-number multiples; their proportions give <b>timbre</b>.</li>
+    </ol>
+    <h4>📊 decibels &amp; distance</h4>
+    <ol start="5">
+      <li><b>Power gets Ten, Volts and Distance get Twenty.</b> <code>10 log(P1/P2)</code> · <code>20 log(V1/V2)</code>. A dB is a <b>ratio, not an absolute</b>.</li>
+      <li><b>0 dB SPL = the threshold of hearing</b> (20 µPa). 0 dBu = 775 mV · 0 dBV = 1 V · 0 dBm = 1 mW.</li>
+      <li><b>One barely, three clearly, ten doubly.</b> 1 dB smallest perceptible · <b>3 dB just noticeable</b> · 10 dB twice as loud.</li>
+      <li><b>Double the distance, drop 6.</b> Inverse square law — true only in near-field or free-field.</li>
+    </ol>
+    <h4>💾 digital &amp; the room</h4>
+    <ol start="9">
+      <li><b>Bandwidth = Sample Rate × Bit Depth × Channels</b> — Snaps × Shades × Speakers, again.</li>
+      <li><b>Six dB per bit.</b> 16-bit→96 dB · 24-bit→144 dB · 32-bit→192 dB. CD = 44.1 kHz/16-bit, Red Book, 1980.</li>
+      <li><b>AVB needs special switches, Dante doesn't.</b> Unicast = one stream each · Multicast = one for all, <b>Class D</b>, LAN only.</li>
+      <li><b>Sound hits a wall and becomes a RAT</b> — Reflected, Absorbed, Transmitted. One late reflection = <b>echo</b>; a dense persistent crowd of them = <b>reverberation</b>.</li>
+    </ol>
+    <h4>🔌 the chain</h4>
+    <ol start="13">
+      <li><b>Dynamic = magnet, no power. Condenser = capacitor, needs power</b> (12–48 V phantom, 48 V typical). Electret = condenser with a permanent charge. <b>Cardioid rejects most at the rear.</b></li>
+      <li><b>Millivolts, one volt, many volts.</b> Mic mV → line ~1 V (consumer 316 mV) → loudspeaker 4 V+. <b>Changing a level = gain adjustment; unity = unchanged.</b> Cable = shielded twisted pair + <b>XLR</b>. <b>One-tenth rule</b> on impedance.</li>
+      <li><b>Above the line: Compress and Limit. Below the line: Expand and Gate.</b> A filter is named for <b>what it lets through</b>. <b>The amp is the last box before the loudspeakers.</b></li>
+      <li><b>The crossover is the traffic cop, not the car</b> — an electrical frequency-dividing circuit. <b>Balanced = two wires + common mode rejection.</b> Feedback = output re-entering the input.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>🔊 Café Decibel · CTS Ch.4 · audio systems</span>
+  <span>Anna &amp; Digi have started a band <span class="kmj">(=^･ω･^=)♪</span></span>
+</footer>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  
+  /* ── gadget 01 · wavelength ── */
+  const wlIn=document.getElementById("wl-r");
+  if (wlIn){
+    const cv=document.getElementById("wl"), g=cv.getContext("2d"), W=1000, H=230;
+    const fOut=document.getElementById("wl-f"), lam=document.getElementById("wl-lam"),
+          cmp=document.getElementById("wl-cmp"), oct=document.getElementById("wl-oct"),
+          band=document.getElementById("wl-band"), say=document.getElementById("wl-say");
+    const OCT=[31.5,63,125,250,500,1000,2000,4000,8000,16000];
+    const freq=()=>20*Math.pow(1000,wlIn.value/1000);           // log sweep 20 Hz → 20 kHz
+    function compare(L){
+      if(L>=10) return "longer than a bus";
+      if(L>=3)  return "a small room";
+      if(L>=1)  return "an adult human";
+      if(L>=0.3)return "a dinner plate";
+      if(L>=0.1)return "your hand";
+      if(L>=0.03)return "a coin";
+      return "thinner than a pencil";
+    }
+    function draw(){
+      const f=freq(), L=343/f, ROOM=5;                          // canvas shows 5 metres of air
+      const cycles=Math.min(120, ROOM/L), amp=62, cy=H/2;
+      g.clearRect(0,0,W,H);
+      // ruler baseline
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=2; g.setLineDash([6,6]);
+      g.beginPath(); g.moveTo(0,cy); g.lineTo(W,cy); g.stroke(); g.setLineDash([]);
+      // metre marks
+      g.fillStyle=css("--ink-faint"); g.font="600 13px ui-monospace,Consolas,monospace";
+      for(let m=1;m<ROOM;m++){ const x=m*W/ROOM;
+        g.fillRect(x,cy-8,2,16); g.fillText(m+" m", x+6, cy+26); }
+      // the wave, drawn to true relative scale
+      g.strokeStyle=css("--lav"); g.lineWidth=5; g.lineJoin="round"; g.lineCap="round";
+      g.beginPath();
+      for(let x=0;x<=W;x+=1){
+        const y=cy-amp*Math.sin(2*Math.PI*cycles*x/W);
+        x?g.lineTo(x,y):g.moveTo(x,y);
+      }
+      g.stroke();
+      // one wavelength highlighted
+      if(L<=ROOM){
+        const w=L*W/ROOM;
+        g.fillStyle=css("--sun"); g.globalAlpha=.30; g.fillRect(0,cy-amp-14,w,2*amp+28); g.globalAlpha=1;
+        g.strokeStyle=css("--berry"); g.lineWidth=3;
+        g.beginPath(); g.moveTo(0,cy-amp-14); g.lineTo(0,cy+amp+14);
+        g.moveTo(w,cy-amp-14); g.lineTo(w,cy+amp+14); g.stroke();
+      }
+      fOut.textContent = f>=1000 ? (f/1000).toFixed(2)+" kHz" : Math.round(f)+" Hz";
+      // round the way the textbook does, so 20 Hz reads 17.2 m and 20 kHz mirrors it at 17.2 mm.
+      // (plain toFixed(1) gives 17.1 for 17.15 — binary float rounds it the wrong way)
+      const r1 = v => (Math.round(v*10 + 1e-9)/10).toFixed(1);
+      const mm = L*1000;
+      lam.textContent = L>=1 ? r1(L)+" m" : mm>=100 ? Math.round(mm)+" mm" : r1(mm)+" mm";
+      cmp.textContent = compare(L);
+      let best=OCT[0]; for(const o of OCT) if(Math.abs(Math.log(f/o))<Math.abs(Math.log(f/best))) best=o;
+      oct.textContent = best>=1000 ? (best/1000)+" kHz" : best+" Hz";
+      const low=f<250, high=f>4000;
+      band.className="verdict "+(high?"bad":"ok");
+      band.textContent = low?"bass":high?"treble":"midrange";
+      say.innerHTML = L>ROOM
+        ? "<b>One wavelength is longer than the whole 5-metre view</b> — that's why bass needs big rooms and big boxes."
+        : "The gold band is <b>exactly one wavelength</b>, drawn to scale in a 5-metre slice of air.";
+    }
+    wlIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 02 · decibel perception ── */
+  const dbIn=document.getElementById("db-r");
+  if (dbIn){
+    const cv=document.getElementById("db"), g=cv.getContext("2d"), W=1000, H=200;
+    const out=document.getElementById("db-out"), vp=document.getElementById("db-p"),
+          vv=document.getElementById("db-v"), vs=document.getElementById("db-s"),
+          vd=document.getElementById("db-verdict"), say=document.getElementById("db-say");
+    function label(d){
+      if(d<1)  return ["inaudible","bad","Under 1 dB — nobody is hearing that."];
+      if(d<3)  return ["barely","bad","<b>1 dB is the smallest perceptible change</b> — and most people miss it unless they're really listening."];
+      if(d<10) return ["noticeable","ok","<b>3 dB is the classic \"just noticeable\" change</b> — 85 dB SPL to 88 dB SPL."];
+      if(d<20) return ["twice as loud","ok","<b>10 dB is perceived as twice as loud</b> — 85 dB SPL to 95 dB SPL. Not ten times. Twice."];
+      return ["four times as loud","ok","20 dB is two doublings of perceived loudness — <b>four times as loud</b>."];
+    }
+    function draw(){
+      const d=parseFloat(dbIn.value);
+      g.clearRect(0,0,W,H);
+      const base=70, y0=H-38;
+      // two bars: reference and changed
+      const h1=base, h2=base*Math.pow(10,d/20);
+      const maxH=H-70, s=Math.min(1, maxH/Math.max(h1,h2));
+      g.fillStyle=css("--lav"); g.fillRect(180,y0-h1*s,180,h1*s);
+      g.strokeStyle=css("--line"); g.lineWidth=4; g.strokeRect(180,y0-h1*s,180,h1*s);
+      g.fillStyle=css("--berry"); g.fillRect(560,y0-h2*s,180,h2*s);
+      g.strokeRect(560,y0-h2*s,180,h2*s);
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=3; g.setLineDash([8,8]);
+      g.beginPath(); g.moveTo(0,y0); g.lineTo(W,y0); g.stroke(); g.setLineDash([]);
+      g.fillStyle=css("--ink-soft"); g.font="700 17px ui-monospace,Consolas,monospace";
+      g.fillText("reference", 200, y0+26);
+      g.fillText("+"+d.toFixed(1)+" dB", 580, y0+26);
+      out.textContent="+"+d.toFixed(1)+" dB";
+      vp.textContent=Math.pow(10,d/10).toFixed(2)+" ×";
+      vv.textContent=Math.pow(10,d/20).toFixed(2)+" ×";
+      const [t,cls,msg]=label(d);
+      vs.textContent=t; vd.className="verdict "+cls; vd.textContent=t; say.innerHTML=msg;
+    }
+    dbIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 03 · inverse square law ── */
+  const islIn=document.getElementById("isl-r");
+  if (islIn){
+    const cv=document.getElementById("isl"), g=cv.getContext("2d"), W=1000, H=250;
+    const md=document.getElementById("isl-m"), spl=document.getElementById("isl-spl"),
+          chg=document.getElementById("isl-chg"), nn=document.getElementById("isl-n"),
+          vd=document.getElementById("isl-d"), say=document.getElementById("isl-say");
+    const dist=()=>Math.pow(2, islIn.value/100);                 // 1 m → 64 m, doublings on the slider
+    function draw(){
+      const d=dist(), drop=20*Math.log10(d), lvl=100-drop, n=Math.log2(d);
+      g.clearRect(0,0,W,H);
+      const sx=90, sy=H/2;
+      // expanding rings
+      for(let i=1;i<=6;i++){
+        g.strokeStyle=css("--lav"); g.globalAlpha=.55/i; g.lineWidth=4;
+        g.beginPath(); g.arc(sx,sy,i*68,-Math.PI/2.4,Math.PI/2.4); g.stroke();
+      }
+      g.globalAlpha=1;
+      // the speaker
+      g.fillStyle=css("--berry"); g.strokeStyle=css("--line"); g.lineWidth=4;
+      g.fillRect(sx-38,sy-46,54,92); g.strokeRect(sx-38,sy-46,54,92);
+      g.fillStyle=css("--line");
+      g.beginPath(); g.arc(sx-11,sy,20,0,6.2832); g.fill();
+      // listener position along the scale (log so 64 m still fits)
+      const lx = 150 + (Math.log2(d)/6)*(W-230);
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=3; g.setLineDash([8,8]);
+      g.beginPath(); g.moveTo(sx+30,sy); g.lineTo(lx,sy); g.stroke(); g.setLineDash([]);
+      g.fillStyle=css("--mint"); g.strokeStyle=css("--line"); g.lineWidth=4;
+      g.beginPath(); g.arc(lx,sy-16,20,0,6.2832); g.fill(); g.stroke();
+      g.fillRect(lx-17,sy+8,34,42); g.strokeRect(lx-17,sy+8,34,42);
+      g.fillStyle=css("--ink"); g.font="800 22px ui-monospace,Consolas,monospace";
+      g.textAlign="center";
+      g.fillText(lvl.toFixed(1)+" dB", lx, sy-46);
+      g.font="700 15px ui-monospace,Consolas,monospace"; g.fillStyle=css("--ink-soft");
+      g.fillText(d.toFixed(1)+" m", lx, sy+72);
+      g.textAlign="left";
+      md.textContent=d.toFixed(1)+" m";
+      spl.textContent=lvl.toFixed(1)+" dB";
+      chg.textContent=(drop<0.05?"":"−")+drop.toFixed(1)+" dB";
+      nn.textContent=n.toFixed(1);
+      vd.className="verdict "+(n>=3?"bad":"ok");
+      vd.textContent=n.toFixed(1)+" doublings";
+      say.innerHTML = n<0.05
+        ? "Reference: <b>100 dB SPL at 1 metre</b>. Slide right and walk away."
+        : "<b>"+n.toFixed(1)+" doublings × 6 dB = "+drop.toFixed(1)+" dB lost.</b> Every single doubling costs exactly 6.";
+    }
+    islIn.addEventListener("input",draw); draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 04 · polar patterns ── */
+  const ppPick=document.getElementById("pp-pick");
+  if (ppPick){
+    const cv=document.getElementById("pp"), g=cv.getContext("2d"), W=1000, H=380;
+    const nm=document.getElementById("pp-name"), say=document.getElementById("pp-say");
+    // r(theta) with theta measured from the front of the mic
+    const PAT={
+      omni:     {r:()=>1, n:"omnidirectional",
+                 s:"<b>Uniform in all directions.</b> Use it when you want the whole room — an interview, for instance."},
+      cardioid: {r:t=>Math.abs(0.5+0.5*Math.cos(t)), n:"cardioid",
+                 s:"Heart-shaped. Pickup <b>primarily from the front</b>, rejects the sides, and the <b>deepest rejection is directly at the rear</b>."},
+      hyper:    {r:t=>Math.abs(0.25+0.75*Math.cos(t)), n:"hypercardioid",
+                 s:"<b>More directional than cardioid</b> — rejects more from the side. The trade-off is <b>some pickup directly at the rear</b>."},
+      super:    {r:t=>Math.abs(0.37+0.63*Math.cos(t)), n:"supercardioid",
+                 s:"Your book: <b>better directionality than hypercardioid</b>, with better side rejection and <b>more rear pickup</b>."},
+      bi:       {r:t=>Math.abs(Math.cos(t)), n:"bidirectional",
+                 s:"The <b>figure-eight</b>. Equal pickup front and back, with <b>little or no pickup from the sides</b>."}
+    };
+    let cur="cardioid";
+    function draw(){
+      const P=PAT[cur], cx=W/2, cy=H/2+20, R=140;
+      g.clearRect(0,0,W,H);
+      // grid rings
+      g.strokeStyle=css("--edge"); g.lineWidth=2;
+      for(let i=1;i<=3;i++){ g.beginPath(); g.arc(cx,cy,R*i/3,0,6.2832); g.stroke(); }
+      g.beginPath(); g.moveTo(cx-R-30,cy); g.lineTo(cx+R+30,cy);
+      g.moveTo(cx,cy-R-40); g.lineTo(cx,cy+R+30); g.stroke();
+      // the pattern, front = up
+      g.beginPath();
+      for(let a=0;a<=360;a++){
+        const t=a*Math.PI/180, r=P.r(t)*R;
+        const x=cx+r*Math.sin(t), y=cy-r*Math.cos(t);
+        a?g.lineTo(x,y):g.moveTo(x,y);
+      }
+      g.closePath();
+      g.fillStyle=css("--mint"); g.globalAlpha=.42; g.fill(); g.globalAlpha=1;
+      g.strokeStyle=css("--mint"); g.lineWidth=5; g.stroke();
+      // the mic itself
+      g.fillStyle=css("--line");
+      g.fillRect(cx-9,cy-6,18,54);
+      g.beginPath(); g.arc(cx,cy-6,15,0,6.2832); g.fill();
+      // labels
+      g.fillStyle=css("--ink-soft"); g.font="700 16px ui-monospace,Consolas,monospace"; g.textAlign="center";
+      g.fillText("FRONT", cx, cy-R-52);
+      g.fillText("REAR",  cx, cy+R+56);
+      g.textAlign="right"; g.fillText("SIDE", cx-R-40, cy+6);
+      g.textAlign="left";  g.fillText("SIDE", cx+R+40, cy+6);
+      nm.textContent=P.n; say.innerHTML=P.s;
+    }
+    ppPick.addEventListener("click", e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.p;
+      ppPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+      draw();
+    });
+    ppPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed", x.dataset.p===cur?"true":"false"));
+    draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 05 · dynamics bench ── */
+  const dyPick=document.getElementById("dy-pick");
+  if (dyPick){
+    const cv=document.getElementById("dy"), g=cv.getContext("2d"), W=1000, H=260;
+    const rIn=document.getElementById("dy-r"), out=document.getElementById("dy-out"),
+          acts=document.getElementById("dy-acts"), say=document.getElementById("dy-say");
+    const MODE={
+      comp:  {n:"compressor", above:true,
+              f:(a,th)=>a>th ? th+(a-th)*0.35 : a,
+              s:"<b>Compressor.</b> Reduces everything <b>above</b> the threshold by an adjustable ratio — keeps loud things from being too loud, and <b>reduces dynamic range</b>."},
+      limit: {n:"limiter", above:true,
+              f:(a,th)=>Math.min(a,th),
+              s:"<b>Limiter.</b> Extreme compression with a far more aggressive ratio — a brick wall that stops peaks dead. <b>Protects your loudspeakers</b> from things like a dropped mic."},
+      expand:{n:"expander", above:false,
+              f:(a,th)=>a<th ? th-(th-a)*1.9 : a,
+              s:"<b>Downward expander.</b> Pushes everything <b>below</b> the threshold further down, <b>increasing dynamic range</b> — used to reduce background noise."},
+      gate:  {n:"gate", above:false,
+              f:(a,th)=>a<th ? 0 : a,
+              s:"<b>Gate.</b> An extreme downward expander: below the threshold it <b>mutes completely</b>. Signals must exceed the threshold to pass at all — that's how unused mics get switched off."}
+    };
+    let cur="comp";
+    // a deterministic, uneven envelope so the effect is obvious
+    const ENV=[0.22,0.85,0.40,0.95,0.15,0.62,0.30,0.78,0.12,0.55,0.90,0.35,0.70,0.18,0.48,0.82];
+    function draw(){
+      const M=MODE[cur], th=+rIn.value/100;
+      g.clearRect(0,0,W,H);
+      const mid=H/2, maxA=H/2-24, bw=W/ENV.length;
+      // threshold line
+      g.strokeStyle=css("--berry"); g.lineWidth=3; g.setLineDash([10,7]);
+      [mid-th*maxA, mid+th*maxA].forEach(y=>{ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); });
+      g.setLineDash([]);
+      g.fillStyle=css("--berry"); g.font="700 14px ui-monospace,Consolas,monospace";
+      g.fillText("threshold", 10, mid-th*maxA-8);
+      // input then output
+      ENV.forEach((a,i)=>{
+        const x=i*bw+bw*0.16, w=bw*0.30;
+        const hi=a*maxA, ho=M.f(a,th)*maxA;
+        g.fillStyle=css("--lav"); g.globalAlpha=.85;
+        g.fillRect(x, mid-hi, w, hi*2);
+        g.globalAlpha=1; g.strokeStyle=css("--line"); g.lineWidth=3;
+        g.strokeRect(x, mid-hi, w, hi*2);
+        const x2=x+bw*0.38;
+        g.fillStyle=css("--mint");
+        if(ho>0){ g.fillRect(x2, mid-ho, w, ho*2); g.strokeRect(x2, mid-ho, w, ho*2); }
+        else { g.strokeStyle=css("--berry"); g.lineWidth=4;
+               g.beginPath(); g.moveTo(x2,mid); g.lineTo(x2+w,mid); g.stroke(); }
+      });
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=2;
+      g.beginPath(); g.moveTo(0,mid); g.lineTo(W,mid); g.stroke();
+      out.textContent=rIn.value+"%";
+      acts.className="verdict "+(M.above?"bad":"ok");
+      acts.textContent="acts "+(M.above?"ABOVE":"BELOW");
+      say.innerHTML=M.s;
+    }
+    dyPick.addEventListener("click", e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.d;
+      dyPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+      draw();
+    });
+    rIn.addEventListener("input",draw);
+    draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── boss fight · 15 questions ── */
+  const QS=[
+    {q:"How sound moves through the air is called _____.",
+     o:["Generation","Compression","Acoustical","Propagation"],a:3,
+     fb:"<b>Propagation.</b> Compression is what the wave <em>is</em>; propagation is how it <em>travels</em>."},
+    {q:"Wavelength is the _____.",
+     o:["Number of times a wavelength cycle occurs per second","Intensity or loudness of a sound in a particular medium","Physical distance between two points of a waveform that are exactly one cycle apart","Cycle when molecules move from rest through compression to rest to rarefaction"],a:2,
+     fb:"<b>Wavelength is a ruler, frequency is a clock.</b> Option A is frequency — that's the clock."},
+    {q:"Which of the following does 0dB SPL describe?",
+     o:["The threshold of human hearing","Ambient noise level","The threshold of pain","Normal listening level"],a:0,
+     fb:"<b>The threshold of hearing</b> — a pressure of 20 µPa. Every SPL number you meet is referenced to it."},
+    {q:"A “just noticeable” change in sound pressure level, either louder or softer, requires a _____ change.",
+     o:["+/–10dB","+/–6dB","+/–1dB","+/–3dB"],a:3,
+     fb:"<b>One barely, three clearly, ten doubly.</b> 1 dB is the smallest perceptible; <b>3 dB is \"just noticeable\"</b>; 10 dB sounds twice as loud."},
+    {q:"Acoustics covers how sound is _____, and its _____ and _____.",
+     o:["Received; effects; structure","Produced; propagation; control","Controlled; delivery; translation","Produced; amplification; reception"],a:1,
+     fb:"<b>Produced, propagation, control.</b> Note \"produced\" appears twice in the options — the second and third words decide it."},
+    {q:"Numerous, persistent reflections of sound are called _____.",
+     o:["Directional sound","Echo","Surface reflection","Reverberation"],a:3,
+     fb:"<b>One late reflection is an echo; a dense persistent crowd of them is reverberation.</b> Echo is the trap here."},
+    {q:"Ambient noise is sound that _____ the desired message or signal.",
+     o:["Interferes with","Completely blocks","Enhances","Is louder than"],a:0,
+     fb:"<b>Interferes with.</b> Noise is anything other than the desired signal — it doesn't have to block it or be louder than it."},
+    {q:"The audio signal ends up in a(n) _____ before being converted into acoustical energy.",
+     o:["Output device","Electrical signal","Processor","Microphone"],a:0,
+     fb:"<b>An output device</b> — an earphone or loudspeaker. It's the transducer at the far end that turns electricity back into sound."},
+    {q:"The strength of the electrical audio signal from a microphone is called a(n) _____ -level signal.",
+     o:["Dynamic","Condenser","Electret","Mic"],a:3,
+     fb:"<b>Mic level</b> — a few millivolts. The other three are microphone <em>types</em>, not levels. <b>Millivolts, one volt, many volts.</b>"},
+    {q:"Phantom power is the _____ required to power a condenser microphone.",
+     o:["Polarized conductor","Electrical field","Remote power","Internal capacitor"],a:2,
+     fb:"<b>Remote power</b> — 12 to 48 V DC, 48 V most common, sent down the same balanced pair as the audio."},
+    {q:"Typically, what type of connector finishes the shielded twisted-pair cable?",
+     o:["XRL","RXL","LRX","XLR"],a:3,
+     fb:"<b>XLR.</b> X plus L-R — Left and Right, with the X in front. The other three are scrambles designed to catch a fast reader."},
+    {q:"The simultaneous use of multiple wireless microphone systems requires ____.",
+     o:["Frequency coordination","Multiple receivers all tuned to the same frequency","Using lavalier microphones","Using IR wireless microphones"],a:0,
+     fb:"<b>Frequency coordination.</b> Option B is actively wrong — same frequency means interference, not harmony."},
+    {q:"If a technician changes the level of a signal, it is called _____.",
+     o:["Unity gain","Gain adjustment","Attenuation","Signal expansion"],a:1,
+     fb:"<b>Gain adjustment</b> — <em>any</em> change. Attenuation is only the downward half, and unity gain means unchanged."},
+    {q:"The amplifier comes right before _____ in the audio system chain.",
+     o:["The equalizer","Everything","The audio processor","The loudspeakers"],a:3,
+     fb:"<b>The loudspeakers.</b> Sing the last line: <em>power amp makes line go loud, loudspeaker gives it to the crowd.</em>"},
+    {q:"What is a crossover?",
+     o:["A loudspeaker containing multiple drivers","A loudspeaker enclosure with more than one frequency range","An electrical frequency dividing network circuit","A single driver reproducing the entire frequency range"],a:2,
+     fb:"<b>The crossover is the traffic cop, not the car.</b> Three of these options describe the loudspeaker instead."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const TAUNT=["it hums at 60 Hz, smugly.","…it felt that one.","it stopped humming.","it's rattling.",
+      "a woofer just blew.","it's clipping badly!","distortion everywhere.","it can't hold a level.",
+      "it's feeding back.","the gate is closing on it.","barely above threshold.","it's below the noise floor.",
+      "one driver left.","it squeals faintly…","almost — hit it!","DEFEATED! ✧ 15 / 15 ✧"];
+    let score=0, done=new Set();
+    function updateHP(){
+      const left=QS.length-score;
+      hp.style.width=(left/QS.length*100)+"%";
+      hp.className="hpfill"+(left<=4?" dying":left<=8?" hurt":"");
+      hpt.textContent="HP "+left+" / "+QS.length+" — "+TAUNT[score];
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / '+QS.length+'</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    /* compact the HP bar once it lifts off and starts floating */
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+
+})();
+</script>
+
