@@ -52,6 +52,9 @@ firebase deploy --only hosting
 ## Adding a chapter
 
 1. Put the new page fragment in `src/` (no `<html>` wrapper — match the existing files).
-2. Add an entry to `PAGES` and `FAVICONS` in `tools/build.mjs`.
+2. Add an entry to the `CHAPTERS` array in `tools/build.mjs`, in reading order.
 3. Add a card to the shelf in `src/home.html`.
 4. `node tools/build.mjs`, then commit `src/` and `public/` together.
+
+The top bar and the previous/next footer are **generated from `CHAPTERS`**, so step 2 wires up
+the navigation on every other chapter automatically — you never edit nav markup by hand.
