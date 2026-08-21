@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café Localhost</title>
+<meta name="description" content="CTS Chapter 6 — networks, from a cable in a wall to a packet crossing the planet. 11 levels, 5 interactive gadgets and a 15-HP boss.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFF3E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241823" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Café Localhost">
+<meta property="og:description" content="CTS Chapter 6 — networks, from a cable in a wall to a packet crossing the planet. 11 levels, 5 interactive gadgets and a 15-HP boss.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%90%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0}img,svg,canvas{max-width:100%}</style>
+</head>
+<body>
+<style>
+:root{--navh:46px}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:var(--sp-3);
+  height:var(--navh);padding:0 var(--sp-4);background:var(--paper);
+  border-bottom:var(--bw) solid var(--line);box-shadow:0 3px 0 var(--stamp);
+  font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700}
+.tb-home{display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;color:var(--ink);
+  background:var(--sun);border:2px solid var(--line);border-radius:var(--r-pill);
+  padding:.25rem .7rem;box-shadow:2px 2px 0 var(--stamp);white-space:nowrap;
+  transition:transform .12s ease}
+.tb-home:hover{transform:translate(-1px,-1px)}
+.tb-here{color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-links{margin-left:auto;display:flex;gap:var(--sp-2);flex:none}
+.tb-arrow{text-decoration:none;color:var(--ink);background:var(--paper-2);
+  border:2px solid var(--line);border-radius:var(--r-pill);padding:.25rem .6rem;
+  white-space:nowrap;transition:transform .12s ease,background .14s ease}
+.tb-arrow:hover{transform:translate(-1px,-1px);background:var(--sun-soft)}
+.tb-arrow.is-off{opacity:.45;background:transparent;border-style:dashed;pointer-events:none}
+@media (max-width:620px){
+  .tb-home span{display:none}
+  .tb-here{font-size:.66rem}
+}
+/* The chapter page's sticky boss bar must clear the sticky top bar.
+   Specificity is deliberate: this style block is injected before the page's own
+   style block (to avoid a flash of unstyled nav), so a bare .boss selector would
+   lose on document order. "body .boss" outranks the kit regardless of order. */
+body .boss{top:calc(var(--navh) + var(--sp-2))}
+
+.chapnav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:var(--sp-4);align-items:stretch;margin-top:var(--sp-16)}
+@media (max-width:760px){.chapnav{grid-template-columns:1fr}}
+.cn-card{display:flex;flex-direction:column;gap:.2rem;text-decoration:none;color:inherit;
+  background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop);padding:var(--sp-4) var(--sp-6);
+  border-top:6px solid var(--tone,var(--sakura));transition:transform .16s ease,box-shadow .16s ease}
+a.cn-card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--stamp)}
+.cn-next{text-align:right}
+.cn-dir{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tone,var(--sakura))}
+.cn-name{font-family:var(--f-display);font-size:var(--t-md);line-height:1.2}
+.cn-topic{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-soft)}
+.cn-card.is-off{opacity:.6;border-style:dashed;box-shadow:none;background:transparent}
+.cn-home{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;
+  text-decoration:none;color:var(--tag-ink);background:var(--sun);
+  border:var(--bw) solid var(--line);border-radius:var(--r-lg);box-shadow:var(--pop);
+  padding:var(--sp-4) var(--sp-6);font-family:var(--f-mono);font-size:var(--t-xs);
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  transition:transform .16s ease}
+.cn-home:hover{transform:translate(-3px,-3px);background:var(--sakura)}
+.cn-home i{font-style:normal;font-size:1.6rem;line-height:1}
+</style>
+<nav class="topbar" aria-label="Site">
+<a class="tb-home" href="/">☕ <span>CTS Café</span></a>
+<span class="tb-here">Ch.6 · Networks</span>
+<span class="tb-links"><a class="tb-arrow" href="/cafe-lumen" title="Chapter 5 · Café Lumen">◂ Ch.5</a><span class="tb-arrow is-off" aria-hidden="true">next ▸</span></span>
+</nav>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
+.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+
+/* ═══ CH4 ADDITIONS ═══════════════════════════════════════ */
+
+/* the signal chain — a row of stages with levels */
+.chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chain-step{flex:1 1 8.5rem; min-width:0; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-1); position:relative}
+.chain-step .cs-i{font-size:1.5rem; line-height:1}
+.chain-step .cs-n{font-family:var(--f-display); font-size:var(--t-sm); line-height:1.2}
+.chain-step .cs-v{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--tone,var(--berry))}
+.chain-step.mic{--tone:var(--lav)} .chain-step.line{--tone:var(--sun)} .chain-step.spk{--tone:var(--berry)}
+.chain-arrow{align-self:center; font-family:var(--f-mono); font-weight:700; color:var(--ink-faint); flex:none}
+@media (max-width:720px){.chain-arrow{display:none}}
+
+/* a compact spec list used for mic types, processors, applications */
+.specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr)); gap:var(--sp-4)}
+.spec-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-5,1.25rem) var(--sp-5,1.25rem);
+  display:flex; flex-direction:column; gap:var(--sp-2); border-top:5px solid var(--tone,var(--sakura))}
+.spec-card h4{font-family:var(--f-display); font-size:var(--t-md)}
+.spec-card .sc-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tone,var(--sakura))}
+.spec-card p{font-size:var(--t-sm); color:var(--ink-soft)}
+.spec-card ul{margin:0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.spec-card b{color:var(--ink)}
+
+/* versus block — two poles side by side */
+.vs{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:var(--sp-4);
+  align-items:center; margin-top:var(--sp-4)}
+@media (max-width:760px){.vs{grid-template-columns:1fr} .vs-mid{justify-self:center}}
+.vs-mid{font-family:var(--f-display); font-size:var(--t-lg); color:var(--paper);
+  background:var(--line); border-radius:50%; width:2.6em; height:2.6em;
+  display:grid; place-items:center; flex:none}
+
+/* the polar-pattern picker */
+.picker{display:flex; flex-wrap:wrap; gap:var(--sp-2)}
+.pick{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.04em;
+  padding:.35rem .7rem; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp); cursor:pointer;
+  transition:transform .12s, background .16s}
+.pick:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pick[aria-pressed="true"]{background:var(--sakura); color:var(--tag-ink); transform:translate(-1px,-1px)}
+
+/* dB / value readouts inside gadgets */
+.dial{display:flex; gap:var(--sp-3); flex-wrap:wrap}
+.dial div{background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 7rem}
+.dial span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.dial b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* grouped cheat sheet */
+.sheet h4{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--paper); background:var(--sakura); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.2rem .8rem; display:inline-block; margin:var(--sp-6) 0 var(--sp-3)}
+.sheet h4:first-child{margin-top:0}
+
+/* a wide callout for the one big formula of a section */
+.formula{background:var(--night); color:#FFE9D6; border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono); font-size:var(--t-md); font-weight:700; text-align:center;
+  overflow-x:auto; margin-top:var(--sp-4)}
+.formula em{color:var(--sun); font-style:normal}
+.formula small{display:block; font-size:var(--t-xs); color:#C3A4B0; font-weight:400; margin-top:var(--sp-2)}
+
+/* ═══ CH5 ADDITIONS ═══════════════════════════════════════ */
+
+/* the 2×2 light-units matrix — the hardest table in the chapter */
+.matrix{display:grid; grid-template-columns:auto 1fr 1fr; gap:var(--sp-2); margin-top:var(--sp-4)}
+@media (max-width:700px){.matrix{grid-template-columns:1fr}}
+.mx-h{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:center;
+  justify-content:center; text-align:center; padding:var(--sp-2)}
+.mx-side{writing-mode:horizontal-tb; background:var(--paper-2); border:2px solid var(--line);
+  border-radius:var(--r); padding:var(--sp-3); display:flex; flex-direction:column;
+  justify-content:center; gap:2px; min-width:8.5rem}
+.mx-side b{font-family:var(--f-display); font-size:var(--t-base); color:var(--tone,var(--sakura))}
+.mx-side span{font-family:var(--f-mono); font-size:var(--t-xs); color:var(--ink-soft)}
+.mx-cell{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  border-top:5px solid var(--tone,var(--sakura))}
+.mx-cell .u{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura))}
+.mx-cell .d{font-family:var(--f-mono); font-size:var(--t-sm); color:var(--ink)}
+.mx-cell .n{font-size:var(--t-sm); color:var(--ink-soft)}
+.mx-cell.us{--tone:var(--berry)} .mx-cell.si{--tone:var(--mint)}
+
+/* colour-temperature preview strip */
+.ctbar{height:64px; border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:flex}
+.ctbar div{flex:1; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:rgba(0,0,0,.55)}
+.ctswatch{height:96px; border:var(--bw) solid var(--line); border-radius:var(--r);
+  display:grid; place-items:center; font-family:var(--f-display); font-size:var(--t-lg);
+  color:rgba(0,0,0,.6); text-shadow:0 1px 0 rgba(255,255,255,.45)}
+
+/* contrast-ratio demo panel */
+.crdemo{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:grid; grid-template-columns:repeat(6,1fr); height:90px}
+.crdemo div{display:grid; place-items:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700}
+
+/* a small inline key/value strip used under figures */
+.kv{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-2)}
+.kv span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .6rem; color:var(--ink)}
+
+/* ═══ CH6 ADDITIONS ═══════════════════════════════════════ */
+
+/* the OSI stack — clickable layer explorer */
+.stack7{display:flex; flex-direction:column-reverse; gap:var(--sp-2)}
+.osi{display:grid; grid-template-columns:auto 1fr auto; gap:var(--sp-3); align-items:center;
+  width:100%; text-align:left; cursor:pointer;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:.5rem var(--sp-4); box-shadow:2px 2px 0 var(--stamp);
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink);
+  transition:transform .12s ease, background .16s ease}
+.osi:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.osi[aria-pressed="true"]{background:var(--tone,var(--sakura)); color:var(--tag-ink);
+  border-width:var(--bw); transform:translate(-2px,-2px)}
+.osi-n{font-family:var(--f-mono); font-size:var(--t-lg); font-weight:700; width:1.4em; text-align:center}
+.osi-nm{font-family:var(--f-display); font-size:var(--t-md); line-height:1.1}
+.osi-nm small{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; opacity:.75}
+.osi-u{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; white-space:nowrap;
+  background:var(--paper); border:2px solid var(--line); border-radius:var(--r-pill); padding:.15rem .5rem}
+.osi[aria-pressed="true"] .osi-u{background:var(--paper)}
+.osi-out{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); margin-top:var(--sp-4);
+  border-left:8px solid var(--tone,var(--sakura))}
+.osi-out h4{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura))}
+.osi-out ul{margin:var(--sp-2) 0 0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.osi-out .dev{margin-top:var(--sp-3); font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  border-top:2px dashed var(--line); padding-top:var(--sp-2); color:var(--ink)}
+
+/* the encapsulation ladder */
+.encap{display:flex; flex-direction:column; gap:var(--sp-2)}
+.enc-row{display:grid; grid-template-columns:7.5rem 1fr; gap:var(--sp-3); align-items:center}
+@media (max-width:620px){.enc-row{grid-template-columns:1fr}}
+.enc-lab{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.enc-bar{display:flex; gap:3px; align-items:stretch; min-height:38px}
+.enc-seg{flex:1; display:grid; place-items:center; border:2px solid var(--line); border-radius:6px;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .2rem;
+  min-width:0; overflow:hidden; white-space:nowrap}
+.enc-hdr{flex:0 0 auto; padding:.3rem .5rem}
+
+/* the address decoder */
+.bits{display:flex; gap:var(--sp-2); flex-wrap:wrap; font-family:var(--f-mono); font-size:var(--t-sm);
+  font-weight:700}
+.octet{border:2px solid var(--line); border-radius:var(--r); padding:.3rem .6rem; background:var(--paper-2)}
+.octet.net{background:var(--lav-soft); color:var(--ink)}
+.octet.host{background:var(--mint-soft); color:var(--ink)}
+.octet small{display:block; font-size:.62rem; font-weight:400; opacity:.8; letter-spacing:.04em}
+
+/* the firewall sorter */
+.fw{display:grid; grid-template-columns:1fr auto 1fr; gap:var(--sp-3); align-items:center}
+@media (max-width:700px){.fw{grid-template-columns:1fr}}
+.fw-lane{display:flex; flex-direction:column; gap:var(--sp-2); min-height:9rem}
+.fw-wall{background:var(--berry); color:var(--tag-ink); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-3);
+  writing-mode:vertical-rl; text-orientation:mixed; font-family:var(--f-mono); font-size:var(--t-sm);
+  font-weight:700; letter-spacing:.2em; text-align:center; align-self:stretch;
+  display:grid; place-items:center}
+@media (max-width:700px){.fw-wall{writing-mode:horizontal-tb; letter-spacing:.1em}}
+.pkt{display:grid; grid-template-columns:auto 1fr auto; gap:var(--sp-2); align-items:center;
+  border:2px solid var(--line); border-radius:var(--r); padding:.35rem .6rem;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; background:var(--paper-2)}
+.pkt.pass{background:var(--mint-soft)} .pkt.block{background:var(--berry-soft)}
+.pkt i{font-style:normal; font-size:1.1rem}
+.pkt span:last-child{white-space:nowrap; opacity:.8}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 6</span>
+      <h1><small>CTS ☆ CHAPTER 6</small>Café<br>Localhost</h1>
+      <p class="hero-sub">Networks — from a cable in a wall to a packet crossing the planet.
+        <b>11 levels</b>, five gadgets, a 15-HP boss, and the OSI model finally made to sit still.
+        <span class="kmj">(=^･ω･^=)ﾉ</span></p>
+      <nav class="chips">
+        <a class="chip" href="#types">🏠 1 · network types</a>
+        <a class="chip" href="#topology">🕸 2 · topology</a>
+        <a class="chip" href="#ethernet">🔌 3 · ethernet</a>
+        <a class="chip" href="#media">💡 4 · fibre &amp; wi-fi</a>
+        <a class="chip" href="#osi">🎂 5 · the OSI model</a>
+        <a class="chip" href="#tcpip">📦 6 · TCP/IP</a>
+        <a class="chip" href="#mac">🆔 7 · NIC &amp; MAC</a>
+        <a class="chip" href="#ip">📮 8 · IP addressing</a>
+        <a class="chip" href="#dns">📖 9 · DNS</a>
+        <a class="chip" href="#boxes">🔀 10 · switches &amp; routers</a>
+        <a class="chip" href="#security">🔥 11 · security</a>
+        <a class="chip" href="#song">🎵 the song</a>
+        <a class="chip" href="#quiz">⚔️ boss ×15</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · TYPES ══════════════ -->
+<section id="types">
+  <div class="head">
+    <span class="lv">Lv.1 · types of networks</span>
+    <h2>Every network is an ___AN <span class="kao">🏠</span></h2>
+    <p class="lede">A network is just <b>a group of devices connected so they can talk</b>. They're
+      categorised by <b>the area they cover</b> — their scale. Which means the whole list is one letter
+      plus "area network".</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Living room, Campus, City, World.</q>
+    <p class="why">The size ladder is just <b>L → C → M → W</b>. <b>LAN</b> is a building.
+      <b>CAN</b> is a campus or cluster of buildings. <b>MAN</b> is a suburb or city.
+      <b>WAN</b> is a state or country — and <b>the Internet is the largest WAN</b>, covering the earth.
+      LANs join WANs through <b>routers</b>.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">the size ladder</span><h4>L · C · M · W</h4>
+      <ul>
+        <li><b>LAN</b> — a confined area: a building or living complex. Short distance, and generally
+          <b>owned or controlled by the end user</b></li>
+        <li><b>CAN</b> — multiple LANs in a limited area, like a university campus</li>
+        <li><b>MAN</b> — a suburb or a city</li>
+        <li><b>WAN</b> — a state or country. <b>The Internet is the biggest one</b></li>
+      </ul>
+      <p><b>LANs and WLANs are the most common</b>, and they're the building blocks CANs, MANs and WANs
+        are made from.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">the odd ones out</span><h4>W · S · V · P</h4>
+      <ul>
+        <li><b>WLAN</b> — a LAN, but wireless</li>
+        <li><b>SAN</b> — <b>S</b>torage: a high-speed special-purpose network interconnecting
+          data-storage devices</li>
+        <li><b>VLAN</b> — <b>V</b>irtual: devices on separate LAN segments joined into a
+          <b>logical group</b>, spanning the LANs they're connected to</li>
+        <li><b>PAN</b> — <b>P</b>ersonal: limited-range wireless for one person or a small workgroup</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🐈 the smallest network</span>
+    A network can be as small as <b>two connected computers</b> or as large as the Internet. Anna and Digi
+    arguing across a table is, technically, a PAN.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · TOPOLOGY ══════════════ -->
+<section id="topology">
+  <div class="head">
+    <span class="lv">Lv.2 · network topology</span>
+    <h2>The shape of the wires <span class="kao">🕸</span></h2>
+    <p class="lede">Devices on a network are <b>nodes</b>. <b>Physical topology</b> is the shape the
+      network makes when it's connected. <b>Logical topology</b> is the way information flows through it.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Star has a middle. Bus has two ends. Ring has none. Mesh has everything.</q>
+    <p class="why">Four shapes, told apart by counting their ends. <b>Star</b> — every node to one central
+      point, a switch or router; <b>the most common topology in general use</b>. <b>Bus</b> — one cable
+      looping node to node <b>along a linear path</b>. <b>Ring</b> — the same, but the two ends are joined
+      into a <b>continuous loop</b>. <b>Mesh</b> — every node connected to at least one other, with
+      <b>many possible paths</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · cut a cable and see what survives</span>
+      <span class="verdict ok" id="tp-v">star</span>
+    </div>
+    <div class="picker" id="tp-pick">
+      <button class="pick" type="button" data-t="star" aria-pressed="true">star</button>
+      <button class="pick" type="button" data-t="bus">bus</button>
+      <button class="pick" type="button" data-t="ring">ring</button>
+      <button class="pick" type="button" data-t="mesh">mesh</button>
+    </div>
+    <div class="screen"><canvas id="tp" width="1000" height="360"></canvas></div>
+    <div class="ctl">
+      <label for="tp-b">break a link</label>
+      <input type="range" id="tp-b" min="0" max="6" step="1" value="0">
+      <output id="tp-out">none</output>
+    </div>
+    <p class="gsay" id="tp-say">Pick a shape, then drag to cut a link and see who gets stranded.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">star</span><h4>One point in the middle ⭐</h4>
+      <p>All nodes connect to a central switch or router, which have <b>multiple connection
+        capabilities</b>. <b>The most common topology in general use.</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">bus</span><h4>A single line 🚌</h4>
+      <p>All nodes on <b>one cable, looping from node to node</b>. Used for control systems like lighting.
+        Each node has a <b>unique number</b> set in software or by a mechanical switch.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">ring</span><h4>A line with its ends joined 💍</h4>
+      <p>Like a bus, but the ends join into a <b>continuous loop</b>. A break doesn't stop the flow,
+        because <b>redundant paths can be created</b>. Telecoms and WAN Internet services use a
+        <b>mesh ring</b> for redundancy.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">mesh</span><h4>Everyone to everyone 🕸</h4>
+      <p>Each node connects via bridges, switches or routers to at least one other. Data takes
+        <b>many possible paths</b> → <b>high resilience to failure</b>.</p>
+      <p>Used for <b>ad hoc wireless</b> where nodes appear and vanish unpredictably and one node relays
+        for another, plus <b>building automation</b> and the <b>Internet of Things</b>.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap #1</span>
+    "Connects devices <b>in sequence along a linear path</b>" is the <b>bus</b>. Ring is also a sequence —
+    but a ring has <b>no ends</b>, so it isn't linear. Count the ends: <b>two = bus, zero = ring</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · ETHERNET ══════════════ -->
+<section id="ethernet">
+  <div class="head">
+    <span class="lv">Lv.3 · ethernet</span>
+    <h2>The house rules of the LAN <span class="kao">🔌</span></h2>
+    <p class="lede"><b>Ethernet is the most commonly used method of transferring data on a LAN</b> — an
+      <b>IEEE</b> standard governing how computers exchange information over the medium.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Ethernet tries its best and apologises later.</q>
+    <p class="why">Ethernet is <b>packet-based</b>: big files get broken into chunks of
+      <b>1,500 bits or smaller</b>. Packets can take <b>different paths and arrive out of order</b>, so
+      the receiving device must track what's missing and either ask again or shrug. That's why Ethernet is
+      called a <b>"best-effort" delivery system</b>.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">the standard</span><h4>IEEE 802</h4>
+      <p>Specifies the <b>physical transmission media</b> (cable, fibre, wireless) and <b>how signal
+        information is handled</b> (frames or packets).</p>
+      <p>Revised periodically as <b>802.x.x</b>, where the x's are revision numbers.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">the connector</span><h4>8P8C, a.k.a. RJ-45</h4>
+      <p><b>Eight-position, eight-conductor</b> modular connector, terminated onto the cable.
+        <b>Inexpensive and easy to install in the field.</b></p>
+      <p>Two wiring formats: <b>T568-A</b> and <b>T568-B</b> — and <b>the overwhelming majority of
+        installations and premade cables use T568-B</b>.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A on one end, B on the other — that's a crossover.</q>
+    <p class="why">Terminate <b>T568-A at one end and T568-B at the other</b> and you have a
+      <b>crossover cable</b>. It lets <b>two devices connect directly</b> — two computers, say — without a
+      switch or router, <b>which would normally do the crossover electronically</b>.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · MEDIA ══════════════ -->
+<section id="media">
+  <div class="head">
+    <span class="lv">Lv.4 · fibre &amp; wireless</span>
+    <h2>Light down a hair, or no wire at all <span class="kao">💡</span></h2>
+    <p class="lede">Fibre carries information <b>coded in a beam of light through a glass or plastic
+      pipe</b> — a strand <b>as thin as human hair</b>. Used where runs are long and speeds are high.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Yellow goes far. Orange stays near.</q>
+    <p class="why"><b>Single-mode</b> — light travels a <b>single path</b>, identified by a
+      <b>yellow</b> outer jacket, and <b>reaches farther</b> because of how the cable is built.
+      <b>Multimode</b> — <b>multiple light paths</b>, identified by an <b>orange</b> jacket.
+      Yellow = one = far.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">speed</span><h4>Absurd headroom</h4>
+      <p>Fibre easily handles LAN speeds of <b>40 Gbps</b>, and goes higher just by upgrading the
+        transmitter and receiver.</p>
+      <p>It's been tested to <b>hundreds of terabits per second</b> (1 Tbps = 1,000 Gbps) — which makes it
+        a good long-term investment in cable plant.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">connectors</span><h4>Twist, pull, click</h4>
+      <ul>
+        <li><b>ST</b> — insert and <b>t</b>wist, much like a BNC connector</li>
+        <li><b>LC</b> — the <b>"push, pull"</b> connector</li>
+        <li><b>SC</b> — inserts and <b>c</b>licks into place</li>
+      </ul>
+      <p><b>S-T = Stick and Twist. S-C = Stick and Click.</b> The letters do the work for two of the three.</p>
+    </article>
+  </div>
+
+  <div class="story" style="--tone:var(--lav)">
+    <div class="story-text">
+      <p class="story-lead"><span>📶</span><span>Wi-Fi, and what actually limits it.</span></p>
+      <div class="beat"><span class="beat-i">📡</span>
+        <p>Wi-Fi is defined by <span class="hl">IEEE 802.11</span>, continually revised to keep up with
+          demand — developers are working toward a theoretical <b>20 Gbps</b>. The device handling the
+          connection is an <b>access point</b>.</p></div>
+      <div class="beat"><span class="beat-i">📉</span>
+        <p><span class="hl-p">As signal strength weakens, the connection slows down.</span> It doesn't stop
+          and it doesn't stay constant — it degrades. Speed depends on <b>RF signal strength</b>, the
+          <b>802.11 revision</b>, and <b>how many users</b> are on it.</p></div>
+      <div class="beat"><span class="beat-i">🧱</span>
+        <p>Some systems claim <b>70 m (about 230 ft)</b>, but the real limit is
+          <span class="hl-m">the antennas at both ends, the obstructions between them, and the transmit
+          power</span> — not the number on the box.</p></div>
+    </div>
+    <figure class="fig" style="--tone:var(--lav)">
+      <span class="fig-t">🔦 single vs multimode</span>
+      <svg viewBox="0 0 220 140" role="img" aria-label="Single-mode fibre carries one straight light path in a yellow jacket; multimode bounces several paths in an orange jacket.">
+        <rect x="4" y="8" width="212" height="54" rx="8" fill="#F2D06B" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="24" font-family="monospace" font-size="10" font-weight="700" fill="#4A2B33">SINGLE-MODE · yellow</text>
+        <path d="M14 46 H206" stroke="#4A2B33" stroke-width="4" stroke-linecap="round"/>
+        <text x="14" y="58" font-family="monospace" font-size="9" font-weight="700" fill="#4A2B33">one path · farther</text>
+        <rect x="4" y="74" width="212" height="58" rx="8" fill="#F0A254" stroke="var(--line)" stroke-width="3"/>
+        <text x="14" y="90" font-family="monospace" font-size="10" font-weight="700" fill="#4A2B33">MULTIMODE · orange</text>
+        <path d="M14 112 L44 100 L74 124 L104 100 L134 124 L164 100 L194 118 L206 112"
+              stroke="#4A2B33" stroke-width="3" fill="none" stroke-linejoin="round"/>
+        <text x="14" y="128" font-family="monospace" font-size="9" font-weight="700" fill="#4A2B33">many paths · shorter</text>
+      </svg>
+      <figcaption>One straight path travels further than a beam bouncing off the walls.</figcaption>
+    </figure>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>802.11 for the air. 802.1x for the door.</q>
+    <p class="why">Two numbers that look almost identical and mean completely different things.
+      <b>802.11 = Wi-Fi.</b> <b>802.1x = port-based network access control</b>, the authentication you'll
+      meet in Level 11. The exam puts them in the same list of options on purpose.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 5 · OSI ══════════════ -->
+<section id="osi">
+  <div class="head">
+    <span class="lv">Lv.5 · the OSI reference model</span>
+    <h2>Seven layers of cake <span class="kao">🎂</span></h2>
+    <p class="lede">Built by the <b>ISO</b> — yes, they know the initials don't match — to standardise
+      communication between devices worldwide. <b>Seven layers, each with a specific duty, processed in a
+      specific sequential order.</b></p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Please Don't Nibble The Sugar, Precious Anna.</q>
+    <p class="why">Bottom to top: <b>P</b>hysical · <b>D</b>ata Link · <b>N</b>etwork · <b>T</b>ransport ·
+      <b>S</b>ession · <b>P</b>resentation · <b>A</b>pplication. Going the other way, the classic is
+      <em>All People Seem To Need Data Processing</em>. Learn one direction properly and you can always
+      count to the other.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · tap a layer</span>
+      <span class="verdict ok" id="osi-v">Layer 1</span>
+    </div>
+    <div class="stack7" id="osi-stack"></div>
+    <div class="osi-out" id="osi-out"></div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Segments, Packets, Frames — four, three, two.</q>
+    <p class="why">Data changes its name as it falls down the stack. Big streams from the upper layers are
+      broken into <b>segments</b> at the <b>Transport layer (4)</b>. At the <b>Network layer (3)</b>
+      destination and control information is added, making a <b>packet</b>. At the
+      <b>Data Link layer (2)</b> packets are encapsulated into <b>frames</b> carrying the physical
+      destination, such as the MAC address. The <b>Physical layer (1)</b> puts it on the wire.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 03 · watch a file fall down the stack</span>
+      <span class="verdict ok" id="en-v">layer 7</span>
+    </div>
+    <div class="encap" id="en-out"></div>
+    <div class="ctl">
+      <label for="en-r">going down</label>
+      <input type="range" id="en-r" min="0" max="4" step="1" value="0">
+      <output id="en-lab">Application</output>
+    </div>
+    <p class="gsay" id="en-say">Each layer wraps the last one in its own header. That's encapsulation.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🎯 what AV people are asked about</span>
+    The book flags <b>layers 7 and 1</b> as the ones AV professionals should watch. And the exam's
+    favourite: <b>cabling and patchbays are Layer 1, the Physical layer.</b>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · TCP/IP ══════════════ -->
+<section id="tcpip">
+  <div class="head">
+    <span class="lv">Lv.6 · the TCP/IP networking model</span>
+    <h2>The same cake, four slices <span class="kao">📦</span></h2>
+    <p class="lede">The <b>Internet Engineering Task Force</b> specifies the standards for TCP/IP —
+      <b>SMTP</b> for e-mail, <b>FTP</b> for file transfer, <b>DNS</b> for domain names, <b>HTTP</b> for
+      the World Wide Web, and the IP address numbering systems themselves.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Squash the top three, squash the bottom two.</q>
+    <p class="why">TCP/IP nominates only <b>four</b> layers, and they map onto OSI exactly:
+      <b>Application</b> = OSI <b>7 + 6 + 5</b> · <b>Transport</b> = OSI <b>4</b> ·
+      <b>Internet</b> = OSI <b>3</b> (the Network layer) · <b>Network Access</b> = OSI <b>2 + 1</b>.
+      The middle two match one-for-one; only the ends collapse.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:var(--sp-6)">
+    <table>
+      <thead><tr><th>OSI</th><th>layer</th><th>TCP/IP</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td>Application</td><td rowspan="3" class="hi">Application</td></tr>
+        <tr><td>6</td><td>Presentation</td></tr>
+        <tr><td>5</td><td>Session</td></tr>
+        <tr><td>4</td><td>Transport</td><td class="hi">Transport</td></tr>
+        <tr><td>3</td><td>Network</td><td class="hi">Internet</td></tr>
+        <tr><td>2</td><td>Data Link</td><td rowspan="2" class="hi">Network Access</td></tr>
+        <tr><td>1</td><td>Physical</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · NIC & MAC ══════════════ -->
+<section id="mac">
+  <div class="head">
+    <span class="lv">Lv.7 · network interface cards &amp; MAC addresses</span>
+    <h2>The number you were born with <span class="kao">🆔</span></h2>
+    <p class="lede">To join a network a device needs an interface — a <b>network interface card (NIC)</b>.
+      Once separate cards, now often built into the device's main circuitry. <b>Wireless connections count
+      as NICs too</b>, since they interface RF to traditional wired cabling.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>MAC is your birth certificate. IP is your mailing address.</q>
+    <p class="why">A <b>MAC address is the actual hardware address of a NIC</b> — <b>globally unique</b>,
+      part of the IEEE 802 standard, and burned in at the factory. An <b>IP address</b> is where you
+      happen to live right now, and it can change. That one sentence answers two exam questions.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">anatomy</span><h4>48 bits, six pairs</h4>
+      <p>A <b>48-bit</b> number written as <b>six groups of two hexadecimal digits</b>, separated by
+        hyphens or colons:</p>
+      <p style="font-family:var(--f-mono);font-weight:700;color:var(--ink)">01-23-45-67-89-ab<br>01:23:45:67:89:ab</p>
+      <p>The <b>first part identifies the manufacturer</b>, the <b>second is a serial number</b> for the
+        product or component — drawn from a table assigned to makers of Ethernet-capable devices.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">why it matters</span><h4>One per network 🔒</h4>
+      <p>Because of how MAC addresses work, <b>there can be only one device with that number on any given
+        network</b>.</p>
+      <p>It's one of the <b>lowest levels of communication</b> on the network — one of the first pieces of
+        the structure. Switches and routers <b>store MAC address locations</b> so they can send traffic
+        efficiently to a specific device.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · IP ══════════════ -->
+<section id="ip">
+  <div class="head">
+    <span class="lv">Lv.8 · internet protocol addressing</span>
+    <h2>Where the device actually lives <span class="kao">📮</span></h2>
+    <p class="lede">The device has a way to connect (the NIC) and a unique number (the MAC). The
+      <b>IP address defines the exact device and its location on a network</b>. IP lives on
+      <b>layer 3</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Name is what. Address is where. Route is how. IP does where.</q>
+    <p class="why">Straight from the book's own distinction: <b>a name indicates what you seek, an address
+      indicates where it is, a route indicates how to get there</b> — and <b>IP deals primarily with
+      addresses</b>. All four words appear as options on the exam.</p>
+  </div>
+
+  <div class="vs">
+    <article class="cat-card" style="--tone:var(--lav);--tone-soft:var(--lav-soft)">
+      <div class="cat-top"><div><div class="cat-name">IPv4</div>
+        <div class="cat-role">SINCE 1982 · FOUR OCTETS</div></div></div>
+      <ul class="cat-list">
+        <li>Four <b>8-bit chunks called octets</b> — <b>192.168.1.25</b></li>
+        <li>Really a 32-digit binary number:<br>
+          <span style="font-family:var(--f-mono);font-size:.8em">11000000.10101000.00000001.00011001</span></li>
+        <li><b>2³² = 4,294,967,296</b> possible addresses</li>
+        <li>Left part = <b>network prefix</b>, right part = <b>network host</b></li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">IPv6</div>
+        <div class="cat-role">EIGHT GROUPS OF FOUR HEX</div></div></div>
+      <ul class="cat-list">
+        <li><b>Eight groups of four hexadecimal digits</b><br>
+          <span style="font-family:var(--f-mono);font-size:.78em">FEDC:BA98:7654:3210:FEDC:BA98:7654:3210</span></li>
+        <li><b>2¹²⁸</b> ≈ 340 undecillion addresses</li>
+        <li>Letters A–F stand for the digits 10–15</li>
+        <li>Can use the <b>MAC address as part of its numbering</b> to guarantee uniqueness — though
+          that isn't recommended in all cases</li>
+        <li><b>No interoperability with IPv4</b> — it's a parallel, independent network</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>The mask hides the network and leaves the host.</q>
+    <p class="why">An IP address has two components — <b>network address and host address</b> — and the
+      <b>subnet mask separates them</b>. It masks the network part and leaves the host number to identify
+      the device. <b>Without a subnet mask a device won't be recognised properly on a network.</b>
+      Subnetting subdivides IP networks logically, <b>increasing performance and enhancing security</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 04 · the mask, decoded</span>
+      <span class="verdict ok" id="sn-v">254 devices</span>
+    </div>
+    <div class="ctl">
+      <label for="sn-mask">subnet mask</label>
+      <select id="sn-mask">
+        <option value="24">255.255.255.0 — the common "Class C"</option>
+        <option value="16">255.255.0.0</option>
+        <option value="8">255.0.0.0</option>
+        <option value="25">255.255.255.128</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="sn-ip">IP address</label>
+      <input type="text" id="sn-ip" value="192.168.1.25" style="width:11rem;font-family:var(--f-mono)">
+    </div>
+    <div class="bits" id="sn-oct"></div>
+    <div class="dial" style="margin-top:var(--sp-3)">
+      <div><span>network part</span><b id="sn-net">192.168.1</b></div>
+      <div><span>host part</span><b id="sn-host">25</b></div>
+      <div><span>usable devices</span><b id="sn-count">254</b></div>
+    </div>
+    <p class="gsay" id="sn-say">Purple octets are the network. Mint octets are the host.</p>
+  </div>
+
+  <div class="vs" style="margin-top:var(--sp-6)">
+    <article class="cat-card" style="--tone:var(--sun);--tone-soft:var(--sun-soft)">
+      <div class="cat-top"><div><div class="cat-name">Static</div>
+        <div class="cat-role">ASSIGNED BY HAND · STAYS PUT</div></div></div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">For devices that must always be findable —
+        a videoconferencing system, IP-controlled equipment. Sometimes you have no choice.</p>
+      <ul class="cat-list">
+        <li><b>IP address — required</b></li>
+        <li><b>Subnet mask — required</b></li>
+        <li>Device name</li>
+        <li>DNS server</li>
+        <li>Gateway</li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="cat-card" style="--tone:var(--mint);--tone-soft:var(--mint-soft)">
+      <div class="cat-top"><div><div class="cat-name">Dynamic</div>
+        <div class="cat-role">DHCP · TEMPORARY</div></div></div>
+      <p style="font-size:var(--t-sm);color:var(--ink-soft)">Tick "obtain IP address automatically" and a
+        <b>DHCP server reads the device's MAC address and assigns it an IP</b>.</p>
+      <ul class="cat-list">
+        <li>Held only for a <b>lease time</b>, then usually auto-renewed if still connected</li>
+        <li><b>Good:</b> easy to manage, no two devices get the same address, more people can connect</li>
+        <li><b>Bad:</b> you never know what your address will be next time</li>
+        <li><b>Hybrid:</b> reserve a block, and enter each static device's <b>MAC in a table</b> so DHCP
+          hands it the same address every time</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap #2</span>
+    <b>255.255.255.0</b> is the common "Class C" mask and allows <b>254 devices</b>.
+    <b>255.0.0.0</b> handles <b>more than 16 million</b>. And when the exam asks what a subnet mask
+    indicates the number of — the word it wants is <b>devices</b>, not computers.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · DNS ══════════════ -->
+<section id="dns">
+  <div class="head">
+    <span class="lv">Lv.9 · the domain name system</span>
+    <h2>The café's phone book <span class="kao">📖</span></h2>
+    <p class="lede">DNS is a <b>hierarchical, distributed database that maps names to data such as IP
+      addresses</b>. A DNS server keeps track of the devices on the network and matches their names so
+      they can be found or wired into control and monitoring systems.</p>
+  </div>
+
+  <div class="say">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+    <div class="bubble">It's much easier to remember <b>ietf.org</b> than <b>4.31.198.44</b>.
+      That's the entire pitch, and it's a good one 📖</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>DHCP hands out the numbers. DNS remembers the names.</q>
+    <p class="why">When they work together <b>you may never need to know a device's IP address at all</b> —
+      only its name. That makes a network far simpler to manage, because <b>the address doesn't need to be
+      static, and the entire addressing scheme could change without affecting communication</b>.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · BOXES ══════════════ -->
+<section id="boxes">
+  <div class="head">
+    <span class="lv">Lv.10 · switches, routers, gateways &amp; bridges</span>
+    <h2>Four boxes, four jobs <span class="kao">🔀</span></h2>
+    <p class="lede">The hardware building blocks. They look similar in a rack and they are not the same
+      thing at all.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Switch knows MACs. Router knows IPs. Gateway knows the way out. Bridge knows two languages.</q>
+    <p class="why">The whole section in one line. A <b>switch</b> stores <b>MAC addresses</b> in memory and
+      looks up destinations. A <b>router</b> reads the <b>destination IP address</b> and works at the
+      layers <em>above</em> a switch — Network and Transport. A <b>gateway</b> is the
+      <b>topmost router in the hierarchy</b>, the one that <b>connects to an outside network</b>. A
+      <b>bridge</b> connects <b>two different types of network</b> by translating one protocol into
+      another.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-step mic"><span class="cs-i">🔀</span><span class="cs-n">Switch</span><span class="cs-v">MAC · layer 2</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step line"><span class="cs-i">🧭</span><span class="cs-n">Router</span><span class="cs-v">IP · layers 3–4</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step spk"><span class="cs-i">🚪</span><span class="cs-n">Gateway</span><span class="cs-v">the way out</span></div>
+    <span class="chain-arrow">▶</span>
+    <div class="chain-step spk"><span class="cs-i">🌉</span><span class="cs-n">Bridge</span><span class="cs-v">protocol → protocol</span></div>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">switch</span><h4>The MAC librarian 🔀</h4>
+      <p>As each device connects, the switch <b>collects its MAC address and stores it in memory</b>. When
+        one device wants another, the switch <b>looks up the destination in memory</b> and sends it there.</p>
+      <p>Switches also let <b>connected devices run at their own maximum speeds</b> — put a 100 Mbps and a
+        1 Gbps device on a 1 Gbps switch and <b>the fast one doesn't slow down</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">switch types</span><h4>Unmanaged vs managed</h4>
+      <p><b>Unmanaged</b> — <b>you plug it in and connect devices. That's it.</b> No adjustments. It just
+        works.</p>
+      <p><b>Managed</b> — the IT manager can adjust <b>port speeds, VLANs, QoS settings, traffic
+        monitoring</b> and more. <b>What you'll find in most complex or multifunction networks.</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">router &amp; gateway</span><h4>Up the hierarchy 🧭</h4>
+      <p>Routers <b>work together in a hierarchy</b> — one router can control the behaviour of routers
+        beneath it. They also <b>allow for redundancy</b>.</p>
+      <p>The <b>gateway is the top-level router</b>. <b>All traffic must eventually travel through it to
+        get outside the local network.</b> It passes traffic to the routers below, which look to it to
+        find DNS names not on the local network. <b>Some devices won't operate without a gateway
+        address.</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">bridge</span><h4>The translator 🌉</h4>
+      <p>Connects <b>two different types of network</b> by translating one protocol to another.</p>
+      <p>The everyday example: a <b>broadband modem</b>, which bridges the <b>Ethernet</b> protocol to a
+        <b>WAN</b> protocol.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚠ exam trap #3 — the nastiest in the chapter</span>
+    "A _____ sends packets to different locations on a network <b>and connects to outside networks</b>."
+    Both <b>Router</b> and <b>Gateway</b> are offered, and the first half describes a router perfectly.
+    <b>The deciding phrase is "connects to outside networks" — that's the gateway</b>, the topmost router.
+    If both are on the list, look for the words <em>outside</em> or <em>external</em>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 11 · SECURITY ══════════════ -->
+<section id="security">
+  <div class="head">
+    <span class="lv">Lv.11 · network security</span>
+    <h2>The bouncer with a list <span class="kao">🔥</span></h2>
+    <p class="lede">The purpose of network security is <b>to prevent unauthorized users from accessing a
+      LAN</b>. It's implemented at many points, but <b>most defences operate at the boundaries</b> — and
+      the first boundary is the physical network interface.</p>
+  </div>
+
+  <div class="say right">
+    <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+    <div class="bubble">Think of the <b>wall port as an extension of the switch to the wall</b>. You can
+      configure it so <b>only certain MAC addresses</b> get in from that point. 🔒</div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A firewall is a bouncer with a list.</q>
+    <p class="why">Firewalls are <b>among the most common network security technologies</b> — software or
+      dedicated hardware. Their primary job: <b>control incoming and outgoing network traffic by analysing
+      packets and deciding whether they should be allowed through, based on a set of rules</b>. That
+      sentence is the exam answer, almost word for word.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 05 · run the door</span>
+      <span class="verdict ok" id="fw-v">2 of 6 allowed</span>
+    </div>
+    <div class="picker" id="fw-pick">
+      <button class="pick" type="button" data-r="strict" aria-pressed="true">web only</button>
+      <button class="pick" type="button" data-r="av">allow AV traffic</button>
+      <button class="pick" type="button" data-r="open">allow everything</button>
+    </div>
+    <div class="fw">
+      <div class="fw-lane" id="fw-in"></div>
+      <div class="fw-wall">FIREWALL</div>
+      <div class="fw-lane" id="fw-out"></div>
+    </div>
+    <p class="gsay" id="fw-say">Left: packets arriving. Right: what the rules let through.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">technique 1</span><h4>Packet filtering</h4>
+      <p>Rules decide whether a packet passes. Configured by the network administrator and applied
+        <b>based on the protocol header of each packet</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">technique 2</span><h4>NAT</h4>
+      <p><b>Network address translation</b> alters IP address information in packet headers as the packet
+        crosses a routing device.</p>
+      <p>It lets devices with <b>private, unregistered addresses reach the Internet through one registered
+        address</b>, <b>conserving address space</b>, and it <b>hides the original source</b> — from
+        outside, everything appears to come from the NAT server.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">technique 3</span><h4>Port forwarding</h4>
+      <p><b>Combines NAT and packet filtering.</b> The firewall inspects the packet against the filtering
+        rules and is <b>also configured to translate certain external ports to private addresses
+        inside</b> the network.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>The address of the building, but not the apartment number.</q>
+    <p class="why">The book's own line for why NAT protects you. Data that arrives at the NAT server
+      <b>without being requested by a client has nowhere to go</b> — it's blocked, and an intruder
+      <b>can't trace the path beyond the edge of the network</b>.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">NAC</span><h4>Network access control</h4>
+      <p>A group of technologies chosen to <b>align with an organisation's security policy</b>. Any device
+        trying to connect <b>must comply with that policy</b> — how it's configured, what software it
+        runs. Once connected, NAC <b>controls what it can reach</b>, based on user actions and identities.</p>
+      <p>⚠ <b>Some AV devices have trouble with NAC because they aren't fully functional computers.</b></p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">ACL</span><h4>Access control list</h4>
+      <p>When a network is broken into subnets or broadcast domains, <b>routers may provide additional
+        security</b> through an ACL, which controls what travels through a router
+        <b>based on the type of data traffic, source, and/or destination</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sakura)">
+      <span class="sc-tag">802.1x</span><h4>The airport gate ✈️</h4>
+      <p><b>Port-based NAC.</b> An IEEE standard requiring <b>authentication before a device may connect
+        through a certain port</b> — the user must be verified by an <b>authentication server</b> first.</p>
+      <p>The book's own analogy: <b>like a security agent checking your ID and ticket before letting you
+        into the terminal</b>.</p>
+    </article>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🤝 what this means for your actual job</span>
+    AV professionals designing or installing networked systems <b>usually won't be responsible for network
+    security</b>. The job is to <b>coordinate with the client's IT department</b> so the right AV traffic
+    can cross firewalls — and to <b>list the ports and protocols needed as specifically and narrowly as
+    possible</b>, which you get from the device manufacturers' specifications. AVIXA publishes
+    <b>Recommended Practices for Security in Networked AV Systems</b>.
+  </div>
+</section>
+
+<!-- ══════════════ SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">the earworm · sing it once, properly</span>
+    <h2>The Seven Layer Song <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">The OSI model is the single most examinable thing in this chapter. Here it is
+      bottom-to-top, to a tune with plenty of room in the lines.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ SONG GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · She'll Be Coming Round the Mountain</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>♪ It's <b style="color:var(--berry)">PHY-si-cal</b>, then <b style="color:var(--berry)">DA-ta LINK</b> be-low — <em>one, two!</em></p>
+      <p>♪ Then <b style="color:var(--berry)">NET-work</b> and it's <b style="color:var(--berry)">TRANS-port</b> as we go — <em>three, four!</em></p>
+      <p>♪ Then <b style="color:var(--berry)">SES-sion</b>, <b style="color:var(--berry)">PRE-sen-TA-tion</b>, <b style="color:var(--berry)">AP-pli-CA-tion</b> at the top,</p>
+      <p>♪ <b style="color:var(--berry)">SE-ven LAY-ers</b> and the <b style="color:var(--berry)">PACK-ets NE-ver STOP!</b></p>
+    </div>
+    <p class="why">And the acrostic if you'd rather not sing in public:
+      <b>Please Don't Nibble The Sugar, Precious Anna</b> — Physical, Data Link, Network, Transport,
+      Session, Presentation, Application.</p>
+  </div>
+
+  <div class="board" style="margin-top:var(--sp-6)">
+    <h3>Five chants for the walk in 🥁</h3>
+    <div class="lyric">
+      <p class="lyric-line"><strong>STAR has a middle · BUS has two ends · RING has none · MESH has everything</strong></p>
+      <p class="lyric-line"><strong>SEGMENTS, PACKETS, FRAMES — four, three, two</strong></p>
+      <p class="lyric-line"><strong>MAC is your birth certificate · IP is your mailing address</strong></p>
+      <p class="lyric-line"><strong>802.11 for the AIR · 802.1x for the DOOR</strong></p>
+      <p class="lyric-line"><strong>SWITCH knows MACs · ROUTER knows IPs · GATEWAY knows the way out · BRIDGE knows two languages</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage</span>
+    <h2>Notes taped to the patch panel <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">localhost</span><p>Why is the café called Localhost?<br><b>Because there's no place like 127.0.0.1.</b></p></article>
+    <article class="item"><span class="item-tag">ethernet</span><p>Ethernet promises "best effort."<br><b>Which is what you say about a cat that knocked the mug over anyway.</b></p></article>
+    <article class="item"><span class="item-tag">bus vs ring</span><p>A bus and a ring walk into a bar.<br><b>The ring never finds the exit. That's the point of it.</b></p></article>
+    <article class="item"><span class="item-tag">OSI</span><p>Seven layers sounds like a lot.<br><b>It's a cake. You've never complained about a cake having layers.</b></p></article>
+    <article class="item"><span class="item-tag">MAC</span><p>Your MAC address is burned in at the factory.<br><b>It's the one number you cannot talk your way out of.</b></p></article>
+    <article class="item"><span class="item-tag">IPv6</span><p>IPv6 has 340 undecillion addresses.<br><b>Enough for every device, every cat, and several spare universes.</b></p></article>
+    <article class="item"><span class="item-tag">DHCP</span><p>DHCP gave Digi a different address three times today.<br><b>He is furious. Anna thinks it's character growth.</b></p></article>
+    <article class="item"><span class="item-tag">DNS</span><p>DNS is the reason you type ietf.org.<br><b>Nobody has ever fallen asleep reciting 4.31.198.44.</b></p></article>
+    <article class="item"><span class="item-tag">unmanaged</span><p>What can you adjust on an unmanaged switch?<br><b>Nothing. That is the entire feature list.</b></p></article>
+    <article class="item"><span class="item-tag">NAT</span><p>NAT gives an intruder the building's address.<br><b>Not the apartment number. Enjoy the lobby.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · all fifteen review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">Straight from the end of your chapter. <b>15 HP.</b></p>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE FIREWALL SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 15 / 15 — it is dropping your packets on purpose.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 15</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+    <p class="lede">Four blocks, sixteen lines.</p>
+  </div>
+  <div class="sheet">
+    <h4>🏠 shapes &amp; wires</h4>
+    <ol>
+      <li><b>Living room, Campus, City, World</b> — L/C/M/W AN. <b>The Internet is the largest WAN.</b> Plus <b>W</b>ireless, <b>S</b>torage, <b>V</b>irtual (logical group), <b>P</b>ersonal.</li>
+      <li><b>Star has a middle, Bus has two ends, Ring has none, Mesh has everything.</b> <b>Star is the most common</b>; <b>bus is the linear path</b>; mesh gives resilience and runs IoT.</li>
+      <li><b>Ethernet is IEEE 802</b>, packet-based at <b>1,500 bits or smaller</b>, and <b>"best effort"</b>. Connector = <b>8P8C / RJ-45</b>; <b>T568-B</b> is almost everything.</li>
+      <li><b>A on one end, B on the other = crossover</b>, which links two devices with no switch.</li>
+      <li><b>Yellow goes far, orange stays near</b> — single-mode (one path) vs multimode. <b>ST = stick and twist, SC = stick and click</b>, LC = push-pull.</li>
+      <li><b>802.11 for the air, 802.1x for the door.</b> Weak Wi-Fi signal → the connection <b>slows down</b>. The box handling it is an <b>access point</b>.</li>
+    </ol>
+    <h4>🎂 the models</h4>
+    <ol start="7">
+      <li><b>Please Don't Nibble The Sugar, Precious Anna</b> — Physical, Data Link, Network, Transport, Session, Presentation, Application.</li>
+      <li><b>Cabling and patchbays are Layer 1.</b> Switches and bridges = 2 · routers = 3 · gateways = 4.</li>
+      <li><b>Segments, Packets, Frames — four, three, two.</b> Named as data falls down the stack.</li>
+      <li><b>TCP/IP squashes the top three and the bottom two:</b> Application (7-6-5) · Transport (4) · Internet (3) · Network Access (2-1). Standards come from the <b>IETF</b>.</li>
+    </ol>
+    <h4>🆔 names &amp; numbers</h4>
+    <ol start="11">
+      <li><b>MAC is your birth certificate, IP is your mailing address.</b> MAC = <b>48-bit</b>, six pairs of hex, globally unique, maker + serial. The interface itself is a <b>NIC</b>.</li>
+      <li><b>Name is what, address is where, route is how — IP does where.</b> IPv4 = four octets, 32-bit. <b>IPv6 = eight groups of four hex</b>, 2¹²⁸.</li>
+      <li><b>The mask hides the network and leaves the host.</b> <b>255.255.255.0 → 254 devices</b>; 255.0.0.0 → 16 million+. Manual setup <b>requires IP address + subnet mask</b>.</li>
+      <li><b>DHCP hands out the numbers</b> (reads your MAC, gives a <b>lease</b>); <b>DNS remembers the names.</b></li>
+    </ol>
+    <h4>🔀 boxes &amp; doors</h4>
+    <ol start="15">
+      <li><b>Switch knows MACs. Router knows IPs. Gateway knows the way out. Bridge knows two languages.</b> <b>Unmanaged = plug it in, no adjustments</b>; managed = ports, VLANs, QoS. ⚠ If the question says <b>"connects to outside networks"</b>, it's the <b>gateway</b>, not the router.</li>
+      <li><b>A firewall is a bouncer with a list</b> — controls traffic in and out by rules. Techniques: <b>packet filtering</b>, <b>NAT</b> ("the address of the building, but not the apartment number"), and <b>port forwarding</b> (both together). <b>802.1x = the airport gate</b>; <b>ACL</b> lives in the router.</li>
+    </ol>
+  </div>
+</section>
+
+<nav class="chapnav" aria-label="Chapters">
+<a class="cn-card cn-prev" href="/cafe-lumen" style="--tone:var(--sun)"><span class="cn-dir">◂ Previous</span>
+<span class="cn-name">💡 Café Lumen</span><span class="cn-topic">Ch.5 · Video systems</span></a>
+<a class="cn-home" href="/"><i>☕</i>All chapters</a>
+<span class="cn-card cn-next is-off"><span class="cn-dir">Next ▸</span>
+<span class="cn-name">Not written yet</span><span class="cn-topic">More cafés are coming</span></span>
+</nav>
+<footer>
+  <span>🌐 Café Localhost · CTS Ch.6 · networks</span>
+  <span>There's no place like <span class="kmj">127.0.0.1</span></span>
+</footer>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  /* ── gadget 01 · topology + link break ── */
+  const tpPick=document.getElementById("tp-pick");
+  if (tpPick){
+    const cv=document.getElementById("tp"), g=cv.getContext("2d"), W=1000, H=360;
+    const bIn=document.getElementById("tp-b"), bOut=document.getElementById("tp-out"),
+          vd=document.getElementById("tp-v"), say=document.getElementById("tp-say");
+    const N=6;
+    let cur="star";
+
+    /** node positions per topology; index 0 of star is the hub */
+    function layout(kind){
+      const cx=W/2, cy=H/2, R=120;
+      if(kind==="star"){
+        const pts=[[cx,cy]];
+        for(let i=0;i<N;i++){ const a=i/N*6.2832-Math.PI/2;
+          pts.push([cx+Math.cos(a)*R*1.35, cy+Math.sin(a)*R]); }
+        return pts;
+      }
+      if(kind==="bus"){
+        const pts=[]; const x0=110, dx=(W-220)/(N-1);
+        for(let i=0;i<N;i++) pts.push([x0+dx*i, cy]);
+        return pts;
+      }
+      if(kind==="ring"){
+        const pts=[];
+        for(let i=0;i<N;i++){ const a=i/N*6.2832-Math.PI/2;
+          pts.push([cx+Math.cos(a)*R*1.5, cy+Math.sin(a)*R]); }
+        return pts;
+      }
+      const pts=[];
+      for(let i=0;i<N;i++){ const a=i/N*6.2832-Math.PI/2;
+        pts.push([cx+Math.cos(a)*R*1.5, cy+Math.sin(a)*R]); }
+      return pts;
+    }
+
+    /** the links, as index pairs, in the order the break slider walks them */
+    function links(kind){
+      const L=[];
+      if(kind==="star"){ for(let i=1;i<=N;i++) L.push([0,i]); return L; }
+      if(kind==="bus"){ for(let i=0;i<N-1;i++) L.push([i,i+1]); return L; }
+      if(kind==="ring"){ for(let i=0;i<N;i++) L.push([i,(i+1)%N]); return L; }
+      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++) if((j-i)%2===1||j-i===2) L.push([i,j]);
+      return L;
+    }
+
+    /** who can still reach node 0 with the broken link removed */
+    function reachable(kind, L, broken){
+      const alive=L.filter((_,i)=>i!==broken);
+      const adj={}; alive.forEach(([a,b])=>{ (adj[a]=adj[a]||[]).push(b); (adj[b]=adj[b]||[]).push(a); });
+      const seen=new Set([0]), q=[0];
+      while(q.length){ const n=q.pop();
+        (adj[n]||[]).forEach(m=>{ if(!seen.has(m)){ seen.add(m); q.push(m); } }); }
+      return seen;
+    }
+
+    function draw(){
+      const pts=layout(cur), L=links(cur);
+      const bi=Math.min(+bIn.value-1, L.length-1);      // 0 on the slider = no break
+      const broken = (+bIn.value===0) ? -1 : bi;
+      bIn.max=L.length;
+      const seen=reachable(cur,L,broken);
+      g.clearRect(0,0,W,H);
+
+      L.forEach(([a,b],i)=>{
+        const [x1,y1]=pts[cur==="star"?a:a], [x2,y2]=pts[cur==="star"?b:b];
+        const isBroken = i===broken;
+        g.strokeStyle = isBroken ? css("--berry") : css("--line");
+        g.lineWidth = isBroken ? 5 : 4;
+        g.setLineDash(isBroken?[10,8]:[]);
+        g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+        g.setLineDash([]);
+        if(isBroken){
+          const mx=(x1+x2)/2, my=(y1+y2)/2;
+          g.fillStyle=css("--berry"); g.font="800 26px ui-monospace,Consolas,monospace";
+          g.textAlign="center"; g.textBaseline="middle"; g.fillText("✕", mx, my);
+        }
+      });
+
+      pts.forEach((p,i)=>{
+        const isHub = cur==="star" && i===0;
+        const ok = seen.has(i);
+        g.beginPath(); g.arc(p[0],p[1], isHub?34:24, 0, 6.2832);
+        g.fillStyle = isHub ? css("--sun") : ok ? css("--mint") : css("--berry-soft");
+        g.fill();
+        g.strokeStyle=css("--line"); g.lineWidth=4; g.stroke();
+        g.fillStyle=css("--line"); g.font="800 15px ui-monospace,Consolas,monospace";
+        g.textAlign="center"; g.textBaseline="middle";
+        g.fillText(isHub?"HUB":String(i+(cur==="star"?0:1)), p[0], p[1]);
+      });
+      g.textBaseline="alphabetic"; g.textAlign="left";
+
+      const stranded = pts.length - seen.size - (cur==="star"?0:0);
+      bOut.textContent = broken<0 ? "none" : "link "+(broken+1);
+      vd.className="verdict "+(stranded>0?"bad":"ok");
+      vd.textContent = cur;
+      if(broken<0){
+        say.innerHTML = cur==="star" ? "Every node hangs off one hub. Cut a spoke and see what it costs."
+          : cur==="bus" ? "One cable, node to node, <b>two ends</b>. Now cut it."
+          : cur==="ring" ? "The ends are joined — <b>no ends at all</b>. Now cut it."
+          : "Many paths between nodes. Now cut one.";
+      } else if(stranded===0){
+        say.innerHTML = "<b>Nothing stranded.</b> "+(cur==="ring"
+          ? "The loop simply sends the data the other way round — that's the redundancy."
+          : "There's another path, so the network shrugs it off.");
+      } else {
+        say.innerHTML = "<b>"+stranded+" node"+(stranded>1?"s":"")+" stranded (red).</b> "+(cur==="star"
+          ? "A star spoke has no alternative route — but only that one node suffers."
+          : "A bus has no second path, so everything past the cut is cut off.");
+      }
+    }
+    tpPick.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.t; bIn.value=0;
+      tpPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+      draw();
+    });
+    bIn.addEventListener("input",draw);
+    draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 02 · the OSI stack ── */
+  const osiStack=document.getElementById("osi-stack");
+  if (osiStack){
+    const out=document.getElementById("osi-out"), vd=document.getElementById("osi-v");
+    const LAYERS=[
+      {n:1,name:"Physical",unit:"bits",tone:"var(--berry)",
+       does:["Defines the relationship between the device and a physical means of sending data over network devices, such as a cable",
+             "Defines optical, electrical and mechanical characteristics"],
+       dev:"Cabling · patchbays — the layer AV people meet most"},
+      {n:2,name:"Data Link",unit:"frames",tone:"var(--sun)",
+       does:["Defines procedures for operating the communication links",
+             "Encapsulates data into Ethernet frames",
+             "Detects and corrects packet-transmission errors"],
+       dev:"Switches · bridges · the Ethernet standard · MAC addresses"},
+      {n:3,name:"Network",unit:"packets",tone:"var(--mint)",
+       does:["Determines how data is transferred between network devices",
+             "Routes packets according to unique network device addresses",
+             "May provide flow and congestion control to prevent network resource depletion"],
+       dev:"Routers · layer-3 switches · the Internet Protocol (IP)"},
+      {n:4,name:"Transport",unit:"segments",tone:"var(--sky)",
+       does:["Provides reliable and sequential packet delivery through error-recovery and flow-control mechanisms",
+             "Provides connection-oriented or connectionless packet delivery",
+             "Provides flow and congestion control to prevent network resource depletion"],
+       dev:"Gateways operate at this level"},
+      {n:5,name:"Session",unit:"data",tone:"var(--lav)",
+       does:["Manages user sessions and dialogues",
+             "Controls the establishment and termination of connections between users",
+             "Reports upper-layer errors"],
+       dev:"First of the upper layers — concerns the data itself"},
+      {n:6,name:"Presentation",unit:"data",tone:"var(--sakura)",
+       does:["Masks data format differences between dissimilar systems so they can communicate",
+             "Specifies an architecture-independent data-transfer format",
+             "Encodes and decodes, encrypts and decrypts, compresses and decompresses"],
+       dev:"Unpackages data for use by the Application layer"},
+      {n:7,name:"Application",unit:"data",tone:"var(--berry)",
+       does:["Defines an interface to user processes for communication and data transfer in a network",
+             "Provides standardized services, such as file and job transfer, and operations"],
+       dev:"Presents data to the application software — the other layer AV people watch"}
+    ];
+    let cur=1;
+    function render(){
+      osiStack.innerHTML="";
+      LAYERS.forEach(L=>{
+        const b=document.createElement("button");
+        b.type="button"; b.className="osi"; b.style.setProperty("--tone",L.tone);
+        b.setAttribute("aria-pressed", L.n===cur ? "true" : "false");
+        b.innerHTML='<span class="osi-n">'+L.n+'</span>'+
+          '<span class="osi-nm">'+L.name+'<small>layer '+L.n+'</small></span>'+
+          '<span class="osi-u">'+L.unit+'</span>';
+        b.addEventListener("click",()=>{ cur=L.n; render(); });
+        osiStack.appendChild(b);
+      });
+      const L=LAYERS[cur-1];
+      out.style.setProperty("--tone",L.tone);
+      out.innerHTML='<h4>Layer '+L.n+' · '+L.name+'</h4>'+
+        '<ul>'+L.does.map(d=>'<li>'+d+'</li>').join("")+'</ul>'+
+        '<p class="dev">'+L.dev+'</p>';
+      vd.className="verdict ok"; vd.textContent="Layer "+L.n;
+    }
+    render();
+  }
+
+  /* ── gadget 03 · encapsulation ── */
+  const enIn=document.getElementById("en-r");
+  if (enIn){
+    const out=document.getElementById("en-out"), lab=document.getElementById("en-lab"),
+          vd=document.getElementById("en-v"), say=document.getElementById("en-say");
+    const STEPS=[
+      {lab:"Application", layer:"layer 7-5", rows:[{cls:"data",parts:[["your file / stream","var(--sakura-soft)"]]}],
+       say:"The upper layers hand down one big stream of data."},
+      {lab:"Transport", layer:"layer 4", rows:[{parts:[["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"]]},
+                                               {parts:[["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"]]}],
+       say:"The stream is broken into <b>segments</b> at the Transport layer."},
+      {lab:"Network", layer:"layer 3", rows:[{parts:[["IP hdr","var(--mint-soft)"],["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"]]},
+                                             {parts:[["IP hdr","var(--mint-soft)"],["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"]]}],
+       say:"Destination and control information is added — now it's a <b>packet</b>."},
+      {lab:"Data Link", layer:"layer 2", rows:[{parts:[["MAC hdr","var(--sun-soft)"],["IP hdr","var(--mint-soft)"],["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"],["FCS","var(--sun-soft)"]]},
+                                               {parts:[["MAC hdr","var(--sun-soft)"],["IP hdr","var(--mint-soft)"],["TCP hdr","var(--sky-soft)"],["segment","var(--sakura-soft)"],["FCS","var(--sun-soft)"]]}],
+       say:"Packets are encapsulated into <b>frames</b> carrying the physical destination — the MAC address."},
+      {lab:"Physical", layer:"layer 1", rows:[{parts:[["1010 1100 0110 1001 0011 1010 1101 0101","var(--panel)"]]}],
+       say:"The Physical layer puts it on the wire as <b>bits</b>."}
+    ];
+    function draw(){
+      const i=+enIn.value, S=STEPS[i];
+      out.innerHTML = S.rows.map((r,ri)=>
+        '<div class="enc-row"><span class="enc-lab">'+(ri===0?S.lab:"")+'</span>'+
+        '<div class="enc-bar">'+ r.parts.map(([t,c],pi)=>
+          '<span class="enc-seg'+(pi===r.parts.length-1&&r.parts.length>1?"":(r.parts.length>1&&pi<r.parts.length-1?" enc-hdr":""))+
+          '" style="background:'+c+'">'+t+'</span>').join("") +'</div></div>'
+      ).join("");
+      lab.textContent=S.lab;
+      vd.className="verdict "+(i===4?"bad":"ok");
+      vd.textContent=S.layer;
+      say.innerHTML=S.say;
+    }
+    enIn.addEventListener("input",draw); draw();
+  }
+
+  /* ── gadget 04 · subnet mask decoder ── */
+  const snMask=document.getElementById("sn-mask");
+  if (snMask){
+    const ipIn=document.getElementById("sn-ip"), oct=document.getElementById("sn-oct"),
+          net=document.getElementById("sn-net"), host=document.getElementById("sn-host"),
+          count=document.getElementById("sn-count"), vd=document.getElementById("sn-v"),
+          say=document.getElementById("sn-say");
+    const maskStr=b=>{
+      const o=[0,0,0,0];
+      for(let i=0;i<4;i++){ const bits=Math.max(0,Math.min(8,b-i*8)); o[i]=256-Math.pow(2,8-bits); }
+      return o.join(".");
+    };
+    function draw(){
+      const bits=+snMask.value;
+      const parts=(ipIn.value||"").split(".").map(n=>parseInt(n,10));
+      const valid = parts.length===4 && parts.every(n=>Number.isFinite(n)&&n>=0&&n<=255);
+      if(!valid){
+        oct.innerHTML='<span class="octet" style="background:var(--berry-soft)">not a valid IPv4 address</span>';
+        say.innerHTML="<b>Four numbers, 0–255, separated by dots.</b> Try 192.168.1.25.";
+        return;
+      }
+      oct.innerHTML = parts.map((n,i)=>{
+        const whole = bits >= (i+1)*8;                       // this octet is entirely network
+        const none  = bits <= i*8;                           // entirely host
+        const cls = whole ? "net" : none ? "host" : "net";
+        const tag = whole ? "network" : none ? "host" : "split";
+        return '<span class="octet '+cls+'">'+n+'<small>'+tag+'</small></span>';
+      }).join("");
+      const hostBits=32-bits, usable=Math.max(0,Math.pow(2,hostBits)-2);
+      const netOct=Math.floor(bits/8);
+      net.textContent = parts.slice(0,Math.max(1,netOct)).join(".") + (bits%8?" +"+(bits%8)+"b":"");
+      host.textContent = netOct>=4 ? "—" : parts.slice(netOct).join(".");
+      count.textContent = usable.toLocaleString();
+      vd.className="verdict "+(usable>1000?"bad":"ok");
+      vd.textContent=usable.toLocaleString()+" devices";
+      say.innerHTML = bits===24
+        ? "<b>255.255.255.0 is the common \"Class C\" mask — 254 devices.</b> Purple is network, mint is host."
+        : bits===8
+        ? "<b>255.0.0.0 handles more than 16 million devices.</b> Only the first octet is network."
+        : "Mask <b>"+maskStr(bits)+"</b> · "+bits+" network bits, "+hostBits+" host bits → <b>2^"+hostBits+" − 2 = "+usable.toLocaleString()+"</b> usable addresses.";
+    }
+    snMask.addEventListener("change",draw);
+    ipIn.addEventListener("input",draw);
+    draw();
+  }
+
+  /* ── gadget 05 · firewall sorter ── */
+  const fwPick=document.getElementById("fw-pick");
+  if (fwPick){
+    const inLane=document.getElementById("fw-in"), outLane=document.getElementById("fw-out"),
+          vd=document.getElementById("fw-v"), say=document.getElementById("fw-say");
+    const PKTS=[
+      {i:"🌐", n:"HTTPS", port:"port 443", kind:"web"},
+      {i:"🌐", n:"HTTP",  port:"port 80",  kind:"web"},
+      {i:"🎥", n:"AV stream", port:"port 5004", kind:"av"},
+      {i:"🎛", n:"AV control", port:"port 4999", kind:"av"},
+      {i:"🕵", n:"Unrequested inbound", port:"unknown port", kind:"bad"},
+      {i:"💀", n:"Telnet", port:"port 23", kind:"bad"}
+    ];
+    const RULES={
+      strict:{allow:["web"], n:"Web only",
+        s:"Default-deny with only web ports open. <b>Your AV stream never arrives</b> — this is exactly the conversation you have with the IT department."},
+      av:{allow:["web","av"], n:"AV traffic allowed",
+        s:"The AV ports have been opened <b>specifically and narrowly</b>, which is what an AV designer is supposed to request. The unrequested inbound traffic is still dropped."},
+      open:{allow:["web","av","bad"], n:"Allow everything",
+        s:"<b>Never do this.</b> With no rules a firewall is just an expensive cable — the unrequested inbound packet walks straight in."}
+    };
+    let cur="strict";
+    function draw(){
+      const R=RULES[cur];
+      inLane.innerHTML = PKTS.map(p=>
+        '<span class="pkt"><i>'+p.i+'</i><span>'+p.n+'</span><span>'+p.port+'</span></span>').join("");
+      const passed=PKTS.filter(p=>R.allow.includes(p.kind));
+      outLane.innerHTML = PKTS.map(p=>{
+        const ok=R.allow.includes(p.kind);
+        return '<span class="pkt '+(ok?"pass":"block")+'"><i>'+(ok?"✅":"⛔")+'</i>'+
+               '<span>'+p.n+'</span><span>'+(ok?"allowed":"dropped")+'</span></span>';
+      }).join("");
+      vd.className="verdict "+(cur==="open"?"bad":"ok");
+      vd.textContent=passed.length+" of "+PKTS.length+" allowed";
+      say.innerHTML="<b>"+R.n+"</b> — "+R.s;
+    }
+    fwPick.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.r;
+      fwPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+      draw();
+    });
+    draw();
+  }
+
+  /* ── boss fight · 15 questions ── */
+  const QS=[
+    {q:"Which of the following network topologies connects devices in sequence along a linear path?",
+     o:["Bus","Star","Mesh","Ring"],a:0,
+     fb:"<b>Star has a middle, Bus has two ends, Ring has none.</b> Ring is also a sequence — but a ring has no ends, so it isn't <em>linear</em>. Count the ends."},
+    {q:"Which IEEE standard defines Wi-Fi communications methods?",
+     o:["802.1x","EIA-485","IPv6","802.11"],a:3,
+     fb:"<b>802.11 for the air, 802.1x for the door.</b> 802.1x is port-based access control — it's in this list on purpose."},
+    {q:"What happens to the connection speed in a Wi-Fi connection if the signal strength declines?",
+     o:["Speeds up","Stops","Slows down","Remains constant"],a:2,
+     fb:"<b>It slows down.</b> It degrades gracefully rather than dropping — speed depends on signal strength, the 802.11 revision, and how many users are on it."},
+    {q:"Which of the following is a type of fiber-optic cable identified by its yellow outer jacket?",
+     o:["ST","SC","Multimode","Single-mode"],a:3,
+     fb:"<b>Yellow goes far, orange stays near.</b> Single-mode = one light path = yellow. ST and SC are connectors, not cable types."},
+    {q:"The _____ model is a guide that assists with conforming network communications and their processes to standards.",
+     o:["Network interface","OSI reference","Informal data link","Asynchronous transfer mode"],a:1,
+     fb:"<b>The OSI reference model</b> — built by the ISO to standardise communication between devices worldwide."},
+    {q:"In the OSI model, cabling and patchbays are elements of _____.",
+     o:["Layer 2, the Data Link layer","Layer 4, the Transport layer","Layer 1, the Physical layer","Layer 3, the Network layer"],a:2,
+     fb:"<b>Layer 1, the Physical layer</b> — the bottom of <em>Please Don't Nibble The Sugar, Precious Anna</em>, and the layer AV work touches most."},
+    {q:"A _____ address is unique to every device and identifies a network's equipment.",
+     o:["Transfer mode","Baseband","Digital subscriber line","MAC"],a:3,
+     fb:"<b>MAC is your birth certificate</b> — 48 bits, six pairs of hex, globally unique, burned in at the factory."},
+    {q:"IP deals with which of the following on a network?",
+     o:["Addresses","Names","Routes","Versions"],a:0,
+     fb:"<b>Name is what, address is where, route is how — IP does where.</b> All three of the book's own words appear as options."},
+    {q:"An IPv6 address uses _____ groups of four hexadecimal numbers.",
+     o:["Three","Eight","Six","One"],a:1,
+     fb:"<b>Eight</b> groups of four hex digits. <em>Six</em> is the trap — that's the MAC address, which is six groups of <em>two</em>."},
+    {q:"Subnet masks can indicate how many _____ are allowed on the network.",
+     o:["Computers","Gateways","Devices","Printers"],a:2,
+     fb:"<b>Devices.</b> 255.255.255.0 allows 254; 255.0.0.0 allows more than 16 million. \"Computers\" is close enough to be tempting and still wrong."},
+    {q:"What is required to set an IP address manually on a network?",
+     o:["IP address and device name","Subnet mask and gateway","Subnet mask and DNS server","IP address and subnet mask"],a:3,
+     fb:"<b>IP address and subnet mask</b> are the two the book marks <em>required</em>. Device name, DNS server and gateway are on the list, but optional."},
+    {q:"Which type of server automatically assigns an IP address to the MAC address during the device's connection to a network?",
+     o:["Gateway","Virtual private network","DNS","DHCP"],a:3,
+     fb:"<b>DHCP hands out the numbers, DNS remembers the names.</b> DHCP reads the MAC address and assigns an IP with a lease time."},
+    {q:"Which of the following switches just needs to be plugged in and connected to devices?",
+     o:["Unmanaged","LAN","Addressing","Managed"],a:0,
+     fb:"<b>Unmanaged.</b> \"There are no adjustments. It just works.\" A managed switch is where you get port speeds, VLANs and QoS."},
+    {q:"A _____ sends packets to different locations on a network and connects to outside networks.",
+     o:["Switch","Gateway","Bridge","Router"],a:1,
+     fb:"<b>Gateway</b> — and this is the nastiest question in the chapter, because the first half describes a router perfectly. <b>The deciding phrase is \"connects to outside networks\"</b>: the gateway is the topmost router, the one everything passes through to get out."},
+    {q:"A _____ controls incoming and outgoing network traffic and determines what will be allowed through based on a set of security rules.",
+     o:["Switch","Gateway","Firewall","Router"],a:2,
+     fb:"<b>A firewall is a bouncer with a list.</b> That phrasing is almost word-for-word the book's definition."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const TAUNT=["it is dropping your packets on purpose.","…a rule just failed.","latency is climbing.",
+      "port 443 is wobbling.","it lost a routing table.","collisions everywhere.","its lease expired.",
+      "DNS can't resolve it.","the uplink is flapping.","it's down to one subnet.","broadcast storm!",
+      "no route to host.","request timed out.","connection refused…","almost — hit it!",
+      "DEFEATED! ✧ 15 / 15 ✧"];
+    let score=0, done=new Set();
+    function updateHP(){
+      const leftHP=QS.length-score;
+      hp.style.width=(leftHP/QS.length*100)+"%";
+      hp.className="hpfill"+(leftHP<=4?" dying":leftHP<=8?" hurt":"");
+      hpt.textContent="HP "+leftHP+" / "+QS.length+" — "+TAUNT[score];
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / '+QS.length+'</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    /* compact the HP bar once it lifts off and starts floating */
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+
+})();
+</script>
+
+
+</body>
+</html>

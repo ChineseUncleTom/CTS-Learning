@@ -60,6 +60,15 @@ const CHAPTERS = [
     icon: "💡",
     desc: "CTS Chapter 5 — video systems from photon to pixel. 11 levels, 5 interactive gadgets and a 15-HP boss.",
   },
+  {
+    src: "cafe-localhost.html",
+    url: "cafe-localhost",
+    n: 6,
+    cafe: "Café Localhost",
+    topic: "Networks",
+    icon: "🌐",
+    desc: "CTS Chapter 6 — networks, from a cable in a wall to a packet crossing the planet. 11 levels, 5 interactive gadgets and a 15-HP boss.",
+  },
 ];
 
 /** Pages that are not chapters. `chrome: "plain"` = top bar with the home link only. */
