@@ -348,6 +348,28 @@ input[type=range]{flex:1 1 11rem;min-width:9rem;accent-color:var(--sakura);heigh
 .fig figcaption{font-family:var(--f-hand);font-size:var(--t-sm);color:var(--ink-soft);
   border-top:2px dashed var(--line);padding-top:var(--sp-2)}
 
+.chat{display:flex;flex-direction:column;gap:var(--sp-2);margin:var(--sp-4) 0}
+.chat .say{margin:0}
+.chat-who{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-faint);margin-left:calc(74px + var(--sp-3))}
+.catline{display:flex;align-items:center;gap:var(--sp-3);background:var(--paper-2);
+  border:2px dashed var(--line);border-radius:var(--r);padding:var(--sp-2) var(--sp-4)}
+.catline svg{width:52px;height:52px;flex:none}
+.catline p{font-family:var(--f-hand);font-size:var(--t-sm);color:var(--ink-soft)}
+.catline p b{color:var(--ink)}
+.ringside{display:flex;align-items:flex-end;justify-content:center;gap:var(--sp-4)}
+.ringside figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:var(--sp-2)}
+.ringside svg{width:76px;height:76px}
+.ringside figcaption{font-family:var(--f-hand);font-size:var(--t-sm);color:var(--ink-soft);
+  background:var(--paper);border:2px solid var(--line);border-radius:var(--r-pill);
+  padding:.2rem .7rem;box-shadow:2px 2px 0 var(--stamp);white-space:nowrap}
+.facegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(6rem,1fr));gap:var(--sp-3)}
+.facegrid figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:var(--sp-1);
+  background:var(--paper);border:2px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--pop);padding:var(--sp-2)}
+.facegrid svg{width:64px;height:64px}
+.facegrid figcaption{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;
+  color:var(--ink-soft);text-align:center}
 .boss{background:var(--night);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
   box-shadow:var(--pop-lg);padding:var(--sp-6);display:flex;align-items:center;gap:var(--sp-4);
   flex-wrap:wrap;color:#FFE9D6}
@@ -402,7 +424,7 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
       <span class="tab">design system · v2.0</span>
       <h1>Neko Notes<br>Kit</h1>
       <p class="mast-sub">The house style for CTS study notes. Chibi café, sticker outlines, screentone dots,
-        and two cats who <b>disagree about everything</b>. Copy the token block, use the thirteen parts, and every
+        and two cats who <b>disagree about everything</b>. Copy the token block, use the sixteen parts, and every
         chapter will look like it came from the same notebook ✧</p>
     </div>
     <div class="mast-cats" aria-hidden="true">
@@ -447,6 +469,69 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
       <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
       <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
     </g>
+  
+    <!-- ANNA · surprised — round wide eyes, small o mouth -->
+    <g id="anna-oh">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <circle cx="49" cy="46" r="7.5" fill="#4A2B33"/><circle cx="71" cy="46" r="7.5" fill="#4A2B33"/>
+      <circle cx="51.5" cy="43" r="2.8" fill="#fff"/><circle cx="73.5" cy="43" r="2.8" fill="#fff"/>
+      <ellipse cx="37" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="83" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="60" cy="60" rx="4.5" ry="5.5" fill="#4A2B33"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M96 22l3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="#FFB01F"/>
+    </g>
+
+    <!-- ANNA · asleep — a loaf with closed eyes -->
+    <g id="anna-zzz">
+      <path d="M22 92c0-24 16-36 38-36s38 12 38 36z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M22 92h76" stroke="#4A2B33" stroke-width="4" stroke-linecap="round"/>
+      <path d="M36 60 32 40l17 10M84 60l4-20-17 10" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M44 74c3 4 7 4 10 0M66 74c3 4 7 4 10 0" stroke="#4A2B33" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="34" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <ellipse cx="86" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <path d="M56 82q4 4 8 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g fill="#8A6BD9" font-family="monospace" font-weight="700">
+        <text x="86" y="40" font-size="15">z</text>
+        <text x="97" y="27" font-size="11">z</text>
+        <text x="105" y="17" font-size="8">z</text>
+      </g>
+    </g>
+
+    <!-- DIGI · smug — flat pixel eyes, stepped smirk -->
+    <g id="digi-smug">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="43" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="67" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58h4v4h4v-4h4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+
+    <!-- DIGI · alarmed — wide square eyes, flat worried mouth -->
+    <g id="digi-alarm">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="42" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="66" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="44" y="42" width="4" height="4" fill="#fff"/><rect x="68" y="42" width="4" height="4" fill="#fff"/>
+      <rect x="28" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <rect x="83" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <path d="M52 62h16" stroke="#4A2B33" stroke-width="3.5"/>
+      <path d="M96 20h6v4h-6zM96 28h6v10h-6z" fill="#EE3D5C"/>
+    </g>
+  
   </defs>
 </svg>
 
@@ -605,7 +690,7 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
 <section>
   <div class="head">
     <span class="lv">components</span>
-    <h2>Thirteen parts, one job each <span class="kao">🧩</span></h2>
+    <h2>Sixteen parts, one job each <span class="kao">🧩</span></h2>
     <p class="lede">When a chapter needs something new, check whether an existing part can stretch before
       adding a tenth.</p>
   </div>
@@ -682,6 +767,49 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
         information.</p>
       <p class="whennot"><b>Not</b> behind body text. Headline type only, and only with the outlined
         <code>h1</code> treatment.</p>
+    </div>
+  </div>
+
+  <!-- the cat vocabulary -->
+  <div class="demo">
+    <div class="stack g-4">
+      <div class="facegrid">
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg><figcaption>#anna</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg><figcaption>#anna-oh</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-zzz"/></svg><figcaption>#anna-zzz</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg><figcaption>#digi</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg><figcaption>#digi-smug</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg><figcaption>#digi-alarm</figcaption></figure>
+      </div>
+      <div class="catline">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+        <p><b>A .catline</b> — a live reaction that changes with a gadget's state.</p>
+      </div>
+      <div class="ringside">
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+          <figcaption>One more!!</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+          <figcaption>Finish it!</figcaption></figure>
+      </div>
+    </div>
+    <div class="demo-note">
+      <h4>The cat vocabulary &mdash; .chat / .catline / .ringside</h4>
+      <p>Anna and Digi are the system's most reusable teaching device, so they have <b>six sprites</b>, not
+        two. All live in the shared <code>&lt;defs&gt;</code> and are placed with
+        <code>&lt;use href="#anna-oh"&gt;</code>; JavaScript swaps expression by rewriting that one
+        attribute.</p>
+      <p><b>.chat</b> stacks several <code>.say</code> turns into one conversation, with a
+        <code>.chat-who</code> label. Use it when the two cats genuinely <em>disagree</em> &mdash; solid vs
+        stranded conductor, say &mdash; because the argument is the lesson.</p>
+      <p><b>.catline</b> is a small portrait plus one reactive sentence, sitting inside a gadget. The
+        sprite and the words both change with the gadget's state, so the cat is <em>reading the
+        instrument with you</em> rather than decorating it.</p>
+      <p><b>.ringside</b> puts both cats beside the boss bar, reacting to your score.</p>
+      <p class="when"><b>Expression carries meaning:</b> <code>-oh</code> is surprise or delight,
+        <code>-smug</code> is Digi being technically correct, <code>-alarm</code> flags a genuine danger
+        or exam trap, <code>-zzz</code> closes a chapter.</p>
+      <p class="whennot"><b>Still not for facts.</b> A cat may voice the intuition and react to a result,
+        but nothing examinable should live only in a bubble.</p>
     </div>
   </div>
 

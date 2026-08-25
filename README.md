@@ -10,6 +10,8 @@ Live: **https://cts-cafe.web.app**
 | Café Nyquist | 3 — Analog & digital signals | `/cafe-nyquist` |
 | Café Decibel | 4 — Audio systems | `/cafe-decibel` |
 | Café Lumen | 5 — Video systems | `/cafe-lumen` |
+| Café Localhost | 6 — Networks | `/cafe-localhost` |
+| Café Patchbay | 7 — Signal-management systems | `/cafe-patchbay` |
 | Neko Notes Kit | the design system | `/design-system` |
 
 ## How it's put together

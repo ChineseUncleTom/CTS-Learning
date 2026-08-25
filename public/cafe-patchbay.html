@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café Patchbay</title>
+<meta name="description" content="CTS Chapter 7 — signal management: wire, cable, connectors, switchers and racks. 11 levels, 5 interactive gadgets and a 9-HP boss.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFF3E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241823" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Café Patchbay">
+<meta property="og:description" content="CTS Chapter 7 — signal management: wire, cable, connectors, switchers and racks. 11 levels, 5 interactive gadgets and a 9-HP boss.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%94%8C%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0}img,svg,canvas{max-width:100%}</style>
+</head>
+<body>
+<style>
+:root{--navh:46px}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:var(--sp-3);
+  height:var(--navh);padding:0 var(--sp-4);background:var(--paper);
+  border-bottom:var(--bw) solid var(--line);box-shadow:0 3px 0 var(--stamp);
+  font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700}
+.tb-home{display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;color:var(--ink);
+  background:var(--sun);border:2px solid var(--line);border-radius:var(--r-pill);
+  padding:.25rem .7rem;box-shadow:2px 2px 0 var(--stamp);white-space:nowrap;
+  transition:transform .12s ease}
+.tb-home:hover{transform:translate(-1px,-1px)}
+.tb-here{color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-links{margin-left:auto;display:flex;gap:var(--sp-2);flex:none}
+.tb-arrow{text-decoration:none;color:var(--ink);background:var(--paper-2);
+  border:2px solid var(--line);border-radius:var(--r-pill);padding:.25rem .6rem;
+  white-space:nowrap;transition:transform .12s ease,background .14s ease}
+.tb-arrow:hover{transform:translate(-1px,-1px);background:var(--sun-soft)}
+.tb-arrow.is-off{opacity:.45;background:transparent;border-style:dashed;pointer-events:none}
+@media (max-width:620px){
+  .tb-home span{display:none}
+  .tb-here{font-size:.66rem}
+}
+/* The chapter page's sticky boss bar must clear the sticky top bar.
+   Specificity is deliberate: this style block is injected before the page's own
+   style block (to avoid a flash of unstyled nav), so a bare .boss selector would
+   lose on document order. "body .boss" outranks the kit regardless of order. */
+body .boss{top:calc(var(--navh) + var(--sp-2))}
+
+.chapnav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:var(--sp-4);align-items:stretch;margin-top:var(--sp-16)}
+@media (max-width:760px){.chapnav{grid-template-columns:1fr}}
+.cn-card{display:flex;flex-direction:column;gap:.2rem;text-decoration:none;color:inherit;
+  background:var(--paper);border:var(--bw) solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--pop);padding:var(--sp-4) var(--sp-6);
+  border-top:6px solid var(--tone,var(--sakura));transition:transform .16s ease,box-shadow .16s ease}
+a.cn-card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--stamp)}
+.cn-next{text-align:right}
+.cn-dir{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tone,var(--sakura))}
+.cn-name{font-family:var(--f-display);font-size:var(--t-md);line-height:1.2}
+.cn-topic{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-soft)}
+.cn-card.is-off{opacity:.6;border-style:dashed;box-shadow:none;background:transparent}
+.cn-home{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;
+  text-decoration:none;color:var(--tag-ink);background:var(--sun);
+  border:var(--bw) solid var(--line);border-radius:var(--r-lg);box-shadow:var(--pop);
+  padding:var(--sp-4) var(--sp-6);font-family:var(--f-mono);font-size:var(--t-xs);
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  transition:transform .16s ease}
+.cn-home:hover{transform:translate(-3px,-3px);background:var(--sakura)}
+.cn-home i{font-style:normal;font-size:1.6rem;line-height:1}
+</style>
+<nav class="topbar" aria-label="Site">
+<a class="tb-home" href="/">☕ <span>CTS Café</span></a>
+<span class="tb-here">Ch.7 · Signal-management systems</span>
+<span class="tb-links"><a class="tb-arrow" href="/cafe-localhost" title="Chapter 6 · Café Localhost">◂ Ch.6</a><span class="tb-arrow is-off" aria-hidden="true">next ▸</span></span>
+</nav>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
+.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+
+/* ═══ CH4 ADDITIONS ═══════════════════════════════════════ */
+
+/* the signal chain — a row of stages with levels */
+.chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chain-step{flex:1 1 8.5rem; min-width:0; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-1); position:relative}
+.chain-step .cs-i{font-size:1.5rem; line-height:1}
+.chain-step .cs-n{font-family:var(--f-display); font-size:var(--t-sm); line-height:1.2}
+.chain-step .cs-v{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--tone,var(--berry))}
+.chain-step.mic{--tone:var(--lav)} .chain-step.line{--tone:var(--sun)} .chain-step.spk{--tone:var(--berry)}
+.chain-arrow{align-self:center; font-family:var(--f-mono); font-weight:700; color:var(--ink-faint); flex:none}
+@media (max-width:720px){.chain-arrow{display:none}}
+
+/* a compact spec list used for mic types, processors, applications */
+.specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr)); gap:var(--sp-4)}
+.spec-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-5,1.25rem) var(--sp-5,1.25rem);
+  display:flex; flex-direction:column; gap:var(--sp-2); border-top:5px solid var(--tone,var(--sakura))}
+.spec-card h4{font-family:var(--f-display); font-size:var(--t-md)}
+.spec-card .sc-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tone,var(--sakura))}
+.spec-card p{font-size:var(--t-sm); color:var(--ink-soft)}
+.spec-card ul{margin:0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.spec-card b{color:var(--ink)}
+
+/* versus block — two poles side by side */
+.vs{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:var(--sp-4);
+  align-items:center; margin-top:var(--sp-4)}
+@media (max-width:760px){.vs{grid-template-columns:1fr} .vs-mid{justify-self:center}}
+.vs-mid{font-family:var(--f-display); font-size:var(--t-lg); color:var(--paper);
+  background:var(--line); border-radius:50%; width:2.6em; height:2.6em;
+  display:grid; place-items:center; flex:none}
+
+/* the polar-pattern picker */
+.picker{display:flex; flex-wrap:wrap; gap:var(--sp-2)}
+.pick{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.04em;
+  padding:.35rem .7rem; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp); cursor:pointer;
+  transition:transform .12s, background .16s}
+.pick:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pick[aria-pressed="true"]{background:var(--sakura); color:var(--tag-ink); transform:translate(-1px,-1px)}
+
+/* dB / value readouts inside gadgets */
+.dial{display:flex; gap:var(--sp-3); flex-wrap:wrap}
+.dial div{background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 7rem}
+.dial span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.dial b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* grouped cheat sheet */
+.sheet h4{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--paper); background:var(--sakura); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.2rem .8rem; display:inline-block; margin:var(--sp-6) 0 var(--sp-3)}
+.sheet h4:first-child{margin-top:0}
+
+/* a wide callout for the one big formula of a section */
+.formula{background:var(--night); color:#FFE9D6; border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono); font-size:var(--t-md); font-weight:700; text-align:center;
+  overflow-x:auto; margin-top:var(--sp-4)}
+.formula em{color:var(--sun); font-style:normal}
+.formula small{display:block; font-size:var(--t-xs); color:#C3A4B0; font-weight:400; margin-top:var(--sp-2)}
+
+/* ═══ CH5 ADDITIONS ═══════════════════════════════════════ */
+
+/* the 2×2 light-units matrix — the hardest table in the chapter */
+.matrix{display:grid; grid-template-columns:auto 1fr 1fr; gap:var(--sp-2); margin-top:var(--sp-4)}
+@media (max-width:700px){.matrix{grid-template-columns:1fr}}
+.mx-h{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:center;
+  justify-content:center; text-align:center; padding:var(--sp-2)}
+.mx-side{writing-mode:horizontal-tb; background:var(--paper-2); border:2px solid var(--line);
+  border-radius:var(--r); padding:var(--sp-3); display:flex; flex-direction:column;
+  justify-content:center; gap:2px; min-width:8.5rem}
+.mx-side b{font-family:var(--f-display); font-size:var(--t-base); color:var(--tone,var(--sakura))}
+.mx-side span{font-family:var(--f-mono); font-size:var(--t-xs); color:var(--ink-soft)}
+.mx-cell{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  border-top:5px solid var(--tone,var(--sakura))}
+.mx-cell .u{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura))}
+.mx-cell .d{font-family:var(--f-mono); font-size:var(--t-sm); color:var(--ink)}
+.mx-cell .n{font-size:var(--t-sm); color:var(--ink-soft)}
+.mx-cell.us{--tone:var(--berry)} .mx-cell.si{--tone:var(--mint)}
+
+/* colour-temperature preview strip */
+.ctbar{height:64px; border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:flex}
+.ctbar div{flex:1; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:rgba(0,0,0,.55)}
+.ctswatch{height:96px; border:var(--bw) solid var(--line); border-radius:var(--r);
+  display:grid; place-items:center; font-family:var(--f-display); font-size:var(--t-lg);
+  color:rgba(0,0,0,.6); text-shadow:0 1px 0 rgba(255,255,255,.45)}
+
+/* contrast-ratio demo panel */
+.crdemo{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:grid; grid-template-columns:repeat(6,1fr); height:90px}
+.crdemo div{display:grid; place-items:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700}
+
+/* a small inline key/value strip used under figures */
+.kv{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-2)}
+.kv span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .6rem; color:var(--ink)}
+
+
+/* ═══ CH7 ADDITIONS ═══════════════════════════════════════ */
+
+/* .chat — a multi-turn exchange, tighter than stacked .say blocks */
+.chat{display:flex; flex-direction:column; gap:var(--sp-2); margin:var(--sp-6) 0}
+.chat .say{margin:0}
+.chat .say + .say{margin-top:calc(var(--sp-2) * -1 + 6px)}
+.chat-who{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-faint); margin-left:calc(74px + var(--sp-3))}
+.chat.right-lead .chat-who{margin-left:0; margin-right:calc(74px + var(--sp-3)); text-align:right}
+
+/* .catline — a live reaction inside a gadget, driven by the gadget's state */
+.catline{display:flex; align-items:center; gap:var(--sp-3);
+  background:var(--paper-2); border:2px dashed var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); margin-top:var(--sp-2)}
+.catline svg{width:52px; height:52px; flex:none}
+.catline p{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.catline p b{color:var(--ink)}
+
+/* .onion — the cable cross-section, four layers */
+.onion{display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--sp-6); align-items:center}
+@media (max-width:760px){.onion{grid-template-columns:1fr}}
+.onion svg{width:min(260px,100%); height:auto; justify-self:center}
+.onion-list{display:flex; flex-direction:column; gap:var(--sp-2)}
+.layerbtn{display:grid; grid-template-columns:auto 1fr; gap:var(--sp-3); align-items:center;
+  text-align:left; width:100%; cursor:pointer;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:.5rem var(--sp-4); box-shadow:2px 2px 0 var(--stamp);
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink);
+  transition:transform .12s ease, background .16s ease}
+.layerbtn:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.layerbtn[aria-pressed="true"]{background:var(--tone,var(--sakura)); color:var(--tag-ink);
+  border-width:var(--bw); transform:translate(-2px,-2px)}
+.layerbtn i{font-style:normal; font-size:1.4rem; line-height:1}
+.layerbtn b{font-family:var(--f-display); font-size:var(--t-md); display:block; line-height:1.15}
+.layerbtn small{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; opacity:.8}
+
+/* .rack — the rack-unit calculator display */
+.rackview{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  background:var(--night); padding:var(--sp-3); display:flex; flex-direction:column; gap:3px}
+.ru{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  border:2px solid var(--line); border-radius:6px; padding:.3rem var(--sp-3);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--line)}
+.ru small{opacity:.75}
+.ru.empty{background:transparent; border-style:dashed; color:#8E7280}
+
+/* .matrix-grid — the switcher crosspoint grid */
+.xgrid{display:grid; gap:4px; justify-content:start; margin-top:var(--sp-3); overflow-x:auto;
+  padding-bottom:var(--sp-2)}
+.xcell{width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
+  border:2px solid var(--line); border-radius:8px; background:var(--paper-2);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink);
+  transition:background .14s ease, transform .1s ease}
+.xcell:hover{transform:translate(-1px,-1px); background:var(--sun-soft)}
+.xcell.on{background:var(--mint); color:var(--line)}
+.xcell.hdr{border:none; background:transparent; cursor:default; color:var(--ink-soft)}
+.xcell.hdr:hover{transform:none; background:transparent}
+
+/* ringside cats at the boss fight */
+.ringside{display:flex; align-items:flex-end; justify-content:center; gap:var(--sp-4);
+  margin-bottom:var(--sp-4)}
+.ringside figure{margin:0; display:flex; flex-direction:column; align-items:center; gap:var(--sp-2);
+  flex:0 0 auto}
+.ringside svg{width:76px; height:76px}
+.ringside figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  background:var(--paper); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .7rem; box-shadow:2px 2px 0 var(--stamp); white-space:nowrap;
+  max-width:42vw; overflow:hidden; text-overflow:ellipsis}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 7</span>
+      <h1><small>CTS ☆ CHAPTER 7</small>Café<br>Patchbay</h1>
+      <p class="hero-sub">Signal management — wire, cable, connectors, switchers and racks.
+        This one is <b>Anna's chapter</b>: she's the source, Digi's the destination, and the whole
+        chapter is getting her voice down a cable without it turning to mush.
+        <span class="kmj">(=^･ω･^=)⇢(=^･ω･^=)</span></p>
+      <nav class="chips">
+        <a class="chip" href="#flow">🧵 1 · wire vs cable</a>
+        <a class="chip" href="#anatomy">🧅 2 · cable anatomy</a>
+        <a class="chip" href="#conductors">🪢 3 · conductors</a>
+        <a class="chip" href="#shields">🛡 4 · shields</a>
+        <a class="chip" href="#types">🎛 5 · cable types</a>
+        <a class="chip" href="#connectors">🔌 6 · connectors</a>
+        <a class="chip" href="#integrity">✨ 7 · signal integrity</a>
+        <a class="chip" href="#distance">📏 8 · distance limits</a>
+        <a class="chip" href="#switchers">🔀 9 · switchers</a>
+        <a class="chip" href="#da">🌱 10 · distribution amps</a>
+        <a class="chip" href="#racks">🗄 11 · racks</a>
+        <a class="chip" href="#song">🎵 the duet</a>
+        <a class="chip" href="#quiz">⚔️ boss ×9</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · SIGNAL FLOW ══════════════ -->
+<section id="flow">
+  <div class="head">
+    <span class="lv">Lv.1 · wire, cable &amp; signal flow</span>
+    <h2>One conductor or many <span class="kao">🧵</span></h2>
+    <p class="lede">A <b>signal is the desired information</b> sent through an AV system — video, audio,
+      data, control. Anything else that gets in is <b>noise and interference</b>.</p>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">Anna · the source</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">Right. I'm going to say something at this end, and you're going to hear it
+        <b>exactly</b> as I said it at that end.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble">Bold. There are <b>forty metres of cable</b>, a dimmer rack and a fluorescent
+        light between us.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">…that's what this whole chapter is about, isn't it.</div>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A wire is a solo. A cable is a band.</q>
+    <p class="why"><b>A wire contains only one signal conductor</b> — solid or stranded — with insulation
+      around it. <b>A cable contains multiple insulated wires in a protected bundle</b>, possibly with
+      shields, under a jacket. That's the whole distinction, and the exam asks it directly:
+      <b>cable contains multiple conductors</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>The path is the signal flow.</q>
+    <p class="why">Signal types get <b>grouped together so their path through the system is easier to
+      trace</b>, and <b>that path is called the signal flow</b>. There may be separate flows for video,
+      audio and control. Not "signal transfer route" — the exam offers that to see if you'll take it.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · ANATOMY ══════════════ -->
+<section id="anatomy">
+  <div class="head">
+    <span class="lv">Lv.2 · the anatomy of a cable</span>
+    <h2>What a signal wears <span class="kao">🧅</span></h2>
+    <p class="lede">Four layers, from the middle out. Learn them in order once and half this chapter
+      falls into place.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Core, coat, chainmail, cloak.</q>
+    <p class="why"><b>Conductor</b> (the core that carries the current) → <b>insulation</b> (the coat that
+      stops conductors touching) → <b>shield</b> (the chainmail against interference) → <b>jacket</b>
+      (the cloak against the world). <b>If there's a shield, the jacket goes over it</b>; if not, straight
+      over the insulated wires.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · peel a cable</span>
+      <span class="verdict ok" id="on-v">conductor</span>
+    </div>
+    <div class="onion">
+      <svg id="on-svg" viewBox="0 0 240 240" role="img" aria-label="Cross-section of a cable showing conductor, insulation, shield and jacket.">
+        <circle id="on-jacket" cx="120" cy="120" r="104" fill="var(--paper-2)" stroke="var(--line)" stroke-width="5"/>
+        <circle id="on-shield" cx="120" cy="120" r="80" fill="var(--paper-2)" stroke="var(--line)" stroke-width="5"/>
+        <circle id="on-ins" cx="120" cy="120" r="56" fill="var(--paper-2)" stroke="var(--line)" stroke-width="5"/>
+        <circle id="on-cond" cx="120" cy="120" r="30" fill="var(--paper-2)" stroke="var(--line)" stroke-width="5"/>
+      </svg>
+      <div class="onion-list" id="on-list"></div>
+    </div>
+    <div class="osi-out" id="on-out"></div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="on-cat"><use href="#anna"/></svg>
+      <p id="on-say">Tap a layer to peel the cable apart.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · CONDUCTORS ══════════════ -->
+<section id="conductors">
+  <div class="head">
+    <span class="lv">Lv.3 · conductors</span>
+    <h2>Solid or stranded <span class="kao">🪢</span></h2>
+    <p class="lede">A <b>conductor is a material that allows a current to pass through it
+      continuously</b>, carrying the signal between a <b>source</b> (a microphone) and a <b>load</b>
+      (a mixing console). Classified by <b>size (gauge or cross-sectional area), construction, and
+      conductive material</b>.</p>
+  </div>
+
+  <div class="chat right-lead">
+    <span class="chat-who">Digi · the destination</span>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+      <div class="bubble">Solid conductor. One strand. <b>Cheaper</b>, stiffer, takes more strain.
+        Obviously correct.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">I'm on <b>stage</b>, Digi. Somebody stands on me four times a night. I want
+        <b>stranded</b> — finer strands, more flexible, better <b>flex life</b>.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble">It costs more and it's <b>slightly fatter</b> for the same cross-section.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">I am <b>being stood on</b>.</div>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Solid is stiff and cheap. Stranded is bendy and dear.</q>
+    <p class="why"><b>Solid</b> — single strand, <b>costs less</b>, less flexible, <b>more restrictive
+      bend radius</b>, but <b>withstands more strain</b> than stranded of similar cross-section.
+      <b>Not suitable where regular flexing is required.</b> <b>Stranded</b> — many small conductors
+      twisted or braided; <b>the finer the strands, the more flexible</b>; more expensive and
+      <b>slightly larger</b> for the same cross-section. Used for <b>patch leads and live events</b>.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📐 two terms worth keeping straight</span>
+    <b>Bend radius</b> = how much you can bend a cable <b>before it deforms and alters its electrical
+    properties</b>. <b>Flex life</b> = how long a wire lasts <b>before it physically fails to conduct
+    properly</b>. One is a limit, the other is a lifespan.
+  </div>
+
+  <div class="note">
+    <span class="note-h">🔥 gauge</span>
+    The <b>cross-sectional area, or gauge</b>, must be big enough to handle the intended signal's current
+    <b>without offering too much electrical resistance or producing too much heat</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · SHIELDS ══════════════ -->
+<section id="shields">
+  <div class="head">
+    <span class="lv">Lv.4 · insulation &amp; shields</span>
+    <h2>The coat and the chainmail <span class="kao">🛡</span></h2>
+    <p class="lede"><b>Insulation prevents physical contact between conductors</b> and avoids signal
+      interactions between them. Bare wires touching create <b>short circuits that prevent transmission
+      and damage equipment</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Heat helps the conductor and hurts the insulator.</q>
+    <p class="why">Straight from the book, and beautifully counterintuitive: <b>most conductors increase
+      in conductivity with temperature</b>, while <b>higher temperatures result in lower dielectric
+      strength in an insulator</b>. And <b>dielectric strength is the ability of an insulating material to
+      block electric fields</b>. Insulation is made from <b>PVC, silicone, rubber or PTFE (Teflon)</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Foil needs a drain. Braid is its own drain.</q>
+    <p class="why">The one line that separates the three shield types. <b>Foil</b> — aluminium foil wrapped
+      round the conductors, needing <b>an additional uninsulated conductor in continuous contact with it</b>
+      to provide the <b>electrical drain or ground</b>. <b>Braided</b> — fine uninsulated wires interwoven
+      into a cover, sometimes in multiple layers, where <b>ground termination is made directly with the
+      braid</b>. <b>Combination</b> — both, possibly plus a drain wire.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">choosing a shield</span><h4>Coverage · flexibility · frequency</h4>
+      <ul>
+        <li><b>Coverage</b> — expressed as a <b>percentage</b>, how much of the inner cable is covered</li>
+        <li><b>Flexibility</b> — subjective, and <b>directly correlates to flex life</b></li>
+        <li><b>Frequency range</b> — <b>no shield stops all EM interference</b>, so its effectiveness is
+          narrowed to a certain band</li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">it works both ways</span><h4>Shields protect the room too 🛡</h4>
+      <p>A shield doesn't only keep interference <b>out</b>. It's <b>also used to protect other devices and
+        cables from the EM radiation generated by the signals in the enclosed circuit</b>.</p>
+      <p>Your noisy cable is somebody else's interference.</p>
+    </article>
+  </div>
+
+  <div class="catline">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+    <p><b>The exam's favourite one-liner:</b> the purpose of shielding is to prevent <b>noise</b> from
+      mixing with the signal. Not insulation, not jackets, not conductors. <b>Noise.</b></p>
+  </div>
+
+  <h3 style="margin-top:var(--sp-8)">Jackets — the cloak 🧥</h3>
+  <div class="specs" style="margin-top:var(--sp-4)">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">the job</span><h4>Physical protection</h4>
+      <p>Jackets (also called <b>sheaths</b>) surround and protect the inner wires and <b>insulate the
+        conductors from environmental factors</b>. Chosen for <b>strength, integrity, abrasion resistance
+        and overall protection</b>.</p>
+      <p>Also weighed: <b>UV radiation, corrosive vapours, colour</b> (aesthetic, identity, labelling),
+        <b>flexibility, flammability, emissions on combustion, and electrical code requirements</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">materials</span><h4>Teflon vs silicone</h4>
+      <p>Mostly the same materials as insulation. Some plastics are unsuitable in certain locations
+        because of <b>flammability or the toxic chemicals they produce in a fire</b>.</p>
+      <p><b>PTFE (Teflon)</b> — withstands high heat, <b>won't support a fire</b>, very little smoke. But
+        <b>hard to work with and more expensive</b>.</p>
+      <p><b>Silicone</b> — <b>flexible, robust, easy to work with</b>, high temperatures.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 5 · CABLE TYPES ══════════════ -->
+<section id="types">
+  <div class="head">
+    <span class="lv">Lv.5 · the three cable types</span>
+    <h2>Coax, twisted-pair, fibre <span class="kao">🎛</span></h2>
+    <p class="lede">Three types the book says you should be familiar with — and you already met two of
+      them in Chapter 6.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Seventy-five for the eyes. Fifty for the sky.</q>
+    <p class="why">The two coax impedances, and they are <b>not interchangeable</b>.
+      <b>75 Ω = video</b> (the eyes). <b>50 Ω = data and radio frequency</b> (the sky).
+      Coax is <b>unbalanced</b>: the single centre wire is the signal conductor and <b>the shield acts as
+      the return</b>. The name comes from the shield and centre conductor sharing <b>the same central
+      axis</b>.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">coax</span><h4>One conductor, unbalanced</h4>
+      <p>A single conductor surrounded by insulation, then <b>one or two shields</b> — the first foil or
+        braid, <b>the second usually braided</b> — then a jacket.</p>
+      <p>Its impedance is mostly set by the <b>capacitive coupling between the central conductor and the
+        shield</b>, which is strongly influenced by the <b>dielectric strength of the insulation</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">twisted-pair</span><h4>Pairs that cancel</h4>
+      <p>Pairs of insulated wires twisted around each other. Pairs may be <b>individually shielded to avoid
+        crosstalk</b> with other pairs, and the whole cable may have a shield for external interference.
+        <b>Spacing materials</b> between pairs reduce crosstalk further.</p>
+      <p><b>Twisting, combined with balanced circuitry, helps reject common mode interference</b> — the
+        exam wants the words <b>rejecting interference</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">fibre</span><h4>Light, not current 💡</h4>
+      <p>Conductors of <b>transparent glass or plastic</b>, so <b>visible light or infrared signals travel
+        instead of a current</b>.</p>
+      <p><b>Single-mode</b> = one light path, <b>yellow</b> jacket, reaches <b>farther without
+        attenuation</b>. <b>Multimode</b> = multiple paths, <b>orange</b> jacket. Same as Chapter 6 —
+        <b>yellow goes far, orange stays near</b>.</p>
+    </article>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">Anna · still on stage</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">So the twist itself does the cancelling?</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+      <div class="bubble">The twist <b>plus balanced circuitry</b>. Same trick as Chapter 4 —
+        <b>two wires that disagree cancel the noise</b>. Common mode rejection. 🐾</div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · CONNECTORS ══════════════ -->
+<section id="connectors">
+  <div class="head">
+    <span class="lv">Lv.6 · connectors</span>
+    <h2>The ends of everything <span class="kao">🔌</span></h2>
+    <p class="lede">Connectors are <b>terminated onto cables</b> and used on equipment to continue the
+      pathway to the electronics inside. <b>The connector on the cable must be compatible with the one on
+      the equipment.</b></p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">🤝 five ways a connector mates</span>
+    <b>Twisting</b> · <b>twist and locking</b> · <b>threading</b> · <b>screw or snap-down lock</b> ·
+    <b>contact pressure</b>. That's the book's full list of mating categories.
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · the connector drawer</span>
+      <span class="verdict ok" id="cn-v">15 connectors</span>
+    </div>
+    <div class="picker" id="cn-pick">
+      <button class="pick" type="button" data-f="all" aria-pressed="true">everything</button>
+      <button class="pick" type="button" data-f="audio">audio</button>
+      <button class="pick" type="button" data-f="video">video</button>
+      <button class="pick" type="button" data-f="data">data &amp; control</button>
+      <button class="pick" type="button" data-f="power">power</button>
+    </div>
+    <div class="menu" id="cn-out"></div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="cn-cat"><use href="#digi"/></svg>
+      <p id="cn-say">Filter the drawer by what the connector actually carries.</p>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Count the rows: HD15 has three, DB15 has two.</q>
+    <p class="why"><b>HD15 (VGA) is sometimes incorrectly called a DB15.</b> They are not the same:
+      <b>DB15 has two rows of pins, HD15 has three</b>. HD15 is found on computers and monitors using
+      analog video.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>D is digital, A is analog, DL is dual, I is integrated.</q>
+    <p class="why">DVI carries digital and analog video plus control through a <b>29-pin</b> connector,
+      and <b>omitting pins</b> makes the variants: <b>DVI-D</b> digital only · <b>DVI-A</b>
+      VGA-compatible analog only · <b>DVI-DL</b> dual digital streams · <b>DVI-I</b> the full integrated
+      system of digital, analog and control.</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · INTEGRITY ══════════════ -->
+<section id="integrity">
+  <div class="head">
+    <span class="lv">Lv.7 · signal integrity</span>
+    <h2>Keeping Anna intact <span class="kao">✨</span></h2>
+    <p class="lede">The goal is simple: <b>preserve the signal's integrity until it arrives at its
+      destination</b>. Two enemies live inside the cable itself, and several more live in the room.</p>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">enemy 1</span><h4>Capacitance</h4>
+      <p>Occurs when <b>two conductors are separated by a nonconductive material</b> — the electrostatic
+        field between them <b>stores some charge</b>.</p>
+      <p>How much is governed by <b>the area of the conductors, the distance between them, and the
+        dielectric strength of the material separating them</b>.</p>
+      <p>Capacitance <b>opposes changes of voltage</b>. <b>The higher the frequency, the lower the
+        capacitive losses</b> — and significant capacitance <b>attenuates and distorts</b> the signal.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">enemy 2</span><h4>Crosstalk</h4>
+      <p><b>Each wire in a cable can act as an antenna</b>, collecting signals from the other wires around
+        it. That's crosstalk — the reason twisted pairs get shielded from <em>each other</em>, not just
+        from the outside world.</p>
+    </article>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Keep your own kind together.</q>
+    <p class="why">Group cables <b>by signal type</b> and then <b>physically separate the groups</b>.
+      <b>Mic-level cables bundle only with mic-level</b>; <b>line-level only with line-level</b>.
+      Putting cables of <b>different voltages and frequencies</b> near each other creates an environment
+      where <b>the signals mutually interfere</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 03 · route Anna's cable</span>
+      <span class="verdict ok" id="rt-v">clean</span>
+    </div>
+    <div class="picker" id="rt-pick">
+      <button class="pick" type="button" data-p="good" aria-pressed="true">by the quiet wall</button>
+      <button class="pick" type="button" data-p="mixed">bundled with line level</button>
+      <button class="pick" type="button" data-p="bad">past the dimmer rack</button>
+    </div>
+    <div class="screen"><canvas id="rt" width="1000" height="260"></canvas></div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="rt-cat"><use href="#anna"/></svg>
+      <p id="rt-say">Purple is what Anna sent. Mint is what reaches Digi.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">⚡ what to run away from</span>
+    Avoid running cables near <b>motors</b>, <b>fluorescent or dimmed lighting</b>, <b>power distribution
+    cables</b> and <b>electrical power control systems</b>. Also <b>battery charging</b> and <b>radio
+    transmitter systems</b>.
+  </div>
+
+  <div class="note">
+    <span class="note-h">📉 three faces of degradation</span>
+    Signal degradation shows up as <b>voltage amplitude reductions</b>, <b>changes in the shape of the
+    waveform</b>, or <b>phase shifting</b>. And <b>analog systems are much more susceptible to noise and
+    distortion than digital</b> — which is why the best defence is <b>proper system design and
+    installation using industry best practices and established performance standards</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · DISTANCE ══════════════ -->
+<section id="distance">
+  <div class="head">
+    <span class="lv">Lv.8 · distance limits</span>
+    <h2>The twist in the tale <span class="kao">📏</span></h2>
+    <p class="lede">A signal transmitted at the proper level <b>will lose strength or amplitude over
+      distance</b>. Three things decide how far it gets.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Digital is tougher but shorter.</q>
+    <p class="why">Here's the one that catches people, because Chapter 3 spent a whole chapter making
+      digital the hero. It still is — <b>digital resists noise far better</b>. But
+      <b>digital signals generally do not travel as far as analog signals</b> without
+      <b>buffering or amplification</b>. Tougher, and shorter.</p>
+  </div>
+
+  <div class="chat right-lead">
+    <span class="chat-who">Digi · wounded</span>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+      <div class="bubble">Hold on. In Chapter 3 I was <b>immune to noise</b>. A smudged 7 is still a 7!</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">You still are. You just <b>don't get as far</b> before somebody has to
+        buffer or amplify you. Immunity isn't stamina 💅</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble">…noted.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">📐 the three factors</span>
+    How far a signal travels is set by <b>signal level</b>, <b>signal bandwidth</b>, and <b>the loss
+    factors of the cable type used</b>. <b>Every signal type has unique characteristics</b>, so
+    <b>consult published standards and the cable manufacturer's documentation</b> for limits by signal
+    type and frequency. Each type may also need <b>a unique cable configuration when splitting or looping
+    within a system</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · SWITCHERS ══════════════ -->
+<section id="switchers">
+  <div class="head">
+    <span class="lv">Lv.9 · switchers</span>
+    <h2>Pick one, not several <span class="kao">🔀</span></h2>
+    <p class="lede">A switcher <b>allows users to select among two or more sources and send the selected
+      signal to a particular destination</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A switcher picks one. A mixer blends many.</q>
+    <p class="why">The distinction the exam is built on. Switchers <b>send only one of their multiple
+      inputs to their output</b> — as opposed to <b>mixers, which send a combination of several sources to
+      a destination simultaneously</b>. Switchers may be <b>passive</b> (no power) or <b>active</b>
+      (adjustable amplification, equalization and buffering on each input <b>so switching doesn't produce
+      disturbances on the output</b>).</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Ins first, outs second.</q>
+    <p class="why">A <b>matrix switcher</b> can send <b>any of its inputs to one or more of its outputs
+      simultaneously</b>. It's <b>a composite of several switchers — one per output</b>. So a
+      <b>4 × 2 contains two four-input switchers</b>, and can connect <b>any of four inputs to one or both
+      of two outputs</b>. To avoid loading at the inputs, <b>each input contains a distribution
+      amplifier</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 04 · patch the matrix</span>
+      <span class="verdict ok" id="mx-v">4 × 2</span>
+    </div>
+    <div class="ctl">
+      <label for="mx-i">inputs</label>
+      <input type="range" id="mx-i" min="2" max="6" step="1" value="4">
+      <output id="mx-io">4</output>
+      <label for="mx-o">outputs</label>
+      <input type="range" id="mx-o" min="1" max="4" step="1" value="2">
+      <output id="mx-oo">2</output>
+    </div>
+    <div class="xgrid" id="mx-grid"></div>
+    <div class="dial" style="margin-top:var(--sp-3)">
+      <div><span>switchers inside</span><b id="mx-sw">2</b></div>
+      <div><span>distribution amps</span><b id="mx-da">4</b></div>
+      <div><span>crosspoints patched</span><b id="mx-on">0</b></div>
+    </div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="mx-cat"><use href="#digi"/></svg>
+      <p id="mx-say">Click a crosspoint to route an input to an output. Each output can only take one.</p>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Mechanical crashes. Seamless waits for the gap.</q>
+    <p class="why">A <b>mechanical switcher</b> makes a physical connection like a wall switch, and
+      <b>pays no attention to a signal's content</b>. Fine for analog audio; a <b>major issue for video or
+      network data that come in discrete frames or packets</b> — the picture <b>jumps, rolls or breaks
+      up</b> because the switch happened mid-frame. That's why they're called <b>crash switchers</b>.
+      <b>Seamless switchers</b> use electronic circuitry to <b>monitor the sync information, buffer the
+      video, and make the transition during the interval between frames</b>.</p>
+  </div>
+
+  <div class="catline">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+    <p>Chapter 5 called this <b>vertical interval switching</b> versus <b>crash switching</b>. Same idea,
+      same words — <b>switch in the gap, or you crash</b>. Two chapters, one rule ✧</p>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · DA ══════════════ -->
+<section id="da">
+  <div class="head">
+    <span class="lv">Lv.10 · distribution amplifiers</span>
+    <h2>The amplifier that won't amplify <span class="kao">🌱</span></h2>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A DA is an amplifier with a gain of one.</q>
+    <p class="why">Word for word from the book. <b>It does not increase signal levels.</b> Instead it
+      <b>allows a single input signal to be distributed to multiple outputs while maintaining the original
+      signal level and quality</b>. Gain of one is <b>unity gain</b> — the same term Chapter 4 gave you
+      for "passing through unchanged".</p>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">Anna · confused</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">An <b>amplifier</b>… that doesn't amplify?</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+      <div class="bubble">It <b>copies</b>. One of you in, twenty-four of you out, all at the same
+        volume you started at.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">Twenty-four of me. <b>Finally.</b></div>
+    </div>
+  </div>
+
+  <div class="specs">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">video DAs</span><h4>Every format</h4>
+      <p>Available for <b>all formats of analog and digital video</b>, in <b>balanced and unbalanced</b>
+        versions, ranging from <b>as few as two to more than a dozen outputs</b>. They <b>may also have
+        audio distribution channels</b> for simultaneous video and audio.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">the classic use</span><h4>The press feed 🎤</h4>
+      <p>A speech-reinforcement system needing <b>up to 24 media feeds</b>. The speaker uses
+        <b>one microphone at a lectern</b> rather than being hidden behind two dozen of them.</p>
+      <p>The media plug into a socket giving <b>a fixed, isolated signal</b> from a DA output — so
+        <b>if one journalist has a shorted cable, it affects only that one feed</b>.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 11 · RACKS ══════════════ -->
+<section id="racks">
+  <div class="head">
+    <span class="lv">Lv.11 · rack-building considerations</span>
+    <h2>Nineteen inches of home <span class="kao">🗄</span></h2>
+    <p class="lede">An <b>AV rack is a housing unit that protects and organizes electronic equipment</b> —
+      that exact phrase is a question.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Nineteen inside. Twenty-one to twenty-five outside.</q>
+    <p class="why">The measurement question, and all four options are plausible numbers.
+      <b>Inside: 19 inches (482.6 mm).</b> <b>Outside: 533 to 635 mm (21 to 25 inches).</b>
+      Height runs from about <b>300 mm (1 foot) to more than 2.1 m (7 feet)</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A rack unit is one and three quarters.</q>
+    <p class="why"><b>1 RU = 44.45 mm = 1.75 inches</b> of usable mounting space. So a
+      <b>300 mm rack is 6RU</b> and a <b>2.1 m rack is 48RU</b>. Equipment mounting points are an
+      industry-standard <b>18.312 inches (465 mm) centre to centre</b>. A mixer might be <b>1RU</b>, an
+      amplifier <b>2RU</b>, a switcher <b>10RU or taller</b>.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 05 · load a rack</span>
+      <span class="verdict ok" id="rk-v">6RU free</span>
+    </div>
+    <div class="ctl">
+      <label for="rk-h">rack height</label>
+      <input type="range" id="rk-h" min="6" max="48" step="1" value="12">
+      <output id="rk-ho">12 RU</output>
+    </div>
+    <div class="picker" id="rk-pick">
+      <button class="pick" type="button" data-a="mixer">+ mixer (1RU)</button>
+      <button class="pick" type="button" data-a="amp">+ amplifier (2RU)</button>
+      <button class="pick" type="button" data-a="switcher">+ switcher (10RU)</button>
+      <button class="pick" type="button" data-a="clear">clear</button>
+    </div>
+    <div class="rackview" id="rk-view"></div>
+    <div class="dial" style="margin-top:var(--sp-3)">
+      <div><span>height</span><b id="rk-mm">533 mm</b></div>
+      <div><span>used</span><b id="rk-used">0 RU</b></div>
+      <div><span>free</span><b id="rk-free">12 RU</b></div>
+    </div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="rk-cat"><use href="#digi"/></svg>
+      <p id="rk-say">Heaviest at the bottom, cool air in the bottom, warm air out the top.</p>
+    </div>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">two diagrams</span><h4>Elevation &amp; separation</h4>
+      <p>A <b>rack elevation diagram</b> shows the <b>front and back of a rack</b> and <b>the number of RUs
+        required for each piece of gear</b>.</p>
+      <p>A <b>signal separation diagram</b> depicts <b>the back of a rack and the cables connecting each
+        piece of equipment</b>.</p>
+      <p>Planning considers <b>how much heat a piece emits, the types of signals carried to it, and whether
+        it has an interface component for a typical user</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">heat</span><h4>Cool in the bottom, warm out the top 🔥</h4>
+      <p><b>All electronic devices produce waste heat</b> that builds up and must be removed. Installers
+        use <b>RUs to calculate vertical spacing for ventilation and airflow paths at the rear</b>.</p>
+      <p>Many devices <b>vent from the top and bottom of the chassis</b> — and hot air leaving one piece
+        <b>may flow into the air intakes of another and eventually cause equipment failure</b>. Vents
+        <b>direct cool air in from the bottom, forcing warm air out through the top</b>.</p>
+    </article>
+    <article class="spec-card" style="--tone:var(--sun)">
+      <span class="sc-tag">balance &amp; reach</span><h4>Heavy low, controls handy</h4>
+      <p>Where racks are <b>freestanding and subject to possible overbalancing</b>, install the
+        <b>heaviest equipment at the bottom to keep the centre of gravity as low as practicable</b>.</p>
+      <p>Equipment with <b>user interface components</b> — removable media, user-adjustable controls —
+        goes <b>within convenient reach of users</b>, and <b>there may be regulations in your location</b>
+        governing placement.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ══════════════ SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">the earworm · a duet, this time</span>
+    <h2>The Four Layers Duet <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">Anna takes the odd lines, Digi takes the even ones. If you're alone, do both voices —
+      nobody is watching.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ DUET GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · Row, Row, Row Your Boat</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>🐈‍⬛ <b style="color:var(--lav)">ANNA:</b> ♪ <b style="color:var(--berry)">Core</b>, then <b style="color:var(--berry)">coat</b>, then <b style="color:var(--berry)">shield</b>,</p>
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ <b style="color:var(--berry)">Jack-et</b> on the top —</p>
+      <p>🐈‍⬛ <b style="color:var(--lav)">ANNA:</b> ♪ <b style="color:var(--berry)">Con-duc-tor, in-su-la-tion, shield-ing, jack-et,</b></p>
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ That's the whole ca-ble, <b style="color:var(--berry)">stop!</b></p>
+    </div>
+    <p class="why">Four layers, four lines, inside out. And the short version for the exam hall:
+      <b>core, coat, chainmail, cloak</b>.</p>
+  </div>
+
+  <div class="board" style="margin-top:var(--sp-6)">
+    <h3>Six chants for the walk in 🥁</h3>
+    <div class="lyric">
+      <p class="lyric-line"><strong>A WIRE is a solo · A CABLE is a band</strong></p>
+      <p class="lyric-line"><strong>SOLID is stiff and cheap · STRANDED is bendy and dear</strong></p>
+      <p class="lyric-line"><strong>FOIL needs a drain · BRAID is its own drain</strong></p>
+      <p class="lyric-line"><strong>SEVENTY-FIVE for the eyes · FIFTY for the sky</strong></p>
+      <p class="lyric-line"><strong>A SWITCHER picks one · A MIXER blends many</strong></p>
+      <p class="lyric-line"><strong>NINETEEN inside · TWENTY-ONE to TWENTY-FIVE outside · ONE and THREE QUARTERS per U</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage</span>
+    <h2>Notes taped inside the rack door <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">wire vs cable</span><p>What's the difference between a wire and a cable?<br><b>About four friends.</b></p></article>
+    <article class="item"><span class="item-tag">solid</span><p>Solid conductor is cheaper and takes more strain.<br><b>It just refuses to bend. Digi relates.</b></p></article>
+    <article class="item"><span class="item-tag">insulation</span><p>Heat makes conductors better and insulators worse.<br><b>Everything in this chapter is somebody's bad day.</b></p></article>
+    <article class="item"><span class="item-tag">shields</span><p>Foil shielding needs a drain wire.<br><b>Braid brought its own. Braid has always been like this.</b></p></article>
+    <article class="item"><span class="item-tag">coax</span><p>Why is it called coax?<br><b>Same central axis. Not because it persuades the signal.</b></p></article>
+    <article class="item"><span class="item-tag">75 vs 50</span><p>Can I use 50Ω coax for video?<br><b>You can. It will be a learning experience.</b></p></article>
+    <article class="item"><span class="item-tag">crosstalk</span><p>Every wire in a cable is a tiny antenna.<br><b>Which means every cable is a group chat nobody muted.</b></p></article>
+    <article class="item"><span class="item-tag">crash switcher</span><p>Mechanical switchers ignore the signal's content.<br><b>They switch confidently and immediately. That's the problem.</b></p></article>
+    <article class="item"><span class="item-tag">distribution amp</span><p>A distribution amplifier has a gain of one.<br><b>It's an amplifier in job title only.</b></p></article>
+    <article class="item"><span class="item-tag">racks</span><p>Put the heaviest gear at the bottom.<br><b>Gravity has never once lost an argument.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · all nine review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">A shorter chapter, so a shorter fight. <b>9 HP</b> — and the cats are watching
+      from the corner.</p>
+  </div>
+
+  <div class="ringside" aria-hidden="true">
+    <figure>
+      <svg viewBox="0 0 120 120" id="rs-anna"><use href="#anna"/></svg>
+      <figcaption id="rs-anna-say">Go on then.</figcaption>
+    </figure>
+    <figure>
+      <svg viewBox="0 0 120 120" id="rs-digi"><use href="#digi"/></svg>
+      <figcaption id="rs-digi-say">Statistically, you'll be fine.</figcaption>
+    </figure>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE PATCHBAY SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 9 / 9 — it has unplugged something and won't say what.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 9</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+    <p class="lede">Three blocks, twelve lines.</p>
+  </div>
+  <div class="sheet">
+    <h4>🧵 what a cable is</h4>
+    <ol>
+      <li><b>A wire is a solo, a cable is a band.</b> Wire = <b>one</b> conductor; <b>cable = multiple conductors</b>. The traced path of a signal type is the <b>signal flow</b>.</li>
+      <li><b>Core, coat, chainmail, cloak</b> — conductor, insulation, shield, jacket. <b>Shielding prevents NOISE from mixing with the signal.</b></li>
+      <li><b>Solid is stiff and cheap. Stranded is bendy and dear</b> (and slightly fatter for the same cross-section). <b>Bend radius</b> = a limit; <b>flex life</b> = a lifespan.</li>
+      <li><b>Heat helps the conductor and hurts the insulator.</b> <b>Dielectric strength</b> = ability to block electric fields.</li>
+      <li><b>Foil needs a drain. Braid is its own drain.</b> Combination = both. Choose on <b>coverage (a %), flexibility, frequency range</b> — and shields protect the <em>room</em> from your cable too.</li>
+      <li><b>PTFE (Teflon)</b> = high heat, won't support fire, little smoke, but pricey and hard to work. <b>Silicone</b> = flexible, robust, easy, high temperature.</li>
+    </ol>
+    <h4>🎛 the three types &amp; keeping them clean</h4>
+    <ol start="7">
+      <li><b>Seventy-five for the eyes, fifty for the sky.</b> Coax is <b>unbalanced</b> (shield = return), <b>75 Ω video / 50 Ω data &amp; RF, not interchangeable</b>. Twisted-pair + balanced = <b>rejecting interference</b>. Fibre: <b>yellow single-mode goes far, orange multimode stays near</b>.</li>
+      <li><b>Count the rows: HD15 three, DB15 two.</b> <b>DVI: D</b>igital · <b>A</b>nalog · <b>D</b>ual <b>L</b>ink · <b>I</b>ntegrated, on a <b>29-pin</b> connector. <b>Speakon NL4</b> = 4 poles; <b>captive screw = Euroblock/Phoenix</b>.</li>
+      <li><b>Keep your own kind together</b> — bundle mic with mic, line with line, and separate the groups. <b>Capacitance</b> opposes voltage change (higher frequency → <b>lower</b> capacitive loss); <b>crosstalk</b> is every wire acting as an antenna. Avoid motors, dimmers, fluorescents, power cabling.</li>
+      <li><b>Digital is tougher but shorter</b> — it won't travel as far as analog without buffering or amplification. Distance depends on <b>signal level, bandwidth, and the cable's loss factors</b>.</li>
+    </ol>
+    <h4>🔀 boxes &amp; racks</h4>
+    <ol start="11">
+      <li><b>A switcher picks one, a mixer blends many.</b> <b>Ins first, outs second</b> — a <b>4 × 2</b> sends any of <b>four</b> inputs to one or both of <b>two</b> outputs, contains <b>two</b> switchers, and has a <b>DA on every input</b>. <b>Mechanical crashes, seamless waits for the gap.</b> <b>A DA is an amplifier with a gain of one.</b></li>
+      <li><b>Nineteen inside, twenty-one to twenty-five outside, one and three quarters per U</b> (<b>1RU = 44.45 mm</b>; mounting points <b>18.312 in / 465 mm</b> centre to centre). A rack <b>protects and organizes</b>. <b>Heaviest at the bottom</b>; <b>cool air in the bottom, warm out the top</b>. <b>Rack elevation</b> = front/back with RUs; <b>signal separation</b> = back with cables.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="catline" style="margin-top:var(--sp-8)">
+  <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-zzz"/></svg>
+  <p><b>Anna made it to the other end intact</b> and has fallen asleep in the free rack space.
+    Digi says the centre of gravity is now unacceptable. He has not moved her.
+    <span class="kmj">(っ- ω -)っ</span></p>
+</div>
+
+<nav class="chapnav" aria-label="Chapters">
+<a class="cn-card cn-prev" href="/cafe-localhost" style="--tone:var(--sakura)"><span class="cn-dir">◂ Previous</span>
+<span class="cn-name">🌐 Café Localhost</span><span class="cn-topic">Ch.6 · Networks</span></a>
+<a class="cn-home" href="/"><i>☕</i>All chapters</a>
+<span class="cn-card cn-next is-off"><span class="cn-dir">Next ▸</span>
+<span class="cn-name">Not written yet</span><span class="cn-topic">More cafés are coming</span></span>
+</nav>
+<footer>
+  <span>🔌 Café Patchbay · CTS Ch.7 · signal-management systems</span>
+  <span>Anna reached Digi intact <span class="kmj">(=^･ω･^=)⇢(=^･ω･^=)</span></span>
+</footer>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA · surprised — round wide eyes, small o mouth -->
+    <g id="anna-oh">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <circle cx="49" cy="46" r="7.5" fill="#4A2B33"/><circle cx="71" cy="46" r="7.5" fill="#4A2B33"/>
+      <circle cx="51.5" cy="43" r="2.8" fill="#fff"/><circle cx="73.5" cy="43" r="2.8" fill="#fff"/>
+      <ellipse cx="37" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="83" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="60" cy="60" rx="4.5" ry="5.5" fill="#4A2B33"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M96 22l3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="#FFB01F"/>
+    </g>
+
+    <!-- ANNA · asleep — a loaf with closed eyes -->
+    <g id="anna-zzz">
+      <path d="M22 92c0-24 16-36 38-36s38 12 38 36z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M22 92h76" stroke="#4A2B33" stroke-width="4" stroke-linecap="round"/>
+      <path d="M36 60 32 40l17 10M84 60l4-20-17 10" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M44 74c3 4 7 4 10 0M66 74c3 4 7 4 10 0" stroke="#4A2B33" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="34" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <ellipse cx="86" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <path d="M56 82q4 4 8 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g fill="#8A6BD9" font-family="monospace" font-weight="700">
+        <text x="86" y="40" font-size="15">z</text>
+        <text x="97" y="27" font-size="11">z</text>
+        <text x="105" y="17" font-size="8">z</text>
+      </g>
+    </g>
+
+    <!-- DIGI · smug — flat pixel eyes, stepped smirk -->
+    <g id="digi-smug">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="43" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="67" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58h4v4h4v-4h4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+
+    <!-- DIGI · alarmed — wide square eyes, flat worried mouth -->
+    <g id="digi-alarm">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="42" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="66" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="44" y="42" width="4" height="4" fill="#fff"/><rect x="68" y="42" width="4" height="4" fill="#fff"/>
+      <rect x="28" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <rect x="83" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <path d="M52 62h16" stroke="#4A2B33" stroke-width="3.5"/>
+      <path d="M96 20h6v4h-6zM96 28h6v10h-6z" fill="#EE3D5C"/>
+    </g>
+  </defs>
+</svg>
+
+
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  /** swap the sprite inside an <svg> that uses <use> */
+  const setCat = (svgEl, id) => { const u=svgEl.querySelector("use");
+    if(u) u.setAttribute("href", "#"+id); };
+
+  /* ── gadget 01 · peel a cable ── */
+  const onList=document.getElementById("on-list");
+  if (onList){
+    const out=document.getElementById("on-out"), vd=document.getElementById("on-v"),
+          say=document.getElementById("on-say"), cat=document.getElementById("on-cat");
+    const L=[
+      {id:"cond", i:"🧵", name:"Conductor", sub:"the core", tone:"var(--sun)", cat:"anna",
+       does:["A material that allows a current to pass through it continuously",
+             "Carries the signal between a <b>source</b> (a microphone) and a <b>load</b> (a mixing console)",
+             "Classified by <b>size (gauge or cross-sectional area), construction, and conductive material</b>"],
+       dev:"Solid = cheaper and stiffer · Stranded = flexible and dearer",
+       say:"That's me — the bit actually carrying your voice. <b>Everything else is protection.</b>"},
+      {id:"ins", i:"🧥", name:"Insulation", sub:"the coat", tone:"var(--lav)", cat:"digi",
+       does:["<b>Prevents physical contact between multiple conductors</b> and avoids signal interactions",
+             "Bare wires touching create <b>short circuits</b> that stop transmission and damage equipment",
+             "A <b>highly resistive</b> material — PVC, silicone, rubber or PTFE (Teflon)"],
+       dev:"Dielectric strength = its ability to block electric fields",
+       say:"Without this we <b>short out</b>. Insulation is the reason two conductors can share a jacket."},
+      {id:"shield", i:"🛡", name:"Shield", sub:"the chainmail", tone:"var(--mint)", cat:"digi-alarm",
+       does:["<b>Isolates and protects a signal from sources of electromagnetic interference</b>",
+             "Three types: <b>foil</b> (needs a drain wire), <b>braided</b> (its own drain), <b>combination</b>",
+             "Chosen on <b>coverage, flexibility and frequency range</b>"],
+       dev:"Cables may or may not have one — and it protects the room from your cable as well",
+       say:"<b>Noise lives out here.</b> The shield is the only layer fighting it."},
+      {id:"jacket", i:"🧣", name:"Jacket", sub:"the cloak", tone:"var(--berry)", cat:"anna",
+       does:["Also called a <b>sheath</b> — provides <b>physical protection</b> to the cable",
+             "Goes <b>over the shield</b> if there is one, otherwise straight over the insulated wires",
+             "Chosen for <b>strength, integrity, abrasion resistance</b> and environmental protection"],
+       dev:"Also weighed: UV, corrosive vapours, colour, flexibility, flammability, smoke, electrical code",
+       say:"This is the bit that gets stood on. <b>It's had a long career.</b>"}
+    ];
+    let cur=0;
+    const RINGS={cond:"on-cond", ins:"on-ins", shield:"on-shield", jacket:"on-jacket"};
+    function render(){
+      onList.innerHTML="";
+      L.forEach((l,i)=>{
+        const b=document.createElement("button");
+        b.type="button"; b.className="layerbtn"; b.style.setProperty("--tone",l.tone);
+        b.setAttribute("aria-pressed", i===cur?"true":"false");
+        b.innerHTML='<i>'+l.i+'</i><span><b>'+l.name+'</b><small>'+l.sub+'</small></span>';
+        b.addEventListener("click",()=>{ cur=i; render(); });
+        onList.appendChild(b);
+      });
+      const C=L[cur];
+      Object.entries(RINGS).forEach(([k,id])=>{
+        const el=document.getElementById(id);
+        el.setAttribute("fill", k===C.id ? C.tone : "var(--paper-2)");
+        el.setAttribute("stroke-width", k===C.id ? "7" : "5");
+      });
+      out.style.setProperty("--tone",C.tone);
+      out.innerHTML='<h4>'+C.i+' '+C.name+' — '+C.sub+'</h4><ul>'+
+        C.does.map(d=>'<li>'+d+'</li>').join("")+'</ul><p class="dev">'+C.dev+'</p>';
+      vd.className="verdict ok"; vd.textContent=C.name.toLowerCase();
+      setCat(cat, C.cat); say.innerHTML=C.say;
+    }
+    render();
+  }
+
+  /* ── gadget 02 · the connector drawer ── */
+  const cnPick=document.getElementById("cn-pick");
+  if (cnPick){
+    const out=document.getElementById("cn-out"), vd=document.getElementById("cn-v"),
+          say=document.getElementById("cn-say"), cat=document.getElementById("cn-cat");
+    const C=[
+      {n:"XLR", t:["audio","data","power"], d:"Audio and control signals, and supplying power. On microphones, mixers, amplifiers, headsets, audio processors, comms and lighting control."},
+      {n:"6.5 mm (¼\") phone", t:["audio"], d:"Between audio devices. On audio patch panels, musical instruments, mixers and amplifiers."},
+      {n:"3.5 mm (⅛\") phone", t:["audio","data"], d:"Audio or control on consumer and computer gear — headphones, computer loudspeakers, laptops, tablets, media players."},
+      {n:"RCA (phono)", t:["audio","video","data"], d:"<b>Unbalanced</b> video, audio or control. On consumer video and audio devices, control systems, switchers and converters."},
+      {n:"F type", t:["video","audio"], d:"RF, composite video and audio. On antennas, consumer video recorders, set-top boxes and televisions."},
+      {n:"DB9", t:["data"], d:"Used for <b>control signals</b>."},
+      {n:"RJ-45 (8P8C)", t:["data","video"], d:"Data networking, control, <b>HDBaseT</b> multimedia and telephone. On projectors, matrix switchers, laptops, control and network devices."},
+      {n:"BNC", t:["video","data"], d:"RF, component video, time code, sync and <b>SDI</b>. On wireless gear with external antennas, and some video equipment and projectors."},
+      {n:"Speakon (NL4)", t:["audio","power"], d:"A <b>four-pole loudspeaker connector</b> joining amplifiers to loudspeakers. <b>NL2</b> and <b>NL8</b> variants exist; the related <b>PowerCon</b> carries mains power."},
+      {n:"Captive screw", t:["audio","data"], d:"Screws secure the connector to the conductors. Also known as <b>Euroblock</b> or <b>Phoenix</b>."},
+      {n:"DVI", t:["video","data"], d:"Digital and analog video plus control on a <b>29-pin</b> connector. <b>DVI-D</b> digital only · <b>DVI-A</b> analog only · <b>DVI-DL</b> dual digital · <b>DVI-I</b> integrated."},
+      {n:"HD15 (VGA)", t:["video"], d:"Analog video on computers and monitors. <b>Three rows of pins</b> — a DB15 has two, so they are not the same thing."},
+      {n:"HDMI", t:["video","audio","data"], d:"Builds on DVI by adding <b>audio, EDID control, HDCP protection and Ethernet</b>. Backward-compatible with DVI. Comes as HDMI, Mini and Micro."},
+      {n:"DisplayPort", t:["video","audio"], d:"Also builds on DVI, in a <b>similar yet not completely compatible</b> format. Also available as Mini-DisplayPort."},
+      {n:"USB", t:["data","video","audio","power"], d:"General-purpose serial data — video and audio streams, device control, network data, storage. Square <b>type B</b>, rectangular <b>type A</b>, and the oval <b>non-polarized type C</b>."}
+    ];
+    const LINES={
+      all:["digi","Fifteen connectors. <b>You will meet every one of these on a real job.</b>"],
+      audio:["anna","Anything that carries my voice. <b>XLR is the professional default</b> — balanced, and it can carry phantom power."],
+      video:["digi","Note <b>RCA is unbalanced</b>, and <b>BNC</b> turns up everywhere from sync to SDI."],
+      data:["digi","Control and data. <b>DB9 is control only</b>; RJ-45 does networking, control <em>and</em> HDBaseT."],
+      power:["digi-alarm","<b>Careful here.</b> Speakon and PowerCon look related because they are — but one is loudspeakers and one is <b>mains</b>."]
+    };
+    let cur="all";
+    function draw(){
+      const list = cur==="all" ? C : C.filter(c=>c.t.includes(cur));
+      out.innerHTML = list.map(c=>
+        '<article class="item"><span class="item-tag">'+c.t.join(" · ")+'</span>'+
+        '<h3 class="item-name">'+c.n+'</h3><p>'+c.d+'</p></article>').join("");
+      vd.className="verdict ok";
+      vd.textContent=list.length+" connector"+(list.length===1?"":"s");
+      const [who,msg]=LINES[cur]; setCat(cat,who); say.innerHTML=msg;
+    }
+    cnPick.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.f;
+      cnPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+      draw();
+    });
+    draw();
+  }
+
+  /* ── gadget 03 · route Anna's cable ── */
+  const rtPick=document.getElementById("rt-pick");
+  if (rtPick){
+    const cv=document.getElementById("rt"), g=cv.getContext("2d"), W=1000, H=260;
+    const vd=document.getElementById("rt-v"), say=document.getElementById("rt-say"),
+          cat=document.getElementById("rt-cat");
+    const MODE={
+      good:{noise:0, hum:0, v:"clean", cls:"ok", cat:"anna",
+        s:"<b>Bundled with its own kind, away from the noisy stuff.</b> What Anna sent is what Digi gets."},
+      mixed:{noise:9, hum:0, v:"crosstalk", cls:"bad", cat:"digi",
+        s:"<b>Mic level bundled with line level.</b> Different voltages side by side — the wires act as antennas and you get <b>crosstalk</b>."},
+      bad:{noise:20, hum:26, v:"ruined", cls:"bad", cat:"digi-alarm",
+        s:"<b>Run past a dimmer rack.</b> Amplitude reduction, a mangled waveform and mains hum riding along. This is the cable route that gets a system rejected."}
+    };
+    let cur="good";
+    function draw(){
+      const M=MODE[cur];
+      g.clearRect(0,0,W,H);
+      const cy=H/2, amp=54;
+      g.strokeStyle=css("--ink-faint"); g.lineWidth=2; g.setLineDash([8,8]);
+      g.beginPath(); g.moveTo(0,cy); g.lineTo(W,cy); g.stroke(); g.setLineDash([]);
+      // what Anna sent
+      g.strokeStyle=css("--lav"); g.lineWidth=5; g.globalAlpha=.5; g.lineCap="round";
+      g.beginPath();
+      for(let x=0;x<=W;x+=2){ const y=cy-amp*Math.sin(2*Math.PI*3*x/W); x?g.lineTo(x,y):g.moveTo(x,y); }
+      g.stroke(); g.globalAlpha=1;
+      // what Digi receives
+      const seed=x=>{const s=Math.sin(x*12.9898)*43758.5453; return (s-Math.floor(s))*2-1;};
+      g.strokeStyle=css("--mint"); g.lineWidth=4;
+      g.beginPath();
+      for(let x=0;x<=W;x+=2){
+        let y=cy-amp*(1-M.hum/90)*Math.sin(2*Math.PI*3*x/W);
+        y+=seed(x)*M.noise;
+        if(M.hum) y-=M.hum*0.5*Math.sin(2*Math.PI*17*x/W);
+        x?g.lineTo(x,y):g.moveTo(x,y);
+      }
+      g.stroke();
+      g.font="700 15px ui-monospace,Consolas,monospace";
+      g.fillStyle=css("--lav"); g.fillText("sent by Anna", 16, 26);
+      g.fillStyle=css("--mint"); g.fillText("received by Digi", 16, H-14);
+      vd.className="verdict "+M.cls; vd.textContent=M.v;
+      setCat(cat,M.cat); say.innerHTML=M.s;
+    }
+    rtPick.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      cur=b.dataset.p;
+      rtPick.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+      draw();
+    });
+    draw();
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+  }
+
+  /* ── gadget 04 · patch the matrix ── */
+  const mxI=document.getElementById("mx-i");
+  if (mxI){
+    const mxO=document.getElementById("mx-o"), grid=document.getElementById("mx-grid"),
+          io=document.getElementById("mx-io"), oo=document.getElementById("mx-oo"),
+          sw=document.getElementById("mx-sw"), da=document.getElementById("mx-da"),
+          on=document.getElementById("mx-on"), vd=document.getElementById("mx-v"),
+          say=document.getElementById("mx-say"), cat=document.getElementById("mx-cat");
+    let routed={};                       // output index -> input index
+    function draw(){
+      const ins=+mxI.value, outs=+mxO.value;
+      Object.keys(routed).forEach(o=>{ if(+o>=outs || routed[o]>=ins) delete routed[o]; });
+      grid.style.gridTemplateColumns="repeat("+(ins+1)+", 44px)";
+      grid.innerHTML="";
+      const hdr=document.createElement("div"); hdr.className="xcell hdr"; grid.appendChild(hdr);
+      for(let i=0;i<ins;i++){ const c=document.createElement("div");
+        c.className="xcell hdr"; c.textContent="IN"+(i+1); grid.appendChild(c); }
+      for(let o=0;o<outs;o++){
+        const rh=document.createElement("div"); rh.className="xcell hdr";
+        rh.textContent="OUT"+(o+1); grid.appendChild(rh);
+        for(let i=0;i<ins;i++){
+          const c=document.createElement("button");
+          c.type="button"; c.className="xcell"+(routed[o]===i?" on":"");
+          c.textContent=routed[o]===i?"●":"";
+          c.setAttribute("aria-label","route input "+(i+1)+" to output "+(o+1));
+          c.addEventListener("click",()=>{
+            if(routed[o]===i) delete routed[o]; else routed[o]=i;
+            draw();
+          });
+          grid.appendChild(c);
+        }
+      }
+      io.textContent=ins; oo.textContent=outs;
+      sw.textContent=outs; da.textContent=ins;
+      const count=Object.keys(routed).length;
+      on.textContent=count;
+      vd.className="verdict ok"; vd.textContent=ins+" × "+outs;
+      const shared={};
+      Object.values(routed).forEach(i=>shared[i]=(shared[i]||0)+1);
+      const dup=Object.values(shared).some(v=>v>1);
+      if(dup){
+        setCat(cat,"digi-smug");
+        say.innerHTML="<b>One input feeding several outputs at once.</b> That's the whole point of a matrix — and why every input needs a distribution amplifier to avoid loading.";
+      } else if(count===0){
+        setCat(cat,"digi");
+        say.innerHTML="A <b>"+ins+" × "+outs+"</b> contains <b>"+outs+" switcher"+(outs===1?"":"s")+"</b> — one per output — and a <b>DA on each of the "+ins+" inputs</b>. Click a crosspoint.";
+      } else {
+        setCat(cat,"anna");
+        say.innerHTML="Each output takes <b>exactly one</b> input. Click the same cell again to unpatch it.";
+      }
+    }
+    [mxI,mxO].forEach(el=>el.addEventListener("input",draw));
+    draw();
+  }
+
+  /* ── gadget 05 · load a rack ── */
+  const rkH=document.getElementById("rk-h");
+  if (rkH){
+    const pick=document.getElementById("rk-pick"), view=document.getElementById("rk-view"),
+          ho=document.getElementById("rk-ho"), mm=document.getElementById("rk-mm"),
+          used=document.getElementById("rk-used"), free=document.getElementById("rk-free"),
+          vd=document.getElementById("rk-v"), say=document.getElementById("rk-say"),
+          cat=document.getElementById("rk-cat");
+    const GEAR={mixer:{n:"Audio mixer",ru:1,i:"🎚",w:1},
+                amp:{n:"Power amplifier",ru:2,i:"⚡",w:3},
+                switcher:{n:"Matrix switcher",ru:10,i:"🔀",w:2}};
+    let load=[];
+    function draw(){
+      const H=+rkH.value;
+      const total=load.reduce((s,g)=>s+GEAR[g].ru,0);
+      ho.textContent=H+" RU";
+      mm.textContent=Math.round(H*44.45)+" mm";
+      used.textContent=total+" RU";
+      free.textContent=(H-total)+" RU";
+      vd.className="verdict "+(total>H?"bad":"ok");
+      vd.textContent=(total>H? (total-H)+"RU over" : (H-total)+"RU free");
+      // heaviest at the bottom: render sorted by weight, heavy last (bottom of a column-reverse list)
+      const sorted=[...load].sort((a,b)=>GEAR[b].w-GEAR[a].w);
+      view.innerHTML="";
+      const empty=Math.max(0,H-total);
+      if(empty) { const e=document.createElement("div"); e.className="ru empty";
+        e.innerHTML='<span>— free space —</span><small>'+empty+' RU</small>'; view.appendChild(e); }
+      sorted.forEach(k=>{
+        const G=GEAR[k], d=document.createElement("div");
+        d.className="ru";
+        d.style.background = G.w===3?"var(--berry)":G.w===2?"var(--sun)":"var(--mint)";
+        d.style.minHeight=(14+G.ru*7)+"px";
+        d.innerHTML='<span>'+G.i+' '+G.n+'</span><small>'+G.ru+' RU</small>';
+        view.appendChild(d);
+      });
+      if(total>H){
+        setCat(cat,"digi-alarm");
+        say.innerHTML="<b>That doesn't fit.</b> "+total+" RU of gear in a "+H+" RU rack. Raise the rack or take something out.";
+      } else if(load.length===0){
+        setCat(cat,"digi");
+        say.innerHTML="<b>1 RU = 44.45 mm = 1.75 inches.</b> A "+H+" RU rack is "+Math.round(H*44.45)+" mm tall. Add some gear.";
+      } else if(load.includes("amp")){
+        setCat(cat,"anna");
+        say.innerHTML="The <b>amplifier sits lowest</b> — heaviest equipment at the bottom keeps the centre of gravity <b>as low as practicable</b>, which matters on a freestanding rack.";
+      } else {
+        setCat(cat,"anna");
+        say.innerHTML="Leave RUs between devices for <b>ventilation and airflow</b>: cool air in the bottom, warm air out the top.";
+      }
+    }
+    pick.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      if(b.dataset.a==="clear") load=[]; else load.push(b.dataset.a);
+      draw();
+    });
+    rkH.addEventListener("input",draw);
+    draw();
+  }
+
+  /* ── boss fight · 9 questions, with ringside cats ── */
+  const QS=[
+    {q:"The path on which signal types travel is called _____.",
+     o:["Signal flow","Signal transfer route","Wires and cables","Audio and video control"],a:0,
+     fb:"<b>Signal flow.</b> Signal types are grouped so their path is easier to trace — and that path is the flow. \"Signal transfer route\" is invented."},
+    {q:"The purpose of shielding is to prevent _____ from mixing with the signal.",
+     o:["Insulation","Jackets","Conductors","Noise"],a:3,
+     fb:"<b>Noise.</b> The other three options are all layers of the cable itself — the shield exists to keep <em>interference</em> out."},
+    {q:"Which of the following differentiates cable from wire?",
+     o:["Cable contains a shield.","Cable contains only one conductor.","Cable contains multiple conductors.","Conductors are insulated."],a:2,
+     fb:"<b>A wire is a solo, a cable is a band.</b> A shield is optional; multiple conductors are the definition."},
+    {q:"Twisted-pair cable using balanced circuitry can help in _____.",
+     o:["Keeping noise from audio and video","Blocking static","Preserving the original transmission","Rejecting interference"],a:3,
+     fb:"<b>Rejecting interference</b> — common mode rejection, the same trick as Chapter 4's balanced circuits. Several options sound right; the book's words are these."},
+    {q:"Unless amplified or buffered, digital signals generally do not travel as far as _____ signals.",
+     o:["Wireless","Analog","Fiber","Cable"],a:1,
+     fb:"<b>Digital is tougher but shorter.</b> Digital resists noise better, but analog gets further before it needs help."},
+    {q:"Switchers _____.",
+     o:["Must have power to operate","Mix different inputs to a signal output","Connect multiple inputs simultaneously to one output","Allow the user to select one input from a number of inputs"],a:3,
+     fb:"<b>A switcher picks one, a mixer blends many.</b> Option B is the mixer, option C is also blending, and option A is wrong because switchers can be <b>passive</b>."},
+    {q:"A 4 × 2 matrix switcher _____.",
+     o:["Can connect any of four inputs to one or both of two outputs","Must have only one output connected at any given time","Can connect either of two inputs to any or all of four outputs","Has effectively eight outputs"],a:0,
+     fb:"<b>Ins first, outs second.</b> 4 inputs, 2 outputs. Option C has the numbers backwards — which is exactly the mistake the question is hunting for."},
+    {q:"An AV rack is a housing unit that _____ electronic equipment.",
+     o:["Identifies","Elevates","Protects and organizes","Cools"],a:2,
+     fb:"<b>Protects and organizes.</b> Cooling is something you have to <em>design into</em> a rack with airflow and spacing — it isn't what the rack is for."},
+    {q:"The inside of a typical AV rack is _____ wide, and the outside varies from _____.",
+     o:["1 foot (305mm); 2 to 7 feet (610mm to 2.13m)","19 inches (482.6mm); 21 to 25 inches (533 to 635mm)","25 inches (635mm); 19 to 21 inches (482.6 to 533mm)","21 inches (533mm); 19 to 25 inches (482.6 to 635mm)"],a:1,
+     fb:"<b>Nineteen inside, twenty-one to twenty-five outside.</b> Every option shuffles the same real numbers, so the order is the whole question."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const rsA=document.getElementById("rs-anna"), rsD=document.getElementById("rs-digi"),
+          rsAS=document.getElementById("rs-anna-say"), rsDS=document.getElementById("rs-digi-say");
+    const TAUNT=["it has unplugged something and won't say what.","…a crosspoint just failed.",
+      "the drain wire is loose.","hum on output three.","it's crash-switching itself.",
+      "the jacket is fraying.","two RUs from collapse.","one output left…","almost — hit it!",
+      "DEFEATED! ✧ 9 / 9 ✧"];
+    const CHEER=[
+      ["anna","Go on then.","digi","Statistically, you'll be fine."],
+      ["anna","That's one.","digi","Noted."],
+      ["anna","Keep going!","digi","Acceptable."],
+      ["anna","Ooh, nice.","digi-smug","I taught her that."],
+      ["anna-oh","You're actually doing it!","digi","Hmm."],
+      ["anna","Halfway-ish!","digi-smug","Better than expected."],
+      ["anna-oh","It's wobbling!","digi","Its shield has failed."],
+      ["anna-oh","Nearly!","digi-alarm","It's unstable!"],
+      ["anna-oh","One more!!","digi-alarm","Finish it!"],
+      ["anna","WE DID IT ✧","digi-smug","We. Interesting word choice."]
+    ];
+    let score=0, done=new Set();
+    function updateHP(){
+      const leftHP=QS.length-score;
+      hp.style.width=(leftHP/QS.length*100)+"%";
+      hp.className="hpfill"+(leftHP<=2?" dying":leftHP<=5?" hurt":"");
+      hpt.textContent="HP "+leftHP+" / "+QS.length+" — "+TAUNT[score];
+      const [ca,ta,cd,td]=CHEER[score];
+      setCat(rsA,ca); rsAS.textContent=ta;
+      setCat(rsD,cd); rsDS.textContent=td;
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / '+QS.length+'</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+
+})();
+</script>
+
+
+</body>
+</html>

@@ -69,6 +69,15 @@ const CHAPTERS = [
     icon: "🌐",
     desc: "CTS Chapter 6 — networks, from a cable in a wall to a packet crossing the planet. 11 levels, 5 interactive gadgets and a 15-HP boss.",
   },
+  {
+    src: "cafe-patchbay.html",
+    url: "cafe-patchbay",
+    n: 7,
+    cafe: "Café Patchbay",
+    topic: "Signal-management systems",
+    icon: "🔌",
+    desc: "CTS Chapter 7 — signal management: wire, cable, connectors, switchers and racks. 11 levels, 5 interactive gadgets and a 9-HP boss.",
+  },
 ];
 
 /** Pages that are not chapters. `chrome: "plain"` = top bar with the home link only. */
