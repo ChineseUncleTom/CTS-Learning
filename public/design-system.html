@@ -465,21 +465,51 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
 .seq-step.now{background:var(--sun); color:var(--line); border-color:var(--line)}
 .seq-step.wait{background:var(--lav); color:var(--tag-ink); border-color:var(--line)}
 
-/* .reach — how far each control path actually goes */
+/* .reach — how far each control path actually goes.
+   Two things are drawn in every track, and keeping them separate is the whole point:
+     .rr-cap  a pale region = how far THIS path can reach. Static, set once at build.
+     .rr-f    a solid needle = the distance you are ASKING for. Moves with the slider.
+   While the needle sits inside the pale region the path covers you, so it is mint. The
+   moment its nose pokes out past the limit it goes berry — you can watch each path give
+   out in turn as you drag, which is the lesson the numbers alone do not deliver. */
 .reach{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-2)}
-.rr{display:grid; grid-template-columns:7.5rem minmax(0,1fr) 5.5rem; gap:var(--sp-3);
+/* Each .rr is its own grid, so the value track must be a FIXED width -- `auto` would let
+   every row size its own column and the bars would stop sharing a baseline, which is fatal
+   for a chart whose whole job is comparing reach. 8.5rem/136px clears the longest nowrap
+   label ("1,200 m · 4,000 ft", 122px) with headroom for a wider mono fallback; the
+   original 5.5rem/88px let that text spill out through the side of the card. */
+.rr{display:grid; grid-template-columns:1.3rem 7.5rem minmax(0,1fr) 8.5rem; gap:var(--sp-3);
   align-items:center; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700}
-@media (max-width:640px){.rr{grid-template-columns:6rem minmax(0,1fr); }
-  .rr .rr-v{grid-column:2; text-align:right; margin-top:-.4rem}}
+@media (max-width:640px){.rr{grid-template-columns:1.3rem 6rem minmax(0,1fr)}
+  .rr .rr-v{grid-column:3; text-align:right; margin-top:-.4rem}}
+/* ✓ in --ink and ✗ in --berry, at 1.2rem/700 so both clear contrast in either theme.
+   Mint measured only 2.64:1 on --paper in light mode, so the tick does NOT carry the
+   colour story — the needle does. */
+.rr-m{font-style:normal; font-size:1.2rem; font-weight:700; line-height:1; text-align:center;
+  color:var(--ink)}
+.rr.out .rr-m{color:var(--berry)}
 .rr-k{color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.rr-t{height:20px; border:2px solid var(--line); border-radius:var(--r-pill);
-  background:var(--panel); overflow:hidden; position:relative}
-.rr-f{height:100%; background:var(--mint); transition:width .35s ease, background .2s ease}
-.rr.out .rr-f{background:var(--berry)}
-.rr.out .rr-k{color:var(--ink-faint)}
-.rr-v{color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap}
-.rr.out .rr-v{color:var(--berry)}
+.rr-t{position:relative; height:20px; border:2px solid var(--line);
+  border-radius:var(--r-pill); background:var(--panel); overflow:hidden}
+/* This path's limit, as a hard edge rather than a filled region: a pale --sun-soft band
+   measured 1.03:1 against --panel in light mode, i.e. invisible. The element still spans
+   0..limit (the JS sets its width) but only its right edge paints.
 
+   Both the edge and the needle outline use --ink, NOT the kit's usual --line. --line is by
+   definition the darkest colour on the card, so against the dark --panel track in dark mode
+   it measured 1.5:1 and vanished. --ink is the one token built to contrast with whatever
+   surface it sits on, so it reads in both themes -- and in light mode --ink and --line are
+   the same value, so nothing changes there. */
+.rr-cap{position:absolute; left:0; top:0; bottom:0; background:transparent;
+  border-right:3px solid var(--ink)}
+/* Outlined like every other sticker in the kit, so the needle stays legible whatever its
+   fill: mint on cream was only 2.24:1 unoutlined. */
+.rr-f{position:absolute; left:0; top:50%; transform:translateY(-50%); height:11px;
+  min-width:7px; border:2px solid var(--ink); border-radius:var(--r-pill);
+  background:var(--mint); transition:width .16s ease, background .18s ease}
+.rr.out .rr-f{background:var(--berry)}
+.rr.out .rr-k{color:var(--ink-soft)}
+.rr-v{color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap}
 /* .roomlit — the 0–10 V dimmer's room preview */
 .roomlit{position:relative; height:120px; border:var(--bw) solid var(--line);
   border-radius:var(--r); overflow:hidden; background:#1A1118;
@@ -1229,8 +1259,12 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
         <div class="seq-step"><span class="sq-n">4</span><span class="sq-t">Lower house light levels in the room</span><span class="sq-s">🌙</span></div>
       </div>
       <div class="reach">
-        <div class="rr"><span class="rr-k">RS-485</span><span class="rr-t"><span class="rr-f" style="width:100%"></span></span><span class="rr-v">1,200 m</span></div>
-        <div class="rr out"><span class="rr-k">Infrared</span><span class="rr-t"><span class="rr-f" style="width:34%"></span></span><span class="rr-v">9–12 m</span></div>
+        <div class="rr"><i class="rr-m">&#10003;</i><span class="rr-k">RS-485</span>
+          <span class="rr-t"><span class="rr-cap" style="width:98%;border-right:0"></span><span class="rr-f" style="width:47%"></span></span>
+          <span class="rr-v">1,200 m &middot; 4,000 ft</span></div>
+        <div class="rr out"><i class="rr-m">&#10007;</i><span class="rr-k">Infrared</span>
+          <span class="rr-t"><span class="rr-cap" style="width:35%"></span><span class="rr-f" style="width:47%"></span></span>
+          <span class="rr-v">9&ndash;12 m &middot; 30&ndash;40 ft</span></div>
       </div>
       <div class="log">
         <p><span class="lg-a">→</span><span class="lg-out">POWER ON PROJECTOR</span></p>
@@ -1250,7 +1284,16 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
         because the book's own example sequence contains &ldquo;Wait 10 minutes&rdquo; &mdash; waiting is a
         step, and it should look like one.</p>
       <p><b>.reach</b> compares distances on a <b>log scale</b>, so 5 m and 1,200 m are both visible in one
-        chart. An <code>.out</code> row dims its label and turns its bar berry.</p>
+        chart. Each track holds two things: a <b>limit edge</b> (<code>.rr-cap</code>) at how far that path
+        reaches, set once, and a <b>needle</b> (<code>.rr-f</code>) showing the distance being asked for,
+        driven live by the slider. The needle is the <em>same length in every row</em> &mdash; it is one
+        shared requirement &mdash; so dragging it makes each path flip to berry <code>.out</code> in turn as
+        it passes that row's edge. That progression is the lesson; a static bar chart does not deliver it.</p>
+      <p class="whennot"><b>The edge and the needle outline use <code>--ink</code>, not
+        <code>--line</code>.</b> <code>--line</code> is the darkest colour on the card by definition, so on
+        the dark <code>--panel</code> track it measures 1.5:1 and disappears. A pale filled band is worse
+        still: <code>--sun-soft</code> on <code>--panel</code> is 1.03:1 in light mode. <code>--ink</code> is
+        the one token built to contrast with whatever surface it sits on.</p>
       <p><b>.log</b> is a command/response console: <code>.lg-out</code> sent, <code>.lg-in</code>
         received, <code>.lg-none</code> for the silence you get from a unidirectional link.</p>
       <p class="when"><b>Reach for these when a fact is a sequence or a limit.</b> A table can list the
