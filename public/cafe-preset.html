@@ -706,7 +706,12 @@ footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:v
 
 /* .reach — how far each control path actually goes */
 .reach{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-2)}
-.rr{display:grid; grid-template-columns:7.5rem minmax(0,1fr) 5.5rem; gap:var(--sp-3);
+/* Each .rr is its own grid, so the value track must be a FIXED width -- `auto` would let
+   every row size its own third column and the bars would stop sharing a baseline, which is
+   fatal for a chart whose whole job is comparing bar lengths. 8.5rem/136px clears the
+   longest nowrap label ("1,200 m · 4,000 ft", 122px) with headroom for a wider mono
+   fallback; the original 5.5rem/88px let that text spill out through the side of the card. */
+.rr{display:grid; grid-template-columns:7.5rem minmax(0,1fr) 8.5rem; gap:var(--sp-3);
   align-items:center; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700}
 @media (max-width:640px){.rr{grid-template-columns:6rem minmax(0,1fr); }
   .rr .rr-v{grid-column:2; text-align:right; margin-top:-.4rem}}
