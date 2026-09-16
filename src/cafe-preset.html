@@ -1,0 +1,2707 @@
+<title>Café Preset</title>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   NEKO NOTES v2.0 — chibi café / study-RPG
+   Sticker outlines, screentone, speech bubbles, two cat mascots.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --line:#4A2B33; --stamp:#4A2B33;
+  --ink:#4A2B33; --ink-soft:#8A6470; --ink-faint:#B49AA3;
+  --ground:#FFF3E4; --paper:#FFFFFF; --paper-2:#FFF0F3; --panel:#FFE9CF;
+  --night:#3B2430;
+  --dot:rgba(74,43,51,.13);
+
+  --sun:#FF9F1A; --sun-soft:#FFE6B8;
+  --sakura:#FF6F91; --sakura-soft:#FFDCE4;
+  --mint:#12B39A;  --mint-soft:#CBF1E7;
+  --lav:#8A6BD9;   --lav-soft:#E4DCFA;
+  --berry:#EE3D5C; --berry-soft:#FFD6DC;
+  --sky:#54B8E8;   --sky-soft:#D5EDFA;
+  --tag-ink:#2A0E14;   /* ink for text on a saturated chip — passes AA on berry in both themes */
+
+  --f-display:"Arial Rounded MT Bold","Segoe UI",system-ui,-apple-system,"Trebuchet MS",sans-serif;
+  --f-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  --f-hand:"Comic Sans MS","Chalkboard SE","Marker Felt","Trebuchet MS",cursive;
+  --f-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
+
+  --t-xs:.72rem; --t-sm:.85rem; --t-base:1.0625rem; --t-md:1.18rem;
+  --t-lg:1.45rem; --t-xl:1.95rem; --t-2xl:2.6rem; --t-4xl:4.2rem;
+
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-24:6rem;
+  --r:18px; --r-lg:26px; --r-pill:999px;
+  --bw:3px;
+  --pop:4px 4px 0 var(--stamp);
+  --pop-lg:6px 6px 0 var(--stamp);
+  --measure:62ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --line:#0F0A12; --stamp:#0F0A12;
+    --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+    --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+    --night:#150E15;
+    --dot:rgba(255,255,255,.07);
+    --sun:#FFB84D; --sun-soft:#5A3E1C;
+    --sakura:#FF8FAB; --sakura-soft:#54293A;
+    --mint:#3FD8BC; --mint-soft:#17453E;
+    --lav:#B39BF5; --lav-soft:#33265A;
+    --berry:#FF7089; --berry-soft:#54222F;
+    --sky:#7FD0F5; --sky-soft:#1D3D50;
+  }
+}
+:root[data-theme="dark"]{
+  --line:#0F0A12; --stamp:#0F0A12;
+  --ink:#FFEEF3; --ink-soft:#C9A9B6; --ink-faint:#8E7280;
+  --ground:#241823; --paper:#33222F; --paper-2:#3C2634; --panel:#42293A;
+  --night:#150E15;
+  --dot:rgba(255,255,255,.07);
+  --sun:#FFB84D; --sun-soft:#5A3E1C;
+  --sakura:#FF8FAB; --sakura-soft:#54293A;
+  --mint:#3FD8BC; --mint-soft:#17453E;
+  --lav:#B39BF5; --lav-soft:#33265A;
+  --berry:#FF7089; --berry-soft:#54222F;
+  --sky:#7FD0F5; --sky-soft:#1D3D50;
+}
+
+/* ── base ── */
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); font-family:var(--f-body);
+  font-size:var(--t-base); line-height:1.7; -webkit-font-smoothing:antialiased;
+  background:var(--ground);
+  background-image:radial-gradient(var(--dot) 1.4px, transparent 1.5px);
+  background-size:10px 10px;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-family:var(--f-display); font-weight:800; line-height:1.15; text-wrap:balance}
+a{color:var(--sakura)}
+:focus-visible{outline:3px solid var(--sun); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+.wrap{max-width:72rem; margin:0 auto; padding:0 var(--sp-4)}
+.prose{max-width:var(--measure)}
+.prose > * + *{margin-top:var(--sp-4)}
+.stack{display:flex; flex-direction:column}
+.g-2{gap:var(--sp-2)}.g-3{gap:var(--sp-3)}.g-4{gap:var(--sp-4)}.g-6{gap:var(--sp-6)}.g-8{gap:var(--sp-8)}
+
+/* ═══ HERO — manga title card ═══ */
+.hero{position:relative; overflow:hidden; border-bottom:var(--bw) solid var(--line);
+  background:linear-gradient(170deg,var(--sun-soft),var(--sakura-soft) 55%,var(--lav-soft))}
+.scene{position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block;
+  image-rendering:pixelated; image-rendering:crisp-edges}
+.hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:46px; z-index:1;
+  pointer-events:none; background:linear-gradient(to bottom, transparent, var(--ground))}
+.hero-in{position:relative; z-index:2; padding:var(--sp-16) 0 var(--sp-12);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-8); align-items:center}
+@media (max-width:880px){.hero-in{grid-template-columns:1fr}}
+
+.tab{display:inline-flex; align-items:center; gap:var(--sp-2); background:var(--paper);
+  border:var(--bw) solid var(--line); border-radius:var(--r-pill); box-shadow:var(--pop);
+  padding:.35rem .9rem; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  transform:rotate(-2deg)}
+.tab i{width:9px;height:9px;border-radius:50%;background:var(--mint);
+  border:2px solid var(--line); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-size:clamp(2.9rem,11vw,var(--t-4xl)); letter-spacing:-.02em; line-height:.92;
+  margin:var(--sp-4) 0 0; color:var(--paper);
+  text-shadow:
+    var(--bw) var(--bw) 0 var(--line), calc(var(--bw)*-1) var(--bw) 0 var(--line),
+    var(--bw) calc(var(--bw)*-1) 0 var(--line), calc(var(--bw)*-1) calc(var(--bw)*-1) 0 var(--line),
+    0 var(--bw) 0 var(--line), 0 calc(var(--bw)*-1) 0 var(--line),
+    var(--bw) 0 0 var(--line), calc(var(--bw)*-1) 0 0 var(--line),
+    9px 9px 0 var(--sakura), 10px 10px 0 var(--line)}
+.hero h1 small{display:block; font-size:.3em; letter-spacing:.18em; margin-bottom:.4em;
+  color:var(--paper); text-shadow:2px 2px 0 var(--line),-2px 2px 0 var(--line),2px -2px 0 var(--line),-2px -2px 0 var(--line)}
+.hero-sub{font-family:var(--f-hand); font-size:var(--t-md); max-width:40ch; margin-top:var(--sp-6);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); transform:rotate(-.6deg)}
+.hero-sub b{color:var(--sakura)}
+
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chip{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; padding:.3rem .7rem;
+  border-radius:var(--r-pill); background:var(--paper); border:2px solid var(--line);
+  color:var(--ink); text-decoration:none; box-shadow:2px 2px 0 var(--stamp);
+  transition:transform .14s, background .14s}
+.chip:hover{transform:translate(-1px,-2px); background:var(--sun-soft)}
+
+.hero-cats{display:flex; gap:var(--sp-2); align-items:flex-end}
+.hero-cats svg{width:clamp(96px,17vw,150px); height:auto}
+.bob{animation:bob 3.4s ease-in-out infinite}
+.bob2{animation:bob 3.4s ease-in-out .7s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ═══ SECTIONS ═══ */
+main{padding:var(--sp-12) 0 var(--sp-24)}
+section + section{margin-top:var(--sp-16)}
+.head{margin-bottom:var(--sp-6)}
+.lv{display:inline-block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--line); background:var(--sun);
+  border:2px solid var(--line); border-radius:var(--r-pill); padding:.25rem .8rem;
+  box-shadow:2px 2px 0 var(--stamp); margin-bottom:var(--sp-3)}
+h2{font-size:clamp(1.7rem,5.5vw,var(--t-2xl)); letter-spacing:-.01em}
+h2 .kao{font-family:var(--f-mono); font-size:.45em; color:var(--sakura); font-weight:400;
+  margin-left:.5em; white-space:nowrap; vertical-align:middle}
+/* kaomoji in running text — must never break across lines mid-face */
+.kmj{white-space:nowrap}
+h3{font-size:var(--t-lg)}
+.lede{font-size:var(--t-md); color:var(--ink-soft); max-width:var(--measure); margin-top:var(--sp-3)}
+
+/* wavy divider */
+.wave{display:block; width:100%; height:20px; color:var(--line); margin:var(--sp-12) 0; opacity:.55}
+.wave svg{width:100%;height:100%}
+
+/* ═══ SPEECH BUBBLE ═══ */
+.say{display:flex; gap:var(--sp-3); align-items:flex-end; margin:var(--sp-4) 0}
+.say.right{flex-direction:row-reverse}
+.say-cat{width:74px; height:74px; flex:none}
+.bubble{position:relative; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-6); box-shadow:var(--pop);
+  font-family:var(--f-hand); font-size:var(--t-base); max-width:48ch}
+.bubble b{color:var(--sakura)}
+.bubble::before,.bubble::after{content:""; position:absolute; bottom:14px; width:0; height:0;
+  border-style:solid}
+.bubble::before{left:calc(var(--bw)*-1 - 15px); border-width:9px 15px 9px 0;
+  border-color:transparent var(--line) transparent transparent}
+.bubble::after{left:-11px; border-width:6px 11px 6px 0;
+  border-color:transparent var(--paper) transparent transparent}
+.say.right .bubble::before{left:auto; right:calc(var(--bw)*-1 - 15px); border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--line)}
+.say.right .bubble::after{left:auto; right:-11px; border-width:6px 0 6px 11px;
+  border-color:transparent transparent transparent var(--paper)}
+
+/* ═══ SKILL GET — the mnemonic ═══ */
+/* the café menu board: wooden frame + wiped white board + marker tray */
+.skill{position:relative; background:var(--sun-soft); border:var(--bw) solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--pop-lg);
+  padding:calc(var(--sp-8) + 6px) var(--sp-8) calc(var(--sp-8) + 10px);
+  margin-top:var(--sp-6); overflow:hidden}
+.skill::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  top:12px; left:12px; right:12px; bottom:26px;
+  background:var(--paper);
+  background-image:repeating-linear-gradient(var(--paper) 0 30px, var(--panel) 30px 31px);
+  border:2px solid var(--line); border-radius:10px;
+  box-shadow:inset 0 3px 10px rgba(74,43,51,.10)}
+/* marker tray along the bottom rail */
+.skill::after{content:""; position:absolute; z-index:2; pointer-events:none;
+  left:12px; right:12px; bottom:8px; height:10px;
+  background-color:var(--sun);
+  background-image:linear-gradient(var(--sakura),var(--sakura)),linear-gradient(var(--mint),var(--mint));
+  background-size:30px 5px, 22px 5px;
+  background-position:right 14px center, right 52px center;
+  background-repeat:no-repeat;
+  border:2px solid var(--line); border-radius:4px}
+.skill > *{position:relative; z-index:1}
+.skill-tag{position:absolute; top:-2px; left:var(--sp-6); z-index:2;
+  background:var(--berry); color:var(--tag-ink); font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; letter-spacing:.14em; padding:.3rem .8rem;
+  border:var(--bw) solid var(--line); border-top:0; border-radius:0 0 12px 12px}
+.skill q{display:block; font-family:var(--f-display); font-size:clamp(1.3rem,4vw,var(--t-xl));
+  quotes:"「" "」"; color:var(--ink); line-height:1.3; text-align:center; margin:var(--sp-2) 0}
+.skill .why{font-size:var(--t-sm); color:var(--ink-soft); margin-top:var(--sp-4);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.skill .why b{color:var(--ink)}
+
+/* ═══ STICKY NOTE — jokes & traps ═══ */
+.note{position:relative; background:var(--paper-2); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-6) var(--sp-6) var(--sp-4);
+  font-family:var(--f-hand); font-size:var(--t-sm); margin-top:var(--sp-4);
+  transform:rotate(-.5deg)}
+.note:nth-of-type(even){transform:rotate(.6deg)}
+.note::before{content:""; position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:88px; height:22px; background:var(--mint-soft); border:2px solid var(--line); border-radius:3px; opacity:.95}
+.note b{color:var(--berry)}
+.note-h{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--lav); margin-bottom:var(--sp-2)}
+
+/* ═══ CAT CARDS ═══ */
+.duo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-6)}
+@media (max-width:780px){.duo{grid-template-columns:1fr}}
+.cat-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.cat-card.analog{--tone:var(--lav); --tone-soft:var(--lav-soft)}
+.cat-card.digital{--tone:var(--mint); --tone-soft:var(--mint-soft)}
+.cat-top{display:flex; align-items:center; gap:var(--sp-4); background:var(--tone-soft);
+  border:2px solid var(--line); border-radius:var(--r); padding:var(--sp-3) var(--sp-4)}
+.cat-art{width:88px; height:88px; flex:none}
+.cat-name{font-family:var(--f-display); font-size:var(--t-xl); color:var(--tone); line-height:1.05}
+.cat-role{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  color:var(--ink-soft); margin-top:var(--sp-1)}
+.cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
+  font-size:var(--t-sm)}
+/* Not a flex row: every inline child (each <b>) would become its own flex item, and a
+   nowrap flex container's min-content is the SUM of its items. A list item with two bold
+   phrases then refused to wrap and forced the whole card wider than a phone screen.
+   Normal text flow + an out-of-flow bullet lets it wrap word by word instead. */
+.cat-list li{position:relative; padding-left:1.2em}
+.cat-list li::before{content:"★"; position:absolute; left:0; top:.05em;
+  color:var(--tone); font-size:.85em}
+.cat-list b{color:var(--ink)}
+
+/* ═══ STAT BLOCK — the nerd receipt ═══ */
+.stats{background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); overflow:hidden; font-family:var(--f-mono); font-size:var(--t-sm)}
+.stats-h{display:flex; justify-content:space-between; gap:var(--sp-3); padding:.5rem var(--sp-4);
+  background:var(--sun); color:var(--line); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; border-bottom:var(--bw) solid var(--line)}
+.stats-b{padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); color:#FFE9D6}
+.row{display:flex; align-items:baseline; gap:var(--sp-2)}
+.row-k{color:#C3A4B0; min-width:0}
+.row-d{flex:1 1 1rem; border-bottom:2px dotted rgba(255,233,214,.28); transform:translateY(-.3em); min-width:.5rem}
+.row-v{color:#FFE9D6; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; min-width:0}
+.row.tot{border-top:2px solid rgba(255,233,214,.35); padding-top:var(--sp-2); margin-top:var(--sp-1)}
+.row.tot .row-v{color:var(--sun); font-size:var(--t-md)}
+.stats-f{padding:.5rem var(--sp-4); border-top:2px dashed rgba(255,233,214,.28);
+  color:#C3A4B0; font-size:var(--t-xs)}
+
+/* ═══ GADGET — interactive instruments ═══ */
+.gadget{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4)}
+.gadget-h{display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.gadget-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.verdict{font-family:var(--f-display); font-size:var(--t-sm); padding:.25rem .8rem;
+  border-radius:var(--r-pill); border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp)}
+.verdict.ok{background:var(--mint); color:var(--line)}
+.verdict.bad{background:var(--berry); color:var(--tag-ink)}
+.screen{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--panel); overflow:hidden}
+.screen canvas{display:block; width:100%; height:auto}
+.ctl{display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap}
+.ctl label{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft); white-space:nowrap}
+.ctl output{font-family:var(--f-display); font-size:var(--t-md); color:var(--berry);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+input[type=range]{flex:1 1 11rem; min-width:9rem; accent-color:var(--sakura); height:1.8rem}
+select,input[type=number]{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700;
+  padding:.35rem .5rem; background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); border-radius:10px}
+.ramp{height:58px; border:var(--bw) solid var(--line); border-radius:var(--r)}
+.gsay{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.gsay b{color:var(--berry)}
+.readout{display:flex; gap:var(--sp-4); flex-wrap:wrap}
+.readout div{background:var(--sun-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 8rem}
+.readout span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.readout b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ═══ MENU CARDS ═══ */
+.menu{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr)); gap:var(--sp-4)}
+.item{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6) var(--sp-6); display:flex;
+  flex-direction:column; gap:var(--sp-2)}
+.item-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.item-name{font-family:var(--f-display); font-size:var(--t-md)}
+.item p{font-size:var(--t-sm); color:var(--ink-soft)}
+.item.keep{--tone:var(--mint)} .item.toss{--tone:var(--berry)}
+
+/* ═══ STORY RAIL — how a long passage gets broken up ═══ */
+.story{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,16rem); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-6)}
+@media (max-width:880px){.story{grid-template-columns:1fr}}
+.story-text{display:flex; flex-direction:column; gap:var(--sp-4); max-width:var(--measure)}
+.story-text p{font-size:var(--t-md)}
+.story-lead{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura));
+  display:flex; align-items:baseline; gap:var(--sp-3)}
+.story-lead span:first-child{font-size:1.3em; line-height:1}
+.beat{display:flex; gap:var(--sp-3); align-items:flex-start}
+.beat-i{font-size:1.35rem; line-height:1.35; flex:none; width:1.6em; text-align:center}
+
+/* highlighter pen — sits behind the text, never over it */
+.hl,.hl-p,.hl-m{padding:0 .14em; border-radius:3px;
+  background:linear-gradient(transparent 56%, var(--sun-soft) 56% 94%, transparent 94%)}
+.hl-p{background:linear-gradient(transparent 56%, var(--sakura-soft) 56% 94%, transparent 94%)}
+.hl-m{background:linear-gradient(transparent 56%, var(--mint-soft) 56% 94%, transparent 94%)}
+
+/* figure card in the rail */
+.fig{margin:0; background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-3)}
+.fig + .fig{margin-top:var(--sp-4)}
+.fig-t{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tone,var(--sakura))}
+.fig svg{width:100%; height:auto; display:block}
+.fig figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-2)}
+
+.tablewrap{overflow-x:auto; border:var(--bw) solid var(--line); border-radius:var(--r);
+  background:var(--paper); box-shadow:var(--pop)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-mono); font-size:var(--t-sm)}
+th,td{padding:.55rem var(--sp-4); text-align:left; border-bottom:2px solid var(--panel); white-space:nowrap}
+th{background:var(--lav-soft); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); border-bottom:var(--bw) solid var(--line)}
+td:not(:first-child){font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--sun-soft)}
+tr.hi td{background:var(--sakura-soft); font-weight:700}
+
+/* ═══ BOSS FIGHT (quiz) ═══ */
+.boss{position:sticky; top:var(--sp-2); z-index:6;
+  background:var(--night); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6); display:flex; align-items:center;
+  gap:var(--sp-4); flex-wrap:nowrap; color:#FFE9D6; margin-bottom:var(--sp-6);
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease}
+.boss svg{width:70px;height:70px;flex:none; transition:width .18s ease, height .18s ease}
+/* once it lifts off and floats, it shrinks out of the way */
+.boss.stuck{padding:var(--sp-3) var(--sp-4); border-radius:var(--r-pill); box-shadow:var(--pop)}
+.boss.stuck svg{width:40px;height:40px}
+.boss.stuck .boss-name{font-size:var(--t-sm)}
+.boss.stuck .hpbar{height:14px; margin-top:3px}
+.boss.stuck .hptext{display:none}
+.boss-info{flex:1 1 14rem; min-width:0}
+.boss-name{font-family:var(--f-display); font-size:var(--t-md); color:var(--sun)}
+.hpbar{height:20px; background:rgba(255,233,214,.16); border:2px solid #FFE9D6;
+  border-radius:var(--r-pill); overflow:hidden; margin-top:var(--sp-2)}
+.hpfill{height:100%; width:100%; background:var(--mint); transition:width .45s cubic-bezier(.2,.9,.3,1)}
+.hpfill.hurt{background:var(--sun)} .hpfill.dying{background:var(--berry)}
+.hptext{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; margin-top:var(--sp-1); color:#C3A4B0}
+
+.quiz{display:flex; flex-direction:column; gap:var(--sp-6)}
+.q{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop); padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-3)}
+.q-num{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  color:var(--paper); background:var(--lav); border-radius:var(--r-pill); padding:.2rem .7rem;
+  align-self:flex-start}
+.q-text{font-family:var(--f-display); font-size:var(--t-md); line-height:1.45}
+.opts{display:grid; gap:var(--sp-2)}
+.opt{display:flex; align-items:baseline; gap:var(--sp-3); text-align:left; width:100%;
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); padding:.55rem var(--sp-4); cursor:pointer;
+  box-shadow:2px 2px 0 var(--stamp); transition:transform .12s, background .16s}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--stamp); background:var(--sun-soft)}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--f-mono); font-size:var(--t-sm); font-weight:700; color:var(--ink-soft)}
+.opt.right{background:var(--mint); color:var(--line)} .opt.right .key{color:var(--line)}
+.opt.wrong{background:var(--berry); color:var(--tag-ink)} .opt.wrong .key{color:var(--tag-ink)}
+.q-fb{display:none; font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  border-top:2px dashed var(--line); padding-top:var(--sp-3)}
+.q-fb.show{display:block}
+.q-fb b{color:var(--berry)}
+.tally{position:sticky; bottom:var(--sp-4); z-index:5; width:fit-content; margin:var(--sp-6) auto 0;
+  display:flex; align-items:center; gap:var(--sp-3); flex-wrap:wrap; justify-content:center;
+  background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-pill);
+  box-shadow:var(--pop); padding:.5rem 1.1rem; font-family:var(--f-mono);
+  font-size:var(--t-sm); font-weight:700}
+.tally b{font-family:var(--f-display); color:var(--berry); font-size:var(--t-md)}
+.tally button{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; background:var(--sakura); color:var(--line); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.25rem .8rem; cursor:pointer}
+.tally button:hover{background:var(--sun)}
+
+/* ═══ CHEAT SHEET ═══ */
+.sheet{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-8) var(--sp-6)}
+.sheet ol{margin:0; padding-left:1.4rem; display:flex; flex-direction:column; gap:var(--sp-4)}
+.sheet li{font-size:var(--t-base)}
+.sheet li::marker{font-family:var(--f-display); color:var(--sakura); font-weight:800}
+.sheet li b{color:var(--berry)}
+.sheet code{font-family:var(--f-mono); font-size:.9em; background:var(--sun-soft);
+  border:2px solid var(--line); border-radius:8px; padding:.05em .4em; color:var(--ink)}
+
+footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:var(--bw) dashed var(--line);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-soft)}
+
+/* ═══ CH4 ADDITIONS ═══════════════════════════════════════ */
+
+/* the signal chain — a row of stages with levels */
+.chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:var(--sp-2); margin-top:var(--sp-6)}
+.chain-step{flex:1 1 8.5rem; min-width:0; background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-1); position:relative}
+.chain-step .cs-i{font-size:1.5rem; line-height:1}
+.chain-step .cs-n{font-family:var(--f-display); font-size:var(--t-sm); line-height:1.2}
+.chain-step .cs-v{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--tone,var(--berry))}
+.chain-step.mic{--tone:var(--lav)} .chain-step.line{--tone:var(--sun)} .chain-step.spk{--tone:var(--berry)}
+.chain-arrow{align-self:center; font-family:var(--f-mono); font-weight:700; color:var(--ink-faint); flex:none}
+@media (max-width:720px){.chain-arrow{display:none}}
+
+/* a compact spec list used for mic types, processors, applications */
+.specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr)); gap:var(--sp-4)}
+.spec-card{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-5,1.25rem) var(--sp-5,1.25rem);
+  display:flex; flex-direction:column; gap:var(--sp-2); border-top:5px solid var(--tone,var(--sakura))}
+.spec-card h4{font-family:var(--f-display); font-size:var(--t-md)}
+.spec-card .sc-tag{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tone,var(--sakura))}
+.spec-card p{font-size:var(--t-sm); color:var(--ink-soft)}
+.spec-card ul{margin:0; padding-left:1.1rem; font-size:var(--t-sm); color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:var(--sp-1)}
+.spec-card b{color:var(--ink)}
+
+/* versus block — two poles side by side */
+.vs{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:var(--sp-4);
+  align-items:center; margin-top:var(--sp-4)}
+@media (max-width:760px){.vs{grid-template-columns:1fr} .vs-mid{justify-self:center}}
+.vs-mid{font-family:var(--f-display); font-size:var(--t-lg); color:var(--paper);
+  background:var(--line); border-radius:50%; width:2.6em; height:2.6em;
+  display:grid; place-items:center; flex:none}
+
+/* the polar-pattern picker */
+.picker{display:flex; flex-wrap:wrap; gap:var(--sp-2)}
+.pick{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.04em;
+  padding:.35rem .7rem; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink);
+  border:2px solid var(--line); box-shadow:2px 2px 0 var(--stamp); cursor:pointer;
+  transition:transform .12s, background .16s}
+.pick:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pick[aria-pressed="true"]{background:var(--sakura); color:var(--tag-ink); transform:translate(-1px,-1px)}
+
+/* dB / value readouts inside gadgets */
+.dial{display:flex; gap:var(--sp-3); flex-wrap:wrap}
+.dial div{background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); display:flex; flex-direction:column; flex:1 1 7rem}
+.dial span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.dial b{font-family:var(--f-display); font-size:var(--t-lg); color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* grouped cheat sheet */
+.sheet h4{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--paper); background:var(--sakura); border:2px solid var(--line);
+  border-radius:var(--r-pill); padding:.2rem .8rem; display:inline-block; margin:var(--sp-6) 0 var(--sp-3)}
+.sheet h4:first-child{margin-top:0}
+
+/* a wide callout for the one big formula of a section */
+.formula{background:var(--night); color:#FFE9D6; border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6);
+  font-family:var(--f-mono); font-size:var(--t-md); font-weight:700; text-align:center;
+  overflow-x:auto; margin-top:var(--sp-4)}
+.formula em{color:var(--sun); font-style:normal}
+.formula small{display:block; font-size:var(--t-xs); color:#C3A4B0; font-weight:400; margin-top:var(--sp-2)}
+
+/* ═══ CH5 ADDITIONS ═══════════════════════════════════════ */
+
+/* the 2×2 light-units matrix — the hardest table in the chapter */
+.matrix{display:grid; grid-template-columns:auto 1fr 1fr; gap:var(--sp-2); margin-top:var(--sp-4)}
+@media (max-width:700px){.matrix{grid-template-columns:1fr}}
+.mx-h{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:center;
+  justify-content:center; text-align:center; padding:var(--sp-2)}
+.mx-side{writing-mode:horizontal-tb; background:var(--paper-2); border:2px solid var(--line);
+  border-radius:var(--r); padding:var(--sp-3); display:flex; flex-direction:column;
+  justify-content:center; gap:2px; min-width:8.5rem}
+.mx-side b{font-family:var(--f-display); font-size:var(--t-base); color:var(--tone,var(--sakura))}
+.mx-side span{font-family:var(--f-mono); font-size:var(--t-xs); color:var(--ink-soft)}
+.mx-cell{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  border-top:5px solid var(--tone,var(--sakura))}
+.mx-cell .u{font-family:var(--f-display); font-size:var(--t-lg); color:var(--tone,var(--sakura))}
+.mx-cell .d{font-family:var(--f-mono); font-size:var(--t-sm); color:var(--ink)}
+.mx-cell .n{font-size:var(--t-sm); color:var(--ink-soft)}
+.mx-cell.us{--tone:var(--berry)} .mx-cell.si{--tone:var(--mint)}
+
+/* colour-temperature preview strip */
+.ctbar{height:64px; border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:flex}
+.ctbar div{flex:1; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:rgba(0,0,0,.55)}
+.ctswatch{height:96px; border:var(--bw) solid var(--line); border-radius:var(--r);
+  display:grid; place-items:center; font-family:var(--f-display); font-size:var(--t-lg);
+  color:rgba(0,0,0,.6); text-shadow:0 1px 0 rgba(255,255,255,.45)}
+
+/* contrast-ratio demo panel */
+.crdemo{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  display:grid; grid-template-columns:repeat(6,1fr); height:90px}
+.crdemo div{display:grid; place-items:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700}
+
+/* a small inline key/value strip used under figures */
+.kv{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-2)}
+.kv span{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .6rem; color:var(--ink)}
+
+
+/* ═══ CH7 ADDITIONS ═══════════════════════════════════════ */
+
+/* .chat — a multi-turn exchange, tighter than stacked .say blocks */
+.chat{display:flex; flex-direction:column; gap:var(--sp-2); margin:var(--sp-6) 0}
+.chat .say{margin:0}
+.chat .say + .say{margin-top:calc(var(--sp-2) * -1 + 6px)}
+.chat-who{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-faint); margin-left:calc(74px + var(--sp-3))}
+.chat.right-lead .chat-who{margin-left:0; margin-right:calc(74px + var(--sp-3)); text-align:right}
+
+/* .catline — a live reaction inside a gadget, driven by the gadget's state */
+.catline{display:flex; align-items:center; gap:var(--sp-3);
+  background:var(--paper-2); border:2px dashed var(--line); border-radius:var(--r);
+  padding:var(--sp-2) var(--sp-4); margin-top:var(--sp-2)}
+.catline svg{width:52px; height:52px; flex:none}
+.catline p{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft)}
+.catline p b{color:var(--ink)}
+
+/* .onion — the cable cross-section, four layers */
+.onion{display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--sp-6); align-items:center}
+@media (max-width:760px){.onion{grid-template-columns:1fr}}
+.onion svg{width:min(260px,100%); height:auto; justify-self:center}
+.onion-list{display:flex; flex-direction:column; gap:var(--sp-2)}
+.layerbtn{display:grid; grid-template-columns:auto 1fr; gap:var(--sp-3); align-items:center;
+  text-align:left; width:100%; cursor:pointer;
+  background:var(--paper-2); border:2px solid var(--line); border-radius:var(--r);
+  padding:.5rem var(--sp-4); box-shadow:2px 2px 0 var(--stamp);
+  font-family:var(--f-body); font-size:var(--t-base); color:var(--ink);
+  transition:transform .12s ease, background .16s ease}
+.layerbtn:hover{transform:translate(-2px,-2px); background:var(--sun-soft)}
+.layerbtn[aria-pressed="true"]{background:var(--tone,var(--sakura)); color:var(--tag-ink);
+  border-width:var(--bw); transform:translate(-2px,-2px)}
+.layerbtn i{font-style:normal; font-size:1.4rem; line-height:1}
+.layerbtn b{font-family:var(--f-display); font-size:var(--t-md); display:block; line-height:1.15}
+.layerbtn small{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; opacity:.8}
+
+/* .rack — the rack-unit calculator display */
+.rackview{border:var(--bw) solid var(--line); border-radius:var(--r); overflow:hidden;
+  background:var(--night); padding:var(--sp-3); display:flex; flex-direction:column; gap:3px}
+.ru{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  border:2px solid var(--line); border-radius:6px; padding:.3rem var(--sp-3);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--line)}
+.ru small{opacity:.75}
+.ru.empty{background:transparent; border-style:dashed; color:#8E7280}
+
+/* .matrix-grid — the switcher crosspoint grid */
+.xgrid{display:grid; gap:4px; justify-content:start; margin-top:var(--sp-3); overflow-x:auto;
+  padding-bottom:var(--sp-2)}
+.xcell{width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
+  border:2px solid var(--line); border-radius:8px; background:var(--paper-2);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink);
+  transition:background .14s ease, transform .1s ease}
+.xcell:hover{transform:translate(-1px,-1px); background:var(--sun-soft)}
+.xcell.on{background:var(--mint); color:var(--line)}
+.xcell.hdr{border:none; background:transparent; cursor:default; color:var(--ink-soft)}
+.xcell.hdr:hover{transform:none; background:transparent}
+
+/* ringside cats at the boss fight */
+.ringside{display:flex; align-items:flex-end; justify-content:center; gap:var(--sp-4);
+  margin-bottom:var(--sp-4)}
+.ringside figure{margin:0; display:flex; flex-direction:column; align-items:center; gap:var(--sp-2);
+  flex:0 0 auto}
+.ringside svg{width:76px; height:76px}
+.ringside figcaption{font-family:var(--f-hand); font-size:var(--t-sm); color:var(--ink-soft);
+  background:var(--paper); border:2px solid var(--line); border-radius:var(--r-pill);
+  padding:.2rem .7rem; box-shadow:2px 2px 0 var(--stamp); white-space:nowrap;
+  max-width:42vw; overflow:hidden; text-overflow:ellipsis}
+
+/* ═══ CHANT BOARD — the shout-along block at the end of the song ═══ */
+/* Used by every chapter from Ch4 on. The markup is .board > h3 + .lyric > .lyric-line > strong. */
+.board{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6) var(--sp-6) var(--sp-8)}
+.lyric{display:flex; flex-direction:column; gap:var(--sp-3); margin-top:var(--sp-4);
+  counter-reset:chant}
+.lyric-line{position:relative; counter-increment:chant; margin:0;
+  background:var(--paper-2); border:2px solid var(--line); border-left:9px solid var(--tone,var(--sakura));
+  border-radius:var(--r); box-shadow:2px 2px 0 var(--stamp);
+  padding:var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-4) + 1.4rem)}
+.lyric-line::before{content:counter(chant); position:absolute; left:var(--sp-3); top:.55rem;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-faint)}
+.lyric-line strong{font-family:var(--f-display); font-size:var(--t-base); line-height:1.4;
+  font-weight:800}
+.lyric-line:nth-child(6n+1){--tone:var(--sakura)}
+.lyric-line:nth-child(6n+2){--tone:var(--sun)}
+.lyric-line:nth-child(6n+3){--tone:var(--mint)}
+.lyric-line:nth-child(6n+4){--tone:var(--lav)}
+.lyric-line:nth-child(6n+5){--tone:var(--sky)}
+.lyric-line:nth-child(6n+6){--tone:var(--berry)}
+
+/* ═══ CH8 ADDITIONS ═══════════════════════════════════════ */
+
+/* .bigbtn — the one button this whole chapter is about */
+.bigbtn{display:flex; align-items:center; gap:var(--sp-4); width:100%; cursor:pointer;
+  font-family:var(--f-display); font-size:var(--t-lg); color:var(--tag-ink);
+  background:var(--sun); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-4) var(--sp-6); text-align:left;
+  transition:transform .1s ease, box-shadow .1s ease, background .16s ease}
+.bigbtn:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:8px 8px 0 var(--stamp)}
+.bigbtn:active:not(:disabled){transform:translate(3px,3px); box-shadow:1px 1px 0 var(--stamp)}
+.bigbtn:disabled{background:var(--panel); color:var(--ink-soft); cursor:default; box-shadow:var(--pop)}
+.bigbtn i{font-style:normal; font-size:1.8rem; line-height:1; flex:none}
+.bigbtn small{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; opacity:.75}
+
+/* .seq — a program: the numbered functions, firing in order */
+.seq{display:flex; flex-direction:column; gap:3px; border:var(--bw) solid var(--line);
+  border-radius:var(--r); background:var(--night); padding:var(--sp-3);
+  max-height:23rem; overflow-y:auto}
+.seq-step{display:grid; grid-template-columns:2rem minmax(0,1fr) auto; gap:var(--sp-2);
+  align-items:center; border:2px solid transparent; border-radius:8px; padding:.3rem var(--sp-2);
+  color:#A89099; transition:background .2s ease, color .2s ease, border-color .2s ease}
+.seq-step .sq-n{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  text-align:right; opacity:.75}
+.seq-step .sq-t{font-size:var(--t-sm); min-width:0}
+.seq-step .sq-s{font-size:1rem; line-height:1; flex:none}
+.seq-step.done{color:#FFE9D6}
+.seq-step.now{background:var(--sun); color:var(--line); border-color:var(--line)}
+.seq-step.wait{background:var(--lav); color:var(--tag-ink); border-color:var(--line)}
+
+/* .reach — how far each control path actually goes */
+.reach{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-2)}
+.rr{display:grid; grid-template-columns:7.5rem minmax(0,1fr) 5.5rem; gap:var(--sp-3);
+  align-items:center; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700}
+@media (max-width:640px){.rr{grid-template-columns:6rem minmax(0,1fr); }
+  .rr .rr-v{grid-column:2; text-align:right; margin-top:-.4rem}}
+.rr-k{color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rr-t{height:20px; border:2px solid var(--line); border-radius:var(--r-pill);
+  background:var(--panel); overflow:hidden; position:relative}
+.rr-f{height:100%; background:var(--mint); transition:width .35s ease, background .2s ease}
+.rr.out .rr-f{background:var(--berry)}
+.rr.out .rr-k{color:var(--ink-soft)}
+.rr-v{color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap}
+.rr.out .rr-v{color:var(--ink-soft)}
+
+/* .roomlit — the 0–10 V dimmer's room preview */
+.roomlit{position:relative; height:120px; border:var(--bw) solid var(--line);
+  border-radius:var(--r); overflow:hidden; background:#1A1118;
+  display:grid; place-items:center}
+.roomlit .rl-glow{position:absolute; inset:0; background:radial-gradient(
+  ellipse 80% 120% at 50% -10%, #FFE9B0, rgba(255,233,176,0) 72%)}
+.roomlit .rl-t{position:relative; font-family:var(--f-display); font-size:var(--t-xl);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r-pill); box-shadow:var(--pop); padding:.15rem var(--sp-6);
+  font-variant-numeric:tabular-nums}
+
+/* .log — a command / response console */
+.log{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--night);
+  padding:var(--sp-3) var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  min-height:8.5rem; max-height:11rem; overflow-y:auto}
+.log p{display:flex; gap:var(--sp-2); align-items:baseline}
+.log .lg-a{color:var(--sun); flex:none}
+.log .lg-out{color:#FFE9D6}
+.log .lg-in{color:#3FD8BC}
+.log .lg-none{color:#8E7280; font-style:italic}
+.log .lg-hint{color:#C3A4B0; font-weight:400}
+
+/* .paths — the pick-a-control-path board */
+.paths{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(9rem,100%),1fr));
+  gap:var(--sp-2); margin-top:var(--sp-2)}
+.pbtn{cursor:pointer; text-align:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; line-height:1.3; color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); box-shadow:2px 2px 0 var(--stamp);
+  padding:var(--sp-2) var(--sp-3); transition:transform .12s ease, background .16s ease}
+.pbtn:hover:not(:disabled){transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pbtn:disabled{cursor:default}
+.pbtn i{display:block; font-style:normal; font-size:1.3rem; line-height:1.4}
+.pbtn.right{background:var(--mint); color:var(--line)}
+.pbtn.wrong{background:var(--berry); color:var(--tag-ink)}
+
+/* .brief — the job ticket above a scenario gadget */
+.brief{background:var(--lav-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-3) var(--sp-4); display:flex; gap:var(--sp-3); align-items:flex-start}
+.brief i{font-style:normal; font-size:1.5rem; line-height:1.2; flex:none}
+.brief b{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.brief p{font-size:var(--t-base)}
+
+/* .fp — the function-or-program drill */
+.fp-card{background:var(--paper-2); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); text-align:center;
+  font-family:var(--f-display); font-size:var(--t-md); line-height:1.35}
+.fp-btns{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3)}
+@media (max-width:520px){.fp-btns{grid-template-columns:1fr}}
+.fp-btns button{cursor:pointer; font-family:var(--f-display); font-size:var(--t-md);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  transition:transform .12s ease, background .16s ease}
+.fp-btns button:hover:not(:disabled){transform:translate(-2px,-2px); background:var(--sun-soft)}
+.fp-btns button:disabled{cursor:default}
+.fp-btns button small{display:block; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; color:var(--ink-soft); letter-spacing:.06em}
+.fp-btns button.right{background:var(--mint); color:var(--line)}
+.fp-btns button.right small{color:var(--line)}
+.fp-btns button.wrong{background:var(--berry); color:var(--tag-ink)}
+.fp-btns button.wrong small{color:var(--tag-ink)}
+</style>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas class="scene" id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="tab"><i></i>Now open · Chapter 8</span>
+      <h1><small>CTS ☆ CHAPTER 8</small>Café<br>Preset</h1>
+      <p class="hero-sub">Control systems — the one button that runs everything.
+        <b>Anna presses it.</b> <b>Digi programmed it.</b> Neither of them wants the other one's job.
+        <span class="kmj">(=^･ω･^=)ノ🔘</span></p>
+      <nav class="chips">
+        <a class="chip" href="#what">🔘 1 · what it does</a>
+        <a class="chip" href="#fnprog">📋 2 · functions &amp; programs</a>
+        <a class="chip" href="#cpu">🧠 3 · the CPU</a>
+        <a class="chip" href="#faces">👆 4 · interfaces &amp; triggers</a>
+        <a class="chip" href="#feedback">🔁 5 · feedback</a>
+        <a class="chip" href="#closure">🔌 6 · contact closure</a>
+        <a class="chip" href="#voltage">🎚 7 · variable voltage</a>
+        <a class="chip" href="#ir">📺 8 · infrared</a>
+        <a class="chip" href="#serial">🔢 9 · serial digital</a>
+        <a class="chip" href="#rf">📡 10 · radio frequency</a>
+        <a class="chip" href="#net">🌐 11 · networked</a>
+        <a class="chip" href="#song">🎵 the song</a>
+        <a class="chip" href="#quiz">⚔️ boss ×9</a>
+        <a class="chip" href="#sheet">📋 cheat sheet</a>
+      </nav>
+    </div>
+    <div class="hero-cats" aria-hidden="true">
+      <svg class="bob" viewBox="0 0 120 120"><use href="#anna-press"/></svg>
+      <svg class="bob2" viewBox="0 0 120 120"><use href="#digi-work"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════ 1 · WHAT A CONTROL SYSTEM DOES ══════════════ -->
+<section id="what">
+  <div class="head">
+    <span class="lv">Lv.1 · what a control system is for</span>
+    <h2>One button, no manual <span class="kao">🔘</span></h2>
+    <p class="lede"><b>Control systems allow complex AV systems to be operated using simple
+      interfaces.</b> A complex AV system is <b>many individual components, integrated to perform
+      like a single system</b> — and you <b>shouldn't need to know about each piece of equipment to
+      operate the overall system</b>.</p>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">Opening time · 07:00</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">Digi. To open the café I have to switch on fourteen separate things in a
+        specific order and I have <b>written none of them down</b>.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg>
+      <div class="bubble">Then I will give you <b>one button</b>.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">One button that does fourteen things? What do I need to know about the
+        fourteen things?</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble"><b>Nothing.</b> That is the entire point of my job.</div>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Control systems simplify. They do not automate.</q>
+    <p class="why">The exam asks it as a fill-in-the-blank and offers <b>Automate</b> right next to
+      <b>Simplify</b>. The book's word is <b>simplify</b>: a control system <b>simplifies the complex
+      individual functions and steps necessary to complete specific tasks</b>, and makes the system
+      <b>more accessible because it doesn't require technical knowledge to operate the AV
+      equipment</b>. Automation is something control systems <em>can</em> do. Simplifying is what they
+      <em>are for</em>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A press, a step, a degree.</q>
+    <p class="why">A control system is <b>event-driven</b>: <b>certain events initiate a change</b>, and
+      the event <b>triggers the control system to perform in a predetermined way</b>. The book's three
+      examples are exactly those three — <b>a button being pressed</b>, <b>a person stepping on a
+      pressure mat</b>, and <b>a temperature setting crossing a threshold</b>. A finger, a foot, and
+      a thermometer.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">the shopping list of interfaces</span>
+    There are <b>handheld remote controls, switches, rotary knobs, faders, pressure sensors, and touch
+    panels</b>. Six ways in, before you have programmed a single thing. Anna has opinions about
+    exactly one of them.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 2 · FUNCTIONS & PROGRAMS ══════════════ -->
+<section id="fnprog">
+  <div class="head">
+    <span class="lv">Lv.2 · functions &amp; programs</span>
+    <h2>Count the verbs <span class="kao">📋</span></h2>
+    <p class="lede">The most examinable idea in the chapter — it takes <b>two</b> of the nine review
+      questions. According to <b>AVIXA best practice, a control system's behaviours are described in a
+      button-by-button document</b> that <b>narrates the events that occur when someone presses a
+      button</b>. Those events are the button's <b>functions and programs</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>One verb is a function. A list is a program.</q>
+    <p class="why"><b>A function is an individual action</b> — select Lights On, the lights switch on.
+      <b>A program is a sequence of several functions executed by pressing a single button.</b> So
+      when the exam asks which option is a function and which needs a program, <b>count the
+      verbs</b>. “Setting volume levels” — one verb, a function. “Powering on the audio amplifier
+      <em>and</em> display” — two devices, two actions, a program.</p>
+  </div>
+
+  <div class="duo" style="margin-top:var(--sp-6)">
+    <article class="cat-card analog">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-press"/></svg>
+        <div>
+          <div class="cat-name">Functions</div>
+          <div class="cat-role">one action each · the book's own list</div>
+        </div>
+      </div>
+      <ul class="cat-list">
+        <li><b>Raising or lowering</b> a projection screen</li>
+        <li><b>Commanding a switcher</b> to change an input</li>
+        <li><b>Setting volume levels</b></li>
+        <li><b>Routing a signal</b> from one device to another</li>
+        <li><b>Powering on</b> devices</li>
+        <li><b>Opening or closing</b> drapes</li>
+        <li><b>Activating various functions on a single device</b> — play, pause, stop</li>
+      </ul>
+    </article>
+    <article class="cat-card digital">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg>
+        <div>
+          <div class="cat-name">Programs</div>
+          <div class="cat-role">a sequence · still one press</div>
+        </div>
+      </div>
+      <ul class="cat-list">
+        <li>A user may <b>execute a programmed sequence of several functions by pressing a single
+          button</b></li>
+        <li>The book's example button is marked <b>Play Show</b> — and it fires <b>fifteen</b> steps</li>
+        <li>As the project requires <b>more functions</b>, the <b>design complexity increases</b></li>
+        <li>Designed correctly, <b>anyone should be able to operate it seamlessly</b></li>
+        <li>Operators' <b>knowledge and experience vary widely</b> — accommodating that range is
+          <b>what makes control-system design and programming a challenge</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 01 · press Play Show</span>
+      <span class="verdict ok" id="ps-v">idle</span>
+    </div>
+    <p class="gsay">This is the book's <b>Play Show</b> program, verbatim, in its order. Anna presses
+      <b>one button</b>. Watch how much is behind it.</p>
+    <button class="bigbtn" id="ps-go" type="button"><i>▶</i><span>PLAY SHOW<small id="ps-sub">one press · fifteen functions</small></span></button>
+    <div class="seq" id="ps-seq"></div>
+    <div class="readout">
+      <div><span>functions fired</span><b id="ps-n">0 / 15</b></div>
+      <div><span>buttons pressed</span><b id="ps-b">0</b></div>
+    </div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="ps-cat"><use href="#anna"/></svg>
+      <p id="ps-say">Press it. I have been told I do not need to know what happens next.</p>
+    </div>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 02 · function or program?</span>
+      <span class="verdict ok" id="fp-v">0 / 0</span>
+    </div>
+    <p class="gsay">Ten jobs, taken from the chapter and the review questions. <b>Count the verbs</b>,
+      then pick.</p>
+    <div class="fp-card" id="fp-task">Setting volume levels</div>
+    <div class="fp-btns">
+      <button type="button" data-a="f">FUNCTION<small>one individual action</small></button>
+      <button type="button" data-a="p">PROGRAM<small>a sequence of functions</small></button>
+    </div>
+    <p class="gsay" id="fp-fb">&nbsp;</p>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="fp-cat"><use href="#digi"/></svg>
+      <p id="fp-say">I write these for a living. You have ten chances to think like me.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">the one the exam is fishing with</span>
+    Asked which option is <b>most likely a function rather than a program</b>, the book's answer is
+    <b>setting volume levels</b> — because that phrase is <b>lifted straight out of its own list of
+    common functions</b>. “Playing a video” feels just as single-minded, and in a real room it often
+    is. On the exam, <b>the book's own list wins</b>.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 3 · THE CPU ══════════════ -->
+<section id="cpu">
+  <div class="head">
+    <span class="lv">Lv.3 · the CPU &amp; distributed intelligence</span>
+    <h2>The brain in the cupboard <span class="kao">🧠</span></h2>
+    <p class="lede"><b>The primary component of a control system is the central processing unit
+      (CPU).</b> It is <b>the “brain” of the entire system</b> — and on the exam, it is where every
+      button press ends up.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Every button talks to the brain.</q>
+    <p class="why">Asked what a control system interface sends instructions to, the answer is
+      <b>the control system CPU</b> — not the Internet gateway, not a network printer, not a hard
+      drive. <b>The CPU runs a program that accepts inputs or control requests from an operator or
+      other triggers and then controls the individual devices as specified in that program.</b> And
+      the person who writes it has a title: <b>a control system programmer develops the program that
+      steps the CPU through the required functions</b>.</p>
+  </div>
+
+  <div class="chat right-lead">
+    <span class="chat-who">Digi · the control system programmer</span>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg>
+      <div class="bubble">Note the job title. <b>Control system programmer.</b> It is in the book.
+        I did not invent it to feel important.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">You did print it on a small card, though.</div>
+    </div>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Three names, one-to-many.</q>
+    <p class="why">Controlling devices <b>in multiple rooms, across a college campus, or even in
+      another part of the world</b> may need <b>multiple interconnected controllers</b>. Those
+      configurations get called <b>distributed intelligence, distributed processing, or edge
+      processing</b>. The book is refreshingly blunt about it: <b>while these three terms have
+      slightly different meanings, control system professionals use them for one-to-many
+      processes</b>. Three labels, one idea — <b>one brain reaching many rooms</b>.</p>
+  </div>
+
+  <div class="note">
+    <span class="note-h">say it out loud</span>
+    <b>Distributed intelligence. Distributed processing. Edge processing.</b> If a question offers you
+    all three as separate answers, be suspicious — in this chapter they are the same shelf.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 4 · INTERFACES & TRIGGERS ══════════════ -->
+<section id="faces">
+  <div class="head">
+    <span class="lv">Lv.4 · interfaces &amp; triggers</span>
+    <h2>The bit Anna touches <span class="kao">👆</span></h2>
+    <p class="lede"><b>Control systems generally require some form of human interface connected to
+      the CPU.</b> The reason is almost funny in its plainness: <b>the CPU can't normally execute a
+      function if it doesn't receive a command.</b></p>
+  </div>
+
+  <div class="story" style="--tone:var(--sky)">
+    <div class="story-text">
+      <p class="story-lead"><span>👆</span><span>A hand, or something that acts like one</span></p>
+      <div class="beat">
+        <span class="beat-i">🚪</span>
+        <p>An interface might be a <span class="hl">multibutton panel installed at the entry door of
+          a presentation room</span>, letting the user pick a lighting level on their way in. Also
+          common: <span class="hl-p">advanced graphical user interfaces (GUIs), touch-sensitive
+          screens, and web-based control panels</span>.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">⏰</span>
+        <p>But a hand is no longer required. It is <span class="hl-m">becoming increasingly common
+          for control systems to trigger functions based on internal timers or external
+          sensors</span> — <b>starting a sequence when a visitor steps on a pressure mat</b>, or when
+          they <b>enter the trigger zone on a camera image</b>.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">🎯</span>
+        <p>How you choose between them is one sentence worth remembering: <span class="hl">the needs
+          of the user and the type of experience will dictate the appropriate user interface
+          devices</span>. Not the budget, not the brand — <b>the user and the experience</b>.</p>
+      </div>
+    </div>
+    <figure class="fig" style="--tone:var(--sky)">
+      <span class="fig-t">not a valid interface</span>
+      <svg viewBox="0 0 200 150" role="img" aria-label="A flip chart on an easel, crossed out.">
+        <path d="M40 140 L70 40 M160 140 L130 40" stroke="var(--line)" stroke-width="5" stroke-linecap="round"/>
+        <rect x="46" y="18" width="108" height="86" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-width="5"/>
+        <path d="M60 42h64M60 58h80M60 74h48" stroke="var(--ink-faint)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M46 18h108" stroke="var(--line)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M34 8 L172 118 M172 8 L34 118" stroke="var(--berry)" stroke-width="10" stroke-linecap="round" opacity=".92"/>
+      </svg>
+      <figcaption>The review asks which is <b>not</b> a common way to interface with a control system.
+        GUIs, wireless touch panels and wall switches all are. <b>A flip chart is not.</b></figcaption>
+      <div class="kv">
+        <span>✓ GUI</span><span>✓ touch panel</span><span>✓ wall switch</span><span>✗ flip chart</span>
+      </div>
+    </figure>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">On the subject of pressure mats</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">So the <b>floor</b> is a button now.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg>
+      <div class="bubble">The floor is <b>a trigger</b>. So is the camera image. The CPU cannot tell
+        the difference between a foot and a finger, and it does not care.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">I am going to stop walking places.</div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 5 · FEEDBACK ══════════════ -->
+<section id="feedback">
+  <div class="head">
+    <span class="lv">Lv.5 · bidirectional vs unidirectional</span>
+    <h2>Does it answer back? <span class="kao">🔁</span></h2>
+    <p class="lede"><b>The CPU and the devices connected to it must be able to communicate to execute
+      the desired command sequence</b>, and <b>the available types of communication, or control
+      signals, vary depending on the capabilities of the CPU and the devices it controls</b>. There
+      are exactly two shapes of conversation.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Two directions, one word: feedback.</q>
+    <p class="why">In <b>bidirectional</b> communication, <b>a CPU sends out an instruction to a
+      device, the device executes the instruction and then replies to the CPU to confirm its action
+      and status. This is called feedback, and it allows the user to know the status of the device at
+      all times.</b> The exam asks it as “communication that allows a return message” and then
+      offers you <b>omnidirectional</b> and <b>multidirectional</b> as decoys. <b>Bi</b>, not
+      <b>omni</b> — there are only two of you in this conversation.</p>
+  </div>
+
+  <div class="vs">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">bidirectional</span>
+      <h4>🔁 It confirms</h4>
+      <ul>
+        <li>CPU sends an instruction</li>
+        <li>Device <b>executes</b> it</li>
+        <li>Device <b>replies to confirm its action and status</b></li>
+        <li>That reply is <b>feedback</b></li>
+        <li>The user <b>knows the status of the device at all times</b></li>
+      </ul>
+    </article>
+    <div class="vs-mid">vs</div>
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">unidirectional</span>
+      <h4>🤞 It hopes</h4>
+      <ul>
+        <li>Communication <b>in one direction only</b></li>
+        <li>May be <b>the only type of control available</b> for a device</li>
+        <li><b>No return acknowledgment to verify that the command was executed</b></li>
+        <li><b>Other methods for monitoring system status, such as surveillance cameras, may be
+          required</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 03 · feedback, or faith?</span>
+      <span class="verdict ok" id="fb-v">bidirectional</span>
+    </div>
+    <div class="ctl">
+      <div class="picker" id="fb-mode">
+        <button class="pick" type="button" data-m="bi" aria-pressed="true">🔁 bidirectional</button>
+        <button class="pick" type="button" data-m="uni" aria-pressed="false">➡️ unidirectional</button>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="picker" id="fb-cmd">
+        <button class="pick" type="button" data-c="power">power on the projector</button>
+        <button class="pick" type="button" data-c="screen">lower the screen</button>
+        <button class="pick" type="button" data-c="vol">set volume to 42</button>
+        <button class="pick" type="button" data-c="cam">🎥 check the camera</button>
+        <button class="pick" type="button" data-c="clear">clear</button>
+      </div>
+    </div>
+    <div class="log" id="fb-log"></div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="fb-cat"><use href="#digi"/></svg>
+      <p id="fb-say">Send a command. Then decide whether you would like to know if it worked.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">why the camera button is in there</span>
+    It is not a joke. The book really does say that with unidirectional control, <b>other methods for
+    monitoring system status, such as surveillance cameras, may be required</b>. Somewhere, right now,
+    a very expensive camera is pointed at a projector purely to see whether its lamp came on.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 6 · CONTACT CLOSURE ══════════════ -->
+<section id="closure">
+  <div class="head">
+    <span class="lv">Lv.6 · contact-closure control</span>
+    <h2>Closed is on, open is off <span class="kao">🔌</span></h2>
+    <p class="lede">Six kinds of control system are coming: <b>contact-closure, variable-voltage,
+      infrared, serial data, radio frequency, and networked</b>. This is the first and the simplest.
+      <b>A contact closure is the simplest form of control communication.</b></p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Closed is on. Open is off. That is the whole protocol.</q>
+    <p class="why">As a system output, contact closure <b>communicates with a remote device by opening
+      or closing an electrical contact that allows a current to flow to the device</b>. The book calls
+      it <b>the most basic protocol: On (contacts closed) or Off (contacts open)</b>. The exam asks
+      how it provides device operation, and the answer is exactly that — <b>closing or opening an
+      electrical contact</b>. Not increasing power, not reducing wattage, not adding resistance.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>A little switch that throws a big one.</q>
+    <p class="why">Operation <b>typically requires a low-voltage interface such as a mechanical or
+      solid-state relay to allow the low current of the control signal to operate a higher-current
+      circuit on the device</b>. A tiny signal closing a tiny contact, so that a relay can slam a
+      motor's worth of current somewhere else.</p>
+  </div>
+
+  <div class="duo" style="margin-top:var(--sp-6)">
+    <article class="cat-card analog" style="--tone:var(--sun); --tone-soft:var(--sun-soft)">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-press"/></svg>
+        <div>
+          <div class="cat-name">As an output</div>
+          <div class="cat-role">the CPU throws the switch</div>
+        </div>
+      </div>
+      <ul class="cat-list">
+        <li><b>Motors</b></li>
+        <li><b>Projection screens</b></li>
+        <li><b>Drapes</b> and <b>shades</b></li>
+        <li><b>HVAC</b> — heating, ventilation, and air conditioning</li>
+        <li><b>Power feeds</b> to equipment</li>
+      </ul>
+    </article>
+    <article class="cat-card digital" style="--tone:var(--sky); --tone-soft:var(--sky-soft)">
+      <div class="cat-top">
+        <svg class="cat-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+        <div>
+          <div class="cat-name">As an input</div>
+          <div class="cat-role">the room tells the CPU something</div>
+        </div>
+      </div>
+      <ul class="cat-list">
+        <li>A simple <b>remote button press</b></li>
+        <li><b>Room occupancy</b></li>
+        <li>The <b>position of a room-dividing panel</b></li>
+        <li>A <b>light beam being interrupted</b></li>
+        <li>A <b>weight on a pressure mat</b></li>
+        <li>An <b>audio over-level sensor</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="chat right-lead">
+    <span class="chat-who">Digi · on relays</span>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble">The control signal is <b>tiny</b>. The screen motor is <b>not</b>. A
+        <b>mechanical or solid-state relay</b> sits between them so the small one can command the
+        large one.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-press"/></svg>
+      <div class="bubble">So I press something weak, and something strong happens somewhere else.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+      <div class="bubble">That is the whole chapter, Anna. You have just described the whole chapter.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">the half everyone forgets</span>
+    <b>Use of contact closures is not limited to the control of remote devices.</b> The same two
+    states work backwards: <b>a contact closure input can provide the status of sensors</b>. So a
+    contact closure is a light switch <em>and</em> a doorbell, depending on which end of it you are
+    standing at.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 7 · VARIABLE VOLTAGE ══════════════ -->
+<section id="voltage">
+  <div class="head">
+    <span class="lv">Lv.7 · variable-voltage control</span>
+    <h2>Volts times ten <span class="kao">🎚</span></h2>
+    <p class="lede"><b>The variable-voltage control is an analog form of control.</b> Where contact
+      closure has two states, this one has all the states in between: <b>a voltage within a specified
+      range is applied to the control input of a device to adjust a level by a specified ratio of
+      control voltage to device parameter</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Multiply the volts by ten to get the percent.</q>
+    <p class="why"><b>Analog-controlled light-dimming technology uses this analog method to control
+      lighting. A 0 to 10V DC signal is applied to the dimming system or light fixture, which matches
+      its output by the specified ratio.</b> The book's own worked example: <b>if a 5V DC signal is
+      applied, the dimmer or fixture output would be set to 50 percent of maximum</b>. And <b>as the
+      applied control voltage changes, the level of dimming changes with it</b> — so 0 V is off, 10 V
+      is full, and 3 V is thirty percent. The arithmetic is doing you a favour here; take it.</p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 04 · the 0–10 V dimmer</span>
+      <span class="verdict ok" id="dm-v">50 %</span>
+    </div>
+    <div class="roomlit">
+      <div class="rl-glow" id="dm-glow"></div>
+      <div class="rl-t" id="dm-t">50 %</div>
+    </div>
+    <div class="ctl">
+      <label for="dm">control voltage</label>
+      <input type="range" id="dm" min="0" max="10" step="0.1" value="5">
+      <output id="dm-o">5.0 V DC</output>
+    </div>
+    <div class="readout">
+      <div><span>applied</span><b id="dm-v2">5.0 V</b></div>
+      <div><span>fixture output</span><b id="dm-p">50 %</b></div>
+      <div><span>the ratio</span><b>×10</b></div>
+    </div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="dm-cat"><use href="#anna"/></svg>
+      <p id="dm-say">Five volts, fifty percent. The book uses this exact number, so the exam might too.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">two words for the same family</span>
+    Contact closure and variable voltage are both wires carrying an <b>electrical condition</b> rather
+    than a message. Contact closure can say <b>on</b> or <b>off</b>. Variable voltage can say
+    <b>how much</b>. Neither of them can say <b>which input</b> — for that you need the next three
+    levels.
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 8 · INFRARED ══════════════ -->
+<section id="ir">
+  <div class="head">
+    <span class="lv">Lv.8 · infrared (IR) control</span>
+    <h2>Blinded by the light <span class="kao">📺</span></h2>
+    <p class="lede"><b>Infrared control systems use pulses of invisible IR light to send control
+      signals between devices.</b> The <b>transmitter is usually an LED</b>, and the <b>receiver is
+      usually a photo-transistor or similar light-sensitive device</b>. <b>Patterns of pulses
+      corresponding to control instructions</b> do the talking.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>IR is blinded by light, not by dark.</q>
+    <p class="why">This is the trap, and it is a good one. The review asks what can interfere with an
+      IR control and offers <b>shadows and darkness</b> — which sounds right for something built on
+      light, and is completely backwards. <b>As IR receivers are light-sensitive devices, they can
+      sometimes be overwhelmed by the IR light in bright sunshine or confused by the pulsed light from
+      fluorescent and LED light sources.</b> Darkness is the one thing IR does not mind.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--sun)">
+    <div class="story-text">
+      <p class="story-lead"><span>📺</span><span>Cheap, everywhere, and fussy about three things</span></p>
+      <div class="beat">
+        <span class="beat-i">💸</span>
+        <p><b>IR control is inexpensive to manufacture and simple to integrate into many devices.</b>
+          <span class="hl">The most common IR controls are the lightweight remote controls used with
+          consumer devices</span> — from heating and cooling equipment to the entire spectrum of media
+          players and displays. In AV systems it earns its place <span class="hl-m">where a control
+          device needs to be both portable and unencumbered by cables</span>.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">👁</span>
+        <p><b>Limitation one — it has to see you.</b> <span class="hl-p">Because most objects,
+          including walls and people, are opaque to IR light, there must be a clear line of sight
+          between an IR transmitter and its receivers.</span> A person standing up is a wall.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">📏</span>
+        <p><b>Limitation two — it does not go far.</b> <span class="hl">Most IR systems are limited to
+          an effective range of about 9 to 12 meters (30 to 40 feet)</span>, although <b>very
+          high-output LED transmitters</b> can push past that. <b>Signal repeaters can also be
+          used</b>, but <b>long IR paths are prone to being blocked</b>, which makes the situation
+          <b>more suitable for a more penetrating radio-frequency communications link</b>.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">🤐</span>
+        <p><b>Limitation three — it never answers.</b> <span class="hl-p">IR is usually a one-way
+          communication path, meaning that an IR-controlled device has no way to provide feedback on
+          its status or confirm that it has received a command from the control system.</span>
+          Straight back to Lv.5: IR is <b>unidirectional</b>, so you are on faith and cameras.</p>
+      </div>
+    </div>
+    <figure class="fig" style="--tone:var(--sun)">
+      <span class="fig-t">what stops an IR beam</span>
+      <svg viewBox="0 0 200 170" role="img" aria-label="An infrared remote beaming at a receiver, blocked by a cat and washed out by sunlight.">
+        <rect x="8" y="64" width="26" height="46" rx="5" fill="var(--paper-2)" stroke="var(--line)" stroke-width="4"/>
+        <circle cx="21" cy="74" r="3.5" fill="var(--berry)"/>
+        <rect x="14" y="83" width="6" height="5" fill="var(--ink-faint)"/><rect x="23" y="83" width="6" height="5" fill="var(--ink-faint)"/>
+        <rect x="14" y="92" width="6" height="5" fill="var(--ink-faint)"/><rect x="23" y="92" width="6" height="5" fill="var(--ink-faint)"/>
+        <path d="M40 78h16M40 87h24M40 96h16" stroke="var(--sun)" stroke-width="4" stroke-linecap="round"/>
+        <rect x="160" y="60" width="32" height="54" rx="5" fill="var(--paper-2)" stroke="var(--line)" stroke-width="4"/>
+        <circle cx="176" cy="72" r="5" fill="var(--line)"/>
+        <path d="M168 88h16M168 98h16" stroke="var(--ink-faint)" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="104" cy="120" rx="30" ry="16" fill="var(--lav)" stroke="var(--line)" stroke-width="4"/>
+        <path d="M84 106l-3-14 12 7M124 106l3-14-12 7" fill="var(--lav)" stroke="var(--line)" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="96" cy="114" r="3" fill="var(--line)"/><circle cx="112" cy="114" r="3" fill="var(--line)"/>
+        <circle cx="34" cy="26" r="15" fill="var(--sun)" stroke="var(--line)" stroke-width="4"/>
+        <path d="M34 4v-1M55 26h1M49 11l1-1M49 41l1 1M19 11l-1-1" stroke="var(--sun)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M120 20h44v22h-44z" fill="var(--sky-soft)" stroke="var(--line)" stroke-width="4"/>
+        <path d="M126 28h32M126 35h32" stroke="var(--sky)" stroke-width="4" stroke-linecap="round"/>
+        <text x="100" y="158" font-family="monospace" font-size="15" font-weight="700" fill="var(--berry)" text-anchor="middle">9–12 m max</text>
+      </svg>
+      <figcaption>A cat, a sunbeam and a fluorescent tube are all fatal to an IR link.
+        <b>Darkness is not.</b></figcaption>
+      <div class="kv">
+        <span>✗ walls &amp; people</span><span>✗ bright sunshine</span><span>✗ fluorescent &amp; LED</span><span>✓ darkness</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 9 · SERIAL DIGITAL ══════════════ -->
+<section id="serial">
+  <div class="head">
+    <span class="lv">Lv.9 · serial digital control</span>
+    <h2>Four numbers to own <span class="kao">🔢</span></h2>
+    <p class="lede"><b>Serial digital control is a method of sending control messages between devices
+      using binary digital codes, frequently over a wired connection.</b> The messages <b>consist of
+      a series of “on” and “off” pulses transmitted sequentially to form control codes</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Written in ASCII so a human can read the argument.</q>
+    <p class="why"><b>Although the codes could be arbitrary sequences of 1s and 0s, it is common to
+      use ASCII-encoded text sequences to make the messages human-readable for testing and
+      debugging.</b> That is the entire reason: <b>so that when it does not work, somebody can see
+      why</b>. Digi considers this the single most civilised sentence in the chapter.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Unbalanced crosses the room. Balanced crosses the campus.</q>
+    <p class="why">Same lesson as Chapter 4 and Chapter 7, third time of asking. <b>RS-232 uses an
+      unbalanced line and is thus susceptible to external noise</b>, and <b>the noise issue limits
+      the length of cable you can reliably use to about 15 to 20 meters (50 to 65 feet)</b>. Both
+      <b>RS-422</b> and <b>RS-485</b> are <b>balanced</b> — and both reach <b>1,200 meters (4,000
+      feet)</b>. Sixty times further, for the price of a second conductor.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>422 has one voice. 485 has thirty-two.</q>
+    <p class="why"><b>RS-422 is a multidrop protocol that uses only one transmitter (driver) in most
+      applications.</b> <b>RS-485 supports up to 32 transmitting and receiving devices or, in some
+      applications, 256.</b> Same distance, same balanced trick, wildly different party size. And one
+      more to tie a bow on it: <b>the DMX-512 digital lighting control protocol, used universally in
+      production and architectural lighting, operates over an RS-485 serial communications
+      transmission line</b> — so <b>DMX rides on 485</b>.</p>
+  </div>
+
+  <div class="chat">
+    <span class="chat-who">Anna finds a DB9</span>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-oh"/></svg>
+      <div class="bubble">There is a <b>nine-pin trapezoid</b> on the back of this projector. It
+        looks older than the building.</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg>
+      <div class="bubble"><b>RS-232.</b> It is there <b>for compatibility with legacy systems</b>.
+        Twenty metres, one device, and it panics near a dimmer.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">And what does it actually <em>say</em> down there?</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg>
+      <div class="bubble">Words. <b>ASCII-encoded text</b>, <b>so it is human-readable for testing
+        and debugging</b>. When it breaks, I can <b>read the argument</b>.</div>
+    </div>
+  </div>
+
+  <div class="tablewrap" style="margin-top:var(--sp-6)">
+    <table>
+      <thead>
+        <tr><th>standard</th><th>line</th><th>devices</th><th>max distance</th><th>the detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>USB</b></td><td>serial bus</td><td>—</td><td>&lt; 5 m (16 ft)</td><td>extends over TCP/IP</td></tr>
+        <tr class="hi"><td><b>RS-232</b></td><td>unbalanced</td><td>point-to-point</td><td>15–20 m (50–65 ft)</td><td>DB9 connector</td></tr>
+        <tr><td><b>RS-422</b></td><td>balanced, 4-wire</td><td>one transmitter</td><td>1,200 m (4,000 ft)</td><td>separate Tx &amp; Rx links</td></tr>
+        <tr><td><b>RS-485</b></td><td>balanced line</td><td>32 · or 256</td><td>1,200 m (4,000 ft)</td><td>UTP · carries DMX-512</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--berry)">
+      <span class="sc-tag">the legacy one</span>
+      <h4>RS-232</h4>
+      <p>The <b>Electronic Industries Association (EIA) Recommended Standard 232</b>.</p>
+      <ul>
+        <li><b>Point-to-point</b>, <b>unbalanced</b>, <b>susceptible to external noise</b></li>
+        <li>Some implementations <b>require up to 20 signals</b>; the <b>minimum configuration uses a
+          pair of signal conductors plus a ground</b></li>
+        <li>Most often connected using the <b>DB9 connector</b></li>
+        <li><b>Once the most widely used</b> — devices still offer it <b>for compatibility with
+          legacy systems</b></li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">the long quiet one</span>
+      <h4>RS-422</h4>
+      <p><b>Balanced, four-wire</b> — <b>separate transmit and receive links</b>.</p>
+      <ul>
+        <li><b>Cable runs of up to 1,200 meters (4,000 feet)</b></li>
+        <li>A <b>multidrop protocol</b> that <b>uses only one transmitter (driver) in most
+          applications</b></li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">the crowded one</span>
+      <h4>RS-485</h4>
+      <p><b>Balanced, transmission-line</b> serial communications.</p>
+      <ul>
+        <li>Up to <b>32</b> transmitting and receiving devices — <b>or, in some applications, 256</b></li>
+        <li><b>Unshielded twisted-pair</b>, <b>up to 1,200 meters (4,000 feet)</b></li>
+        <li><b>DMX-512</b> lighting control <b>operates over an RS-485</b> line</li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">the one on your desk</span>
+      <h4>USB</h4>
+      <p><b>Universal Serial Bus</b> — <b>widely used for device control in AV systems</b>.</p>
+      <ul>
+        <li>May be <b>limited to transmission distances less than 5 meters (16 feet)</b></li>
+        <li><b>USB-to-Ethernet adapter systems use TCP/IP to allow USB control to be extended to any
+          point on the Internet</b></li>
+        <li><b>USB to RS-232, RS-422, and RS-485 converters</b> let modern gear talk to <b>legacy
+          serial interfaces</b></li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 10 · RADIO FREQUENCY ══════════════ -->
+<section id="rf">
+  <div class="head">
+    <span class="lv">Lv.10 · radio-frequency (RF) control</span>
+    <h2>Everyone lives at 2.4 <span class="kao">📡</span></h2>
+    <p class="lede"><b>Radio frequency control uses wireless signaling via radio waves to communicate
+      between devices.</b> The physics waits until Chapter 10; this level is <b>the applications of
+      RF communication for wireless AV control</b>, and there are three of them.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Zigbee thirty, Bluetooth ten.</q>
+    <p class="why">Two ranges, both line of sight. <b>Zigbee</b> has <b>a maximum range of about 30
+      meters (100 feet) line of sight</b> and <b>can use mesh network relays to extend its
+      coverage</b>. <b>Bluetooth</b> is <b>designed for personal area networking over distances up to
+      about 10 meters (30 feet) line of sight</b>. Zigbee is a building; Bluetooth is a handbag.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Everyone lives at 2.4 — so knock before you move in.</q>
+    <p class="why">Zigbee <b>operates in the unlicensed industrial, scientific, and medical (ISM)
+      2.4GHz band worldwide</b> (and <b>ISM 900MHz, 780MHz and 860MHz in some other countries</b>).
+      Bluetooth <b>operates in the ISM 2.4GHz band</b>. Wi-Fi is there too. Which is why: <b>when
+      using RF control, you must verify the frequencies that are already in use in the environment
+      you intend to control</b> — and <b>it is almost impossible to guarantee that the required
+      communications channels will be available and free from interference</b>. <b>This can become
+      critical at times when many people are present in the AV space</b>, because every person in the
+      room arrives carrying two more radios.</p>
+  </div>
+
+  <div class="specs" style="margin-top:var(--sp-6)">
+    <article class="spec-card" style="--tone:var(--mint)">
+      <span class="sc-tag">30 m · 100 ft</span>
+      <h4>📡 Zigbee</h4>
+      <p><b>Inexpensive, low-energy, low-speed</b> — <b>designed for remote device communication and
+        control over a small area such as a house or an office</b>.</p>
+      <ul>
+        <li><b>Mesh network relays</b> extend coverage</li>
+        <li><b>ISM 2.4GHz</b> worldwide · <b>900, 780, 860 MHz</b> elsewhere</li>
+        <li><b>Domestic</b> appliance control and <b>industrial</b> applications</li>
+        <li><b>The basis for some implementations of the Internet of Things (IoT)</b></li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--sky)">
+      <span class="sc-tag">the one already there</span>
+      <h4>🛜 Wi-Fi</h4>
+      <p><b>A general data communications protocol used for computer networking</b> — Chapter 6's
+        territory.</p>
+      <ul>
+        <li>Chosen because of its <b>wide implementation across most spaces where AV systems are
+          used</b> and <b>the wide availability of devices with integrated Wi-Fi</b></li>
+        <li>Used for <b>both control communications and data distribution</b></li>
+        <li><b>Also used in some IoT implementations</b></li>
+      </ul>
+    </article>
+    <article class="spec-card" style="--tone:var(--lav)">
+      <span class="sc-tag">10 m · 30 ft</span>
+      <h4>🦷 Bluetooth</h4>
+      <p><b>Low-energy</b>, for <b>personal area networking</b>.</p>
+      <ul>
+        <li><b>ISM 2.4GHz</b> band</li>
+        <li><b>Widely implemented in computing and peripheral devices</b></li>
+        <li><b>Point-to-point control and data communications in portable audio equipment</b></li>
+        <li><b>Also used in some IoT implementations</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="chat right-lead">
+    <span class="chat-who">Friday, 11:00, a full house</span>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+      <div class="bubble">Three hundred people just walked in and the wireless panel has stopped
+        responding.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna"/></svg>
+      <div class="bubble">Did they break it?</div>
+    </div>
+    <div class="say right">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg>
+      <div class="bubble">They each brought <b>two radios in their pocket</b>, and every one of them
+        lives at <b>2.4GHz</b>. The book warns about exactly this: <b>it can become critical at
+        times when many people are present</b>.</div>
+    </div>
+    <div class="say">
+      <svg class="say-cat" viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-press"/></svg>
+      <div class="bubble">I will press it harder.</div>
+    </div>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 05 · how far will it actually reach?</span>
+      <span class="verdict ok" id="rc-v">6 paths survive</span>
+    </div>
+    <p class="gsay">Every distance number in the chapter, on one ruler. Drag it and watch the options
+      die off one at a time.</p>
+    <div class="ctl">
+      <label for="rc">distance needed</label>
+      <input type="range" id="rc" min="1" max="1400" step="1" value="12">
+      <output id="rc-o">12 m</output>
+    </div>
+    <div class="reach" id="rc-list"></div>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="rc-cat"><use href="#digi"/></svg>
+      <p id="rc-say">Twelve metres. IR is already at the very end of its tether.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ 11 · NETWORKED CONTROL ══════════════ -->
+<section id="net">
+  <div class="head">
+    <span class="lv">Lv.11 · networked control systems</span>
+    <h2>The one that ate the others <span class="kao">🌐</span></h2>
+    <p class="lede"><b>The Ethernet network has become the standard means of communicating between all
+      types of devices, not only for control but also for content.</b> And, the book adds,
+      <b>nowhere is this more so than in the world of AV</b>.</p>
+  </div>
+
+  <div class="skill">
+    <span class="skill-tag">★ SKILL GET!</span>
+    <q>Layer 2 is the exception. Layer 3 is the rule.</q>
+    <p class="why"><b>While there remain a few proprietary AV applications that run directly over the
+      data link layer (OSI layer 2) of an Ethernet network, the vast majority of Ethernet
+      communications and control applications use the TCP/IP networking protocol (OSI layer 3 and
+      above) as their underlying architecture.</b> And that is what buys you the world:
+      <b>TCP/IP allows the possibility of routing and communications across the entire
+      Internet.</b> Straight back to Chapter 6's ladder — <b>Please Don't Nibble The Sugar</b>.</p>
+  </div>
+
+  <div class="story" style="--tone:var(--mint)">
+    <div class="story-text">
+      <p class="story-lead"><span>🌐</span><span>What the network gets you, and what it costs</span></p>
+      <div class="beat">
+        <span class="beat-i">🔗</span>
+        <p><span class="hl">Ethernet allows communication among control components, devices, input
+          systems, output systems, applications, data, and the Internet.</span> One cable type for the
+          control, the content and the company email. Chapter 7's careful signal separation did not
+          see this coming.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">📶</span>
+        <p><b>Wi-Fi has effectively become the unwired component of Ethernet networks.</b> That is
+          the book's phrasing and it is worth keeping — <span class="hl-m">Wi-Fi is not a rival to
+          Ethernet here, it is Ethernet with the wire taken out</span>.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">🤝</span>
+        <p><b>The cost is political, not technical.</b> <span class="hl-p">Placing control systems on
+          networks requires considerable advanced planning and coordination between AV professionals
+          and information technology (IT) departments.</span> Somebody owns that switch, and it is
+          not you.</p>
+      </div>
+      <div class="beat">
+        <span class="beat-i">🏢</span>
+        <p>What it unlocks: <b>real-time room support, loss prevention, inventory management, facility
+          usage and scheduling, and web-centric presentation environments</b>. And so
+          <span class="hl">the control scenario has shifted from the needs of one facility to
+          enterprise-wide considerations</span> — from <b>this room</b> to <b>every room we own</b>.</p>
+      </div>
+    </div>
+    <figure class="fig" style="--tone:var(--mint)">
+      <span class="fig-t">what Ethernet is mainly for, here</span>
+      <svg viewBox="0 0 200 160" role="img" aria-label="One controller on a network reaching four rooms.">
+        <rect x="68" y="8" width="64" height="30" rx="7" fill="var(--mint-soft)" stroke="var(--line)" stroke-width="4"/>
+        <text x="100" y="28" font-family="monospace" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">CPU</text>
+        <path d="M100 38v22M24 60h152M24 60v18M76 60v18M124 60v18M176 60v18" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/>
+        <g fill="var(--paper-2)" stroke="var(--line)" stroke-width="4">
+          <rect x="6" y="78" width="36" height="30" rx="5"/><rect x="58" y="78" width="36" height="30" rx="5"/>
+          <rect x="106" y="78" width="36" height="30" rx="5"/><rect x="158" y="78" width="36" height="30" rx="5"/>
+        </g>
+        <g font-family="monospace" font-size="11" font-weight="700" fill="var(--ink)" text-anchor="middle">
+          <text x="24" y="98">rm 1</text><text x="76" y="98">rm 2</text>
+          <text x="124" y="98">rm 3</text><text x="176" y="98">rm 4</text>
+        </g>
+        <text x="100" y="130" font-family="monospace" font-size="12" font-weight="700" fill="var(--mint)" text-anchor="middle">TCP/IP · layer 3+</text>
+        <text x="100" y="149" font-family="monospace" font-size="12" font-weight="700" fill="var(--berry)" text-anchor="middle">to control complex systems</text>
+      </svg>
+      <figcaption>The review question asks what Ethernet is <b>mainly</b> used for in control systems.
+        Not to create IP addresses, not one-way, not for analog — <b>to control complex
+        systems</b>.</figcaption>
+    </figure>
+  </div>
+
+  <div class="catline">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
+    <p>Digi has sent the IT department a port request. <b>That was in March.</b> He maintains that
+      <b>considerable advanced planning and coordination</b> is the book’s phrasing and not a
+      complaint. <span class="kmj">(ﾉД｀)</span></p>
+  </div>
+
+  <div class="gadget" style="margin-top:var(--sp-6)">
+    <div class="gadget-h">
+      <span class="gadget-t">🎛 gadget 06 · pick the control path</span>
+      <span class="verdict ok" id="pk-v">0 / 0</span>
+    </div>
+    <p class="gsay">Eight jobs Digi has actually been handed. One right answer each, and the reason is
+      always a sentence from this chapter.</p>
+    <div class="brief">
+      <i id="pk-i">🎬</i>
+      <div><b>the job</b><p id="pk-q">Raise and lower a motorised projection screen.</p></div>
+    </div>
+    <div class="paths" id="pk-opts"></div>
+    <p class="gsay" id="pk-fb">&nbsp;</p>
+    <div class="catline">
+      <svg viewBox="0 0 120 120" aria-hidden="true" id="pk-cat"><use href="#digi-work"/></svg>
+      <p id="pk-say">Eight jobs. Pick the cheapest thing that actually reaches.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="note-h">the chapter review, in one breath</span>
+    <b>A control system provides the single user interface for operating all those different
+    integrated components as one.</b> They <b>come in various configurations and speak different
+    control languages</b>, and choosing depends on three things: <b>the AV technology you need to
+    control, the space where you need to control it, and users' specific requirements</b>.
+    <b>What, where, who.</b>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ SONG ══════════════ -->
+<section id="song">
+  <div class="head">
+    <span class="lv">the earworm · call and response</span>
+    <h2>The Six Types Song <span class="kao">🎵 ♪</span></h2>
+    <p class="lede">Digi sings the facts. Anna's entire part is pressing the button. She has never
+      once missed her cue.</p>
+  </div>
+
+  <div class="skill" style="background:var(--lav-soft)">
+    <span class="skill-tag" style="background:var(--lav)">♪ SONG GET!</span>
+    <p style="font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; letter-spacing:.1em;
+       text-transform:uppercase; color:var(--ink-soft); text-align:center">sing to · If You're Happy and You Know It</p>
+    <div class="stack g-3" style="margin-top:var(--sp-4); font-family:var(--f-hand); font-size:var(--t-md)">
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ If it's <b style="color:var(--berry)">ON or OFF</b> then it's a <b style="color:var(--berry)">CON-tact CLO-sure</b> —
+        🐈‍⬛ <b style="color:var(--lav)">ANNA:</b> <em>press! press!</em></p>
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ If it's <b style="color:var(--berry)">NOUGHT to TEN</b> then it is <b style="color:var(--berry)">VAR-i-a-ble VOLTS</b> —
+        🐈‍⬛ <b style="color:var(--lav)">ANNA:</b> <em>press! press!</em></p>
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ If it's <b style="color:var(--berry)">LIGHT that you can't SEE</b> then it's <b style="color:var(--berry)">IN-fra-RED</b> and it's <b style="color:var(--berry)">ONE-WAY</b>,</p>
+      <p>🐈 <b style="color:var(--mint)">DIGI:</b> ♪ And if <b style="color:var(--berry)">EVE-ry-thing's</b> con-<b style="color:var(--berry)">NEC</b>-ted, it's the <b style="color:var(--berry)">NET</b> —
+        🐈‍⬛ <b style="color:var(--lav)">ANNA:</b> <em>press! press!</em></p>
+    </div>
+    <p class="why">The two that wouldn't fit the metre are the two with the numbers —
+      <b>serial digital</b> and <b>radio frequency</b>. They get the chants instead, which is
+      arguably where they belong, because <b>the numbers are the whole exam</b>.</p>
+  </div>
+
+  <div class="board" style="margin-top:var(--sp-6)">
+    <h3>Seven chants for the walk in 🥁</h3>
+    <div class="lyric">
+      <p class="lyric-line"><strong>Control systems SIMPLIFY · they do not AUTOMATE</strong></p>
+      <p class="lyric-line"><strong>ONE VERB is a FUNCTION · A LIST is a PROGRAM</strong></p>
+      <p class="lyric-line"><strong>Every BUTTON talks to the BRAIN · and the brain is the CPU</strong></p>
+      <p class="lyric-line"><strong>BI, not OMNI · two directions, one word: FEEDBACK</strong></p>
+      <p class="lyric-line"><strong>CLOSED is ON · OPEN is OFF · and VOLTS TIMES TEN is PERCENT</strong></p>
+      <p class="lyric-line"><strong>IR is BLINDED BY LIGHT, not by DARK · 9 to 12 metres · and it never answers</strong></p>
+      <p class="lyric-line"><strong>UNBALANCED crosses the ROOM · BALANCED crosses the CAMPUS · ZIGBEE THIRTY · BLUETOOTH TEN</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ JOKES ══════════════ -->
+<section id="jokes">
+  <div class="head">
+    <span class="lv">bonus stage</span>
+    <h2>Notes taped to the back of the touch panel <span class="kao">(๑&gt;ᴗ&lt;๑)</span></h2>
+  </div>
+  <div class="menu">
+    <article class="item"><span class="item-tag">simplify</span><p>Does a control system automate the room?<br><b>It simplifies the room. The exam is very firm about this.</b></p></article>
+    <article class="item"><span class="item-tag">functions</span><p>How do you tell a function from a program?<br><b>Count the verbs. Then count them again, because the exam will.</b></p></article>
+    <article class="item"><span class="item-tag">button by button</span><p>AVIXA best practice says document it button by button.<br><b>Which is also how Anna reads a menu.</b></p></article>
+    <article class="item"><span class="item-tag">the CPU</span><p>The CPU is the brain of the entire system.<br><b>One job, fifteen steps, and absolutely no small talk.</b></p></article>
+    <article class="item"><span class="item-tag">distributed</span><p>Distributed intelligence, distributed processing, edge processing.<br><b>Three names, one shelf, one invoice.</b></p></article>
+    <article class="item"><span class="item-tag">unidirectional</span><p>Unidirectional control sends the command and never hears back.<br><b>It is the only protocol that is also a personality.</b></p></article>
+    <article class="item"><span class="item-tag">contact closure</span><p>On is contacts closed, off is contacts open.<br><b>The simplest protocol in AV. It still gets wired backwards.</b></p></article>
+    <article class="item"><span class="item-tag">0–10 V</span><p>Five volts gives you fifty percent.<br><b>At last, AV maths that is just moving a decimal point.</b></p></article>
+    <article class="item"><span class="item-tag">infrared</span><p>Bright sunshine ruins an IR link.<br><b>So the remote works perfectly at night. The meeting is at eleven.</b></p></article>
+    <article class="item"><span class="item-tag">line of sight</span><p>Walls and people are opaque to IR.<br><b>Yes. You are the wall.</b></p></article>
+    <article class="item"><span class="item-tag">RS-232</span><p>Why do new devices still ship with RS-232?<br><b>For compatibility with legacy systems. The legacy system is immortal.</b></p></article>
+    <article class="item"><span class="item-tag">RS-485</span><p>DMX-512 runs over RS-485.<br><b>Every stage light in the world, politely queueing on a twisted pair.</b></p></article>
+    <article class="item"><span class="item-tag">2.4 GHz</span><p>Zigbee, Wi-Fi and Bluetooth all live in the 2.4GHz ISM band.<br><b>It is a studio apartment and there are forty of them in it.</b></p></article>
+    <article class="item"><span class="item-tag">a full room</span><p>RF control gets critical when many people are present.<br><b>An audience is just interference that bought tickets.</b></p></article>
+    <article class="item"><span class="item-tag">networked</span><p>Networked control requires coordination with the IT department.<br><b>The longest run in the chapter, and none of it is cable.</b></p></article>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" fill="none"><path d="M0 14c50 0 50-10 100-10s50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10 50-10 100-10 50 10 100 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+
+<!-- ══════════════ BOSS ══════════════ -->
+<section id="quiz">
+  <div class="head">
+    <span class="lv">final boss · all nine review questions</span>
+    <h2>Settle the tab <span class="kao">⚔️</span></h2>
+    <p class="lede">It is a macro that got out. <b>9 HP</b>, one function per hit — and the cats are
+      ringside again, because they have decided that is their role now.</p>
+  </div>
+
+  <div class="ringside" aria-hidden="true">
+    <figure>
+      <svg viewBox="0 0 120 120" id="rs-anna"><use href="#anna-press"/></svg>
+      <figcaption id="rs-anna-say">Which button do I press?</figcaption>
+    </figure>
+    <figure>
+      <svg viewBox="0 0 120 120" id="rs-digi"><use href="#digi-work"/></svg>
+      <figcaption id="rs-digi-say">There is only one. That is the design.</figcaption>
+    </figure>
+  </div>
+
+  <div id="boss-sentinel" aria-hidden="true"></div>
+  <div class="boss" id="boss">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#slime"/></svg>
+    <div class="boss-info">
+      <div class="boss-name">👾 THE MACRO SLIME</div>
+      <div class="hpbar"><div class="hpfill" id="hp"></div></div>
+      <div class="hptext" id="hptext">HP 9 / 9 — it is on step 1 of 15 and will not be rushed.</div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quizlist"></div>
+  <div class="tally"><span>⚔️ hits</span><b id="score">0</b><span>/ 9</span><button id="reset" type="button">restart</button></div>
+</section>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<section id="sheet">
+  <div class="head">
+    <span class="lv">read this on the way in</span>
+    <h2>The cheat sheet <span class="kao">📋 ✧</span></h2>
+    <p class="lede">Three blocks, twelve lines.</p>
+  </div>
+  <div class="sheet">
+    <h4>🔘 what it is</h4>
+    <ol>
+      <li><b>Control systems SIMPLIFY the operation of an AV system</b> — not automate, not
+        reconfigure. They let <b>complex AV systems be operated using simple interfaces</b>, and you
+        <b>shouldn't need to know about each piece of equipment</b>.</li>
+      <li><b>Event-driven: a press, a step, a degree.</b> A <b>button being pressed</b>, a <b>person
+        stepping on a pressure mat</b>, a <b>temperature crossing a threshold</b> — the event
+        <b>triggers the control system to perform in a predetermined way</b>.</li>
+      <li><b>One verb is a function. A list is a program.</b> A <b>function is an individual
+        action</b> (<b>setting volume levels</b>); a <b>program</b> is <b>a sequence of several
+        functions executed by pressing a single button</b> (<b>powering on the amplifier
+        <em>and</em> display</b>). AVIXA documents it <b>button by button</b>.</li>
+      <li><b>Every button talks to the brain</b> — the interface sends instructions to the
+        <b>control system CPU</b>. A <b>control system programmer</b> writes the program.
+        <b>Distributed intelligence / distributed processing / edge processing</b> = three names for
+        <b>one-to-many</b>. Valid interfaces: <b>GUIs, touch panels, wall switches</b> — <b>not flip
+        charts</b>.</li>
+    </ol>
+    <h4>🔌 the wired ways to talk to a box</h4>
+    <ol start="5">
+      <li><b>Bi, not omni — two directions, one word: feedback.</b> <b>Bidirectional</b>: the device
+        <b>replies to confirm its action and status</b>, so you <b>know the status at all times</b>.
+        <b>Unidirectional</b>: <b>no return acknowledgment</b>, so <b>other methods such as
+        surveillance cameras may be required</b>.</li>
+      <li><b>Closed is on, open is off.</b> Contact closure is the <b>simplest form</b>, operating a
+        device by <b>closing or opening an electrical contact</b>, usually through a <b>mechanical or
+        solid-state relay</b> so a small current can switch a big one. Drives <b>motors, screens,
+        drapes, shades, HVAC, power feeds</b> — and works <b>as an input too</b> (occupancy, panel
+        position, broken light beam, pressure mat, audio over-level).</li>
+      <li><b>Volts times ten is percent.</b> Variable voltage is <b>analog</b>: a <b>0 to 10V DC</b>
+        signal sets output <b>by a specified ratio</b> — <b>5V DC = 50 percent of maximum</b>.</li>
+      <li><b>IR is blinded by light, not by dark.</b> <b>Bright sunshine</b> and <b>pulsed light from
+        fluorescent and LED sources</b> break it; <b>walls and people are opaque to IR</b> so it needs
+        <b>clear line of sight</b>; range <b>9 to 12 m (30 to 40 ft)</b>; and it is <b>usually
+        one-way, with no feedback</b>. Transmitter = <b>LED</b>, receiver = <b>photo-transistor</b>.</li>
+      <li><b>Unbalanced crosses the room, balanced crosses the campus.</b> Serial digital sends
+        <b>binary codes</b>, usually as <b>ASCII text so they are human-readable for testing and
+        debugging</b>. <b>USB &lt; 5 m (16 ft)</b> · <b>RS-232 15–20 m (50–65 ft)</b>, unbalanced,
+        point-to-point, <b>DB9</b> · <b>RS-422 1,200 m (4,000 ft)</b>, balanced four-wire, <b>one
+        transmitter</b> · <b>RS-485 1,200 m (4,000 ft)</b>, balanced, <b>32 devices (or 256)</b>, UTP,
+        and <b>DMX-512 rides on it</b>.</li>
+    </ol>
+    <h4>📡 the wireless &amp; networked ways</h4>
+    <ol start="10">
+      <li><b>Zigbee thirty, Bluetooth ten.</b> <b>Zigbee</b>: low-energy, low-speed, <b>30 m (100 ft)
+        line of sight</b>, <b>mesh relays</b> extend it, <b>ISM 2.4GHz</b> worldwide, a basis for
+        <b>IoT</b>. <b>Bluetooth</b>: <b>personal area networking</b>, <b>10 m (30 ft)</b>, <b>ISM
+        2.4GHz</b>, <b>point-to-point</b>. <b>Wi-Fi</b>: used for <b>both control and data
+        distribution</b> because it is <b>already everywhere</b>.</li>
+      <li><b>Everyone lives at 2.4, so knock before you move in.</b> You <b>must verify the
+        frequencies already in use</b>, and it is <b>almost impossible to guarantee</b> a free
+        channel — <b>critical when many people are present</b>.</li>
+      <li><b>Layer 2 is the exception, layer 3 is the rule.</b> A few proprietary AV apps run on the
+        <b>data link layer (OSI 2)</b>; <b>the vast majority use TCP/IP (OSI 3 and above)</b>, which
+        <b>allows routing across the entire Internet</b>. <b>Wi-Fi is the unwired component of
+        Ethernet</b>. Ethernet is mainly there <b>to control complex systems</b>, and it needs
+        <b>advance planning and coordination with IT</b>. Choose a control system on <b>what you need
+        to control, where, and who is using it</b>.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="catline" style="margin-top:var(--sp-8)">
+  <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-zzz"/></svg>
+  <p><b>The café opened on one press</b> and Anna went straight back to sleep on the touch panel.
+    Digi reports that she is holding down PLAY SHOW, that the haze machine has been running for
+    forty minutes, and that <b>this is technically a valid event</b>.
+    <span class="kmj">(っ- ω -)っ 🔘</span></p>
+</div>
+
+<footer>
+  <span>🎛 Café Preset · CTS Ch.8 · control systems</span>
+  <span>One button, fourteen things <span class="kmj">(=^･ω･^=)ノ🔘</span></span>
+</footer>
+</main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA LOG — all curves -->
+    <g id="anna">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <ellipse cx="49" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <ellipse cx="71" cy="47" rx="5" ry="7" fill="#4A2B33"/>
+      <circle cx="50.5" cy="44" r="2.2" fill="#fff"/><circle cx="72.5" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="57" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58q3 4 6 0q3 4 6 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- DIGI TAL — all right angles -->
+    <g id="digi">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="68" y="42" width="8" height="11" fill="#4A2B33"/>
+      <rect x="45.5" y="43.5" width="3" height="3" fill="#fff"/><rect x="69.5" y="43.5" width="3" height="3" fill="#fff"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 56v4h4v-4h4v4h4v-4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+    <!-- boss slime -->
+    <g id="slime">
+      <path d="M14 82c0-30 16-52 46-52s46 22 46 52z" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4" stroke-linejoin="round"/>
+      <rect x="14" y="78" width="92" height="10" rx="5" fill="#8A6BD9" stroke="#0F0A12" stroke-width="4"/>
+      <ellipse cx="44" cy="56" rx="6" ry="9" fill="#0F0A12"/><ellipse cx="76" cy="56" rx="6" ry="9" fill="#0F0A12"/>
+      <circle cx="46" cy="52" r="2.4" fill="#fff"/><circle cx="78" cy="52" r="2.4" fill="#fff"/>
+      <path d="M50 70q10 9 20 0" stroke="#0F0A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M34 34l4-10 4 10 10 4-10 4-4 10-4-10-10-4z" fill="#FFF" opacity=".55"/>
+    </g>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA · surprised — round wide eyes, small o mouth -->
+    <g id="anna-oh">
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <circle cx="49" cy="46" r="7.5" fill="#4A2B33"/><circle cx="71" cy="46" r="7.5" fill="#4A2B33"/>
+      <circle cx="51.5" cy="43" r="2.8" fill="#fff"/><circle cx="73.5" cy="43" r="2.8" fill="#fff"/>
+      <ellipse cx="37" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="83" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="60" cy="60" rx="4.5" ry="5.5" fill="#4A2B33"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M96 22l3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="#FFB01F"/>
+    </g>
+
+    <!-- ANNA · asleep — a loaf with closed eyes -->
+    <g id="anna-zzz">
+      <path d="M22 92c0-24 16-36 38-36s38 12 38 36z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M22 92h76" stroke="#4A2B33" stroke-width="4" stroke-linecap="round"/>
+      <path d="M36 60 32 40l17 10M84 60l4-20-17 10" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M44 74c3 4 7 4 10 0M66 74c3 4 7 4 10 0" stroke="#4A2B33" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="34" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <ellipse cx="86" cy="80" rx="6" ry="4" fill="#FF6F91" opacity=".7"/>
+      <path d="M56 82q4 4 8 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g fill="#8A6BD9" font-family="monospace" font-weight="700">
+        <text x="86" y="40" font-size="15">z</text>
+        <text x="97" y="27" font-size="11">z</text>
+        <text x="105" y="17" font-size="8">z</text>
+      </g>
+    </g>
+
+    <!-- DIGI · smug — flat pixel eyes, stepped smirk -->
+    <g id="digi-smug">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="43" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="67" y="45" width="10" height="4" fill="#4A2B33"/>
+      <rect x="30" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="54" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 58h4v4h4v-4h4" stroke="#4A2B33" stroke-width="3" fill="none"/>
+    </g>
+
+    <!-- DIGI · alarmed — wide square eyes, flat worried mouth -->
+    <g id="digi-alarm">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="42" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="66" y="40" width="12" height="14" fill="#4A2B33"/>
+      <rect x="44" y="42" width="4" height="4" fill="#fff"/><rect x="68" y="42" width="4" height="4" fill="#fff"/>
+      <rect x="28" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <rect x="83" y="56" width="9" height="5" fill="#EE3D5C" opacity=".85"/>
+      <path d="M52 62h16" stroke="#4A2B33" stroke-width="3.5"/>
+      <path d="M96 20h6v4h-6zM96 28h6v10h-6z" fill="#EE3D5C"/>
+    </g>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ANNA · pressing the button — one paw out, one very large button -->
+    <g id="anna-press">
+      <circle cx="19" cy="100" r="11" fill="#4A2B33"/>
+      <circle cx="19" cy="98" r="10" fill="#FF9F1A" stroke="#4A2B33" stroke-width="4"/>
+      <circle cx="16" cy="95" r="2.6" fill="#FFE6B8"/>
+      <path d="M4 84l-4-6M34 84l5-6M2 98h-7" stroke="#FF9F1A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M36 78C30 80 24 84 21 89" stroke="#4A2B33" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M36 78C30 80 24 84 21 89" stroke="#E4DCFA" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <path d="M43 42q6-5 12 0M65 42q6-5 12 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="49" cy="49" rx="5" ry="6" fill="#4A2B33"/>
+      <ellipse cx="71" cy="49" rx="5" ry="6" fill="#4A2B33"/>
+      <circle cx="50.5" cy="46.5" r="2.2" fill="#fff"/><circle cx="72.5" cy="46.5" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M53 59q7 6 14 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- DIGI · working — a tablet, and eyes pointed down at it -->
+    <g id="digi-work">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="47" width="8" height="7" fill="#4A2B33"/>
+      <rect x="68" y="47" width="8" height="7" fill="#4A2B33"/>
+      <rect x="45.5" y="48.5" width="3" height="2" fill="#fff"/><rect x="69.5" y="48.5" width="3" height="2" fill="#fff"/>
+      <rect x="30" y="52" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="52" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 61h12" stroke="#4A2B33" stroke-width="3"/>
+      <rect x="28" y="82" width="64" height="26" rx="3" fill="#3B2430" stroke="#4A2B33" stroke-width="4"/>
+      <rect x="33" y="87" width="26" height="4" fill="#3FD8BC"/>
+      <rect x="33" y="94" width="42" height="4" fill="#FFB84D"/>
+      <rect x="33" y="101" width="18" height="4" fill="#3FD8BC"/>
+      <rect x="63" y="87" width="8" height="4" fill="#FF8FAB"/>
+      <rect x="20" y="76" width="12" height="9" rx="4" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4"/>
+      <rect x="98" y="66" width="7" height="4" fill="#12B39A"/>
+      <rect x="104" y="58" width="6" height="4" fill="#12B39A"/>
+    </g>
+  </defs>
+</svg>
+<script>
+(function(){
+  "use strict";
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => {
+    const t = document.documentElement.getAttribute("data-theme");
+    return t ? t === "dark" : darkMQ.matches;
+  };
+const cv = document.getElementById("scene");
+  if (cv){
+    const g = cv.getContext("2d");
+    const H = 124, HORIZON = 90, ROAD = 112;
+    let W = 240;
+
+    const DAY = {sky:["#CFEBDC","#DDF2E4","#EAF7EA"], cloud:"#F5FCF6", star:null, moon:null,
+      far:"#63B79E", mid:"#2F8E79", near:"#1B6A59", trunk:"#8A5A44",
+      ground:"#F0D9AE", grass:"#3FA07F", road:"#CBBBA9", dash:"#F6F0E7", kerb:"#8E4632",
+      wood:"#C46A4A", woodDark:"#8E4632", roof:"#B4553C", sign:"#DE9068", signIn:"#F2C39F",
+      glass:"#2E5C55", glow:"#FFD27A", lamp:"#FFC24D", bird:"#3B4A46", steam:"#FFFFFF",
+      bush:"#2E8F70", neon:"#EE3D5C"};
+    const NIGHT = {sky:["#181233","#20183F","#2A1E4D"], cloud:"#2D2151", star:"#FFF3C4", moon:"#FFE9B0",
+      far:"#2B5B54", mid:"#1D4642", near:"#122F2E", trunk:"#452C27",
+      ground:"#33232E", grass:"#1C3B34", road:"#241B24", dash:"#4B3A46", kerb:"#54291F",
+      wood:"#8A4636", woodDark:"#54291F", roof:"#733729", sign:"#9E5740", signIn:"#C57C58",
+      glass:"#13302D", glow:"#FFCE6E", lamp:"#FFB84D", bird:"#0F0A12", steam:"#9FB6C8",
+      bush:"#1E4838", neon:"#FF7089"};
+
+    const px = (x,y,w,h,c) => { g.fillStyle=c;
+      g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); };
+    const rnd = i => { const s=Math.sin(i*127.1+0.7)*43758.5453; return s-Math.floor(s); };
+    const dither = (y,c) => { for(let x=y%2;x<W;x+=2) px(x,y,1,1,c); };
+
+    function pine(cx,baseY,h,halfW,col,trunkCol){
+      for(let i=0;i<h;i+=2){
+        const hw = Math.max(1, Math.round(halfW*(i+2)/h));
+        px(cx-hw, baseY-h+i, hw*2, 2, col);
+      }
+      if(trunkCol) px(cx-1, baseY-2, 2, 3, trunkCol);
+    }
+    function cloud(x,y,c){ px(x,y,18,4,c); px(x+4,y-3,10,3,c); px(x+11,y+2,11,3,c); }
+
+    function render(t){
+      const P = isDark() ? NIGHT : DAY;
+
+      /* sky, in three dithered bands */
+      px(0,0,W,HORIZON,P.sky[0]);
+      px(0,Math.round(HORIZON*0.40),W,HORIZON,P.sky[1]);
+      px(0,Math.round(HORIZON*0.66),W,HORIZON,P.sky[2]);
+      dither(Math.round(HORIZON*0.40),P.sky[0]);
+      dither(Math.round(HORIZON*0.66),P.sky[1]);
+
+      /* stars + moon at night */
+      if(P.star){
+        for(let i=0;i<46;i++){
+          const sx=Math.floor(rnd(i)*W), sy=Math.floor(rnd(i+99)*HORIZON*0.62);
+          if(0.6+0.4*Math.sin(t/700+i) > 0.74) px(sx,sy,1,1,P.star);
+        }
+        px(W-34,12,10,10,P.moon); px(W-31,9,6,3,P.moon); px(W-31,22,6,3,P.moon);
+        px(W-30,11,5,5,P.sky[0]);
+      }
+
+      /* drifting clouds */
+      for(let i=0;i<3;i++){
+        const x = ((t/1000*(4+i*2) + i*97) % (W+72)) - 36;
+        cloud(x, 11+i*12, P.cloud);
+      }
+
+      /* three bands of pine forest */
+      for(let x=-6;x<W+6;x+=9)  pine(x+rnd(x*0.37)*4,  HORIZON-6, 22+Math.floor(rnd(x*0.37+3)*14),  7, P.far);
+      for(let x=-8;x<W+8;x+=13) pine(x+rnd(x*0.71)*5,  HORIZON-2, 30+Math.floor(rnd(x*0.71+7)*18), 10, P.mid);
+      for(let x=-10;x<W+10;x+=21) pine(x+rnd(x*1.13)*7, HORIZON+1, 38+Math.floor(rnd(x*1.13+11)*20), 13, P.near, P.trunk);
+
+      /* ground + grass tufts */
+      px(0,HORIZON,W,ROAD-HORIZON,P.ground);
+      for(let x=0;x<W;x+=3) if(rnd(x*2.1)>0.52) px(x,HORIZON,2,2,P.grass);
+
+      /* ══ the café ══ */
+      const bw=86, cx=Math.round(W*0.63), bx=Math.round(cx-bw/2);
+      const flick = 0.86 + 0.14*Math.sin(t/380);
+
+      px(bx+12,HORIZON-58,bw-24,17,P.woodDark);          /* sign frame  */
+      px(bx+14,HORIZON-56,bw-28,13,P.sign);              /* sign face   */
+      for(let i=0;i<5;i++) px(bx+20+i*11,HORIZON-51,7,3,P.signIn);  /* fake lettering */
+
+      px(bx+6,HORIZON-49,6,9,P.woodDark);                /* coffee-pot chimney */
+      px(bx+5,HORIZON-51,8,2,P.wood);
+
+      px(bx-7,HORIZON-41,bw+14,7,P.roof);                /* roof overhang */
+      for(let x=bx-7;x<bx+bw+7;x+=4) px(x,HORIZON-41,2,7,P.woodDark);  /* shingles */
+      px(bx-7,HORIZON-34,bw+14,2,P.woodDark);            /* roof lip */
+
+      px(bx,HORIZON-32,bw,32,P.wood);                    /* body */
+      px(bx+4,HORIZON-30,bw-8,18,P.glass);               /* dark interior */
+
+      g.globalAlpha=flick;                                /* warm lit windows */
+      px(bx+8,HORIZON-27,20,12,P.glow);
+      px(bx+32,HORIZON-27,20,12,P.glow);
+      g.globalAlpha=1;
+      px(bx+12,HORIZON-21,3,6,P.woodDark);               /* silhouettes on the counter */
+      px(bx+18,HORIZON-19,4,4,P.woodDark);
+      px(bx+24,HORIZON-20,2,5,P.woodDark);
+      px(bx+36,HORIZON-22,5,7,P.woodDark);
+      px(bx+44,HORIZON-18,3,3,P.woodDark);
+
+      px(bx+bw-22,HORIZON-30,16,30,P.woodDark);          /* door */
+      px(bx+bw-19,HORIZON-27,10,9,P.glass);
+      px(bx+bw-12,HORIZON-14,2,2,P.lamp);                /* knob */
+      if(Math.sin(t/600) > -0.4) px(bx+bw-19,HORIZON-15,9,3,P.neon);  /* OPEN sign */
+
+      px(bx+2,HORIZON-13,bw-4,3,P.woodDark);             /* counter edge */
+      for(let x=bx+3;x<bx+bw-24;x+=6) px(x,HORIZON-10,1,10,P.woodDark); /* siding */
+
+      px(bx-5,HORIZON-34,3,4,P.woodDark);                /* hanging lantern */
+      g.globalAlpha=flick; px(bx-5,HORIZON-30,3,3,P.lamp); g.globalAlpha=1;
+
+      px(bx-32,HORIZON-9,15,2,P.wood);                   /* patio table + stools */
+      px(bx-30,HORIZON-7,2,7,P.woodDark); px(bx-20,HORIZON-7,2,7,P.woodDark);
+      px(bx-38,HORIZON-6,5,2,P.wood);  px(bx-36,HORIZON-4,2,4,P.woodDark);
+      px(bx-14,HORIZON-6,5,2,P.wood);  px(bx-12,HORIZON-4,2,4,P.woodDark);
+
+      for(let i=0;i<7;i++){                              /* bushes along the base */
+        const x=bx-12+i*16;
+        px(x,HORIZON-5,11,5,P.bush); px(x+3,HORIZON-7,6,3,P.bush);
+      }
+
+      /* steam curling off the chimney */
+      for(let i=0;i<7;i++){
+        const life=((t/1000*0.5 + i/7) % 1);
+        g.globalAlpha=(1-life)*0.8;
+        px(bx+9+Math.sin(life*7+i)*3, HORIZON-52-life*24, life<0.5?1:2, life<0.5?1:2, P.steam);
+      }
+      g.globalAlpha=1;
+
+      /* road */
+      px(0,ROAD,W,H-ROAD,P.road);
+      px(0,ROAD,W,1,P.kerb);
+      for(let x=4;x<W;x+=16) px(x,ROAD+7,8,1,P.dash);
+
+      /* birds */
+      for(let i=0;i<4;i++){
+        const x=((t/1000*(9+i*3) + i*83) % (W+40)) - 20;
+        const y=13+i*7+Math.sin(t/900+i)*3;
+        const flap=Math.sin(t/160+i*1.7)>0?1:-1;
+        px(x,y,1,1,P.bird); px(x+1,y-flap,1,1,P.bird); px(x+2,y,1,1,P.bird);
+      }
+    }
+
+    let raf=null;
+    const frame = t => { render(t); raf=requestAnimationFrame(frame); };
+    function resize(){
+      const r=cv.getBoundingClientRect();
+      if(!r.height || !r.width) return;
+      W = Math.max(150, Math.round(r.width * (H/r.height)));
+      cv.width=W; cv.height=H; g.imageSmoothingEnabled=false;
+      render(performance.now());
+    }
+    function start(){
+      resize();
+      if(reduceMQ.matches){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+      else if(!raf) raf=requestAnimationFrame(frame);
+    }
+    if(window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+    addEventListener("resize", resize);
+    darkMQ.addEventListener("change", () => render(performance.now()));
+    reduceMQ.addEventListener("change", start);
+    start();
+  }
+
+  /** swap the sprite inside an <svg> that uses <use> */
+  const setCat = (svgEl, id) => { const u=svgEl.querySelector("use");
+    if(u) u.setAttribute("href", "#"+id); };
+
+
+  /* ── gadget 01 · press Play Show ── */
+  const psSeq=document.getElementById("ps-seq");
+  if (psSeq){
+    /* The book's Play Show sequence, verbatim and in its order. */
+    const STEPS=[
+      ["💨","Power up the haze and smoke machines"],
+      ["🎆","Power up the effects lighting system"],
+      ["📼","Power up the show replay system"],
+      ["📽","Power up the projectors, video processor, and video displays"],
+      ["🔊","Power up the speaker arrays"],
+      ["🤖","Power up the animatronics system"],
+      ["🔀","Switch the audio and video inputs to the preshow players"],
+      ["🖼","Display the preshow video content"],
+      ["🎵","Play the preshow music"],
+      ["⏳","Wait 10 minutes"],
+      ["🌙","Lower house light levels in the room"],
+      ["🔉","Fade out the preshow music and video"],
+      ["🔀","Switch the video and audio inputs to the show replay system"],
+      ["▶","Trigger the show replay system"],
+      ["🚧","Turn on external “Show in Progress” signs"]
+    ];
+    const WAIT=9; /* index of "Wait 10 minutes" — the one step that visibly stalls */
+    const go=document.getElementById("ps-go"), sub=document.getElementById("ps-sub"),
+          vd=document.getElementById("ps-v"), nOut=document.getElementById("ps-n"),
+          bOut=document.getElementById("ps-b"), say=document.getElementById("ps-say"),
+          cat=document.getElementById("ps-cat");
+    let presses=0, timer=null;
+
+    STEPS.forEach((s,i)=>{
+      const d=document.createElement("div");
+      d.className="seq-step"; d.id="sq"+i;
+      d.innerHTML='<span class="sq-n">'+(i+1)+'</span><span class="sq-t">'+s[1]+
+        '</span><span class="sq-s">'+s[0]+'</span>';
+      psSeq.appendChild(d);
+    });
+    const rows=()=>STEPS.map((s,i)=>document.getElementById("sq"+i));
+
+    function reset(){
+      if(timer){clearTimeout(timer); timer=null;}
+      rows().forEach(r=>r.className="seq-step");
+      nOut.textContent="0 / 15"; vd.className="verdict ok"; vd.textContent="idle";
+      go.disabled=false; sub.textContent="one press · fifteen functions";
+    }
+    function finish(){
+      vd.className="verdict ok"; vd.textContent="show running";
+      nOut.textContent="15 / 15"; go.disabled=false;
+      sub.textContent="press again to run it from the top";
+      setCat(cat,"anna-press");
+      say.innerHTML="<b>Fifteen functions. One press.</b> That is the difference between a function "+
+        "and a program, and it is worth two questions on the review.";
+    }
+    function step(i){
+      const r=rows();
+      if(i>0) r[i-1].className="seq-step done";
+      if(i>=STEPS.length){ finish(); return; }
+      r[i].className="seq-step "+(i===WAIT?"wait":"now");
+      r[i].scrollIntoView({block:"nearest"});
+      nOut.textContent=(i+1)+" / 15";
+      if(i===WAIT){
+        setCat(cat,"anna-zzz");
+        say.innerHTML="<b>Step 10 is “Wait 10 minutes”.</b> A program can contain waiting. "+
+          "Anna has used the time productively.";
+      } else if(i===0){
+        setCat(cat,"anna-oh");
+        say.innerHTML="One press, and it has already started <b>six machines</b>.";
+      } else if(i===WAIT+1){
+        setCat(cat,"anna");
+        say.innerHTML="House lights down. <b>Nobody touched a light switch.</b>";
+      }
+      timer=setTimeout(()=>step(i+1), i===WAIT?1500:380);
+    }
+    go.addEventListener("click",()=>{
+      presses++; bOut.textContent=presses;
+      reset(); go.disabled=true;
+      vd.className="verdict bad"; vd.textContent="running…";
+      if(reduceMQ.matches){
+        rows().forEach(r=>r.className="seq-step done");
+        finish(); return;
+      }
+      step(0);
+    });
+    reset();
+  }
+
+  /* ── gadget 02 · function or program? ── */
+  const fpTask=document.getElementById("fp-task");
+  if (fpTask){
+    const JOBS=[
+      ["Setting volume levels","f","One action, and the phrase is lifted straight from the book's own list of common functions. This is the review's answer for “most likely a function”."],
+      ["Powering on the audio amplifier and display","p","Two devices, two actions. The review's answer for “would most likely require a program”."],
+      ["Raising a projection screen","f","Straight off the function list — <b>raising or lowering a projection screen</b>."],
+      ["Commanding a switcher to change an input","f","On the function list too. One command, one switcher, one input."],
+      ["Dimming the lights and starting a media player","p","The word <b>and</b> is doing all the work. Two functions in a row is a program."],
+      ["Activating play, pause and stop on a single device","f","A trap that reads like three things. The book files it under functions: <b>activating various functions on a single device</b>."],
+      ["Opening or closing drapes","f","On the list. One action, one set of drapes."],
+      ["Starting a videoconference","p","Nothing about starting a conference is one action — displays, cameras, mics, routing. The review offers it as a program-sized job."],
+      ["Routing a signal from one device to another","f","On the function list verbatim."],
+      ["Pressing Play Show, and fifteen things happen","p","The definition, in one press: <b>a programmed sequence of several functions</b>."]
+    ];
+    const vd=document.getElementById("fp-v"), fb=document.getElementById("fp-fb"),
+          say=document.getElementById("fp-say"), cat=document.getElementById("fp-cat"),
+          btns=Array.from(document.querySelectorAll(".fp-btns button"));
+    let i=0, right=0, asked=0, locked=false;
+    function show(){
+      locked=false;
+      fpTask.textContent=JOBS[i][0];
+      btns.forEach(b=>{b.disabled=false; b.className="";});
+      fb.innerHTML="&nbsp;";
+      vd.className="verdict ok"; vd.textContent=right+" / "+asked;
+    }
+    btns.forEach(b=>b.addEventListener("click",()=>{
+      if(locked) return; locked=true; asked++;
+      const ok = b.dataset.a===JOBS[i][1];
+      if(ok) right++;
+      btns.forEach(x=>{
+        x.disabled=true;
+        if(x.dataset.a===JOBS[i][1]) x.className="right";
+        else if(x===b) x.className="wrong";
+      });
+      vd.className="verdict "+(ok?"ok":"bad"); vd.textContent=right+" / "+asked;
+      fb.innerHTML=(ok?"✧ ":"✗ ")+JOBS[i][2];
+      if(ok){ setCat(cat,"digi-smug"); say.innerHTML="Correct. <b>Count the verbs</b> — it keeps working."; }
+      else { setCat(cat,"digi-alarm"); say.innerHTML="<b>Count the verbs again.</b> One action is a function; a list of them is a program."; }
+      i=(i+1)%JOBS.length;
+      setTimeout(show, 1900);
+    }));
+    show();
+  }
+
+  /* ── gadget 03 · feedback, or faith? ── */
+  const fbLog=document.getElementById("fb-log");
+  if (fbLog){
+    const CMD={
+      power:["POWER ON PROJECTOR","ACK · lamp on · 41 °C · input HDMI 1"],
+      screen:["SCREEN DOWN","ACK · screen at 100 % · motor idle"],
+      vol:["SET VOLUME 42","ACK · volume 42 · unmuted"]
+    };
+    const modeBox=document.getElementById("fb-mode"), cmdBox=document.getElementById("fb-cmd"),
+          vd=document.getElementById("fb-v"), say=document.getElementById("fb-say"),
+          cat=document.getElementById("fb-cat");
+    let mode="bi";
+    const line=(cls,arrow,text)=>{
+      const p=document.createElement("p");
+      p.innerHTML='<span class="lg-a">'+arrow+'</span><span class="'+cls+'">'+text+'</span>';
+      fbLog.appendChild(p); fbLog.scrollTop=fbLog.scrollHeight;
+    };
+    function hint(){
+      fbLog.innerHTML="";
+      line("lg-hint","·", mode==="bi"
+        ? "bidirectional link open — the device will confirm its action and status"
+        : "unidirectional link open — commands only, nothing comes back");
+    }
+    modeBox.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      mode=b.dataset.m;
+      Array.from(modeBox.children).forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+      vd.className="verdict "+(mode==="bi"?"ok":"bad");
+      vd.textContent=(mode==="bi"?"bidirectional":"unidirectional");
+      if(mode==="bi"){ setCat(cat,"digi");
+        say.innerHTML="<b>Feedback.</b> The device replies to confirm its action and status, so you know the status at all times."; }
+      else { setCat(cat,"digi-alarm");
+        say.innerHTML="<b>No acknowledgment.</b> Send what you like — you will not hear about it either way."; }
+      hint();
+    });
+    cmdBox.addEventListener("click",e=>{
+      const b=e.target.closest(".pick"); if(!b) return;
+      const c=b.dataset.c;
+      if(c==="clear"){ hint(); return; }
+      if(c==="cam"){
+        if(mode==="bi"){
+          line("lg-hint","🎥","camera: not needed. The projector already told you it is on.");
+          setCat(cat,"digi-smug");
+          say.innerHTML="A camera pointed at a device you can already <b>ask</b> is a cable you did not need.";
+        } else {
+          line("lg-in","🎥","camera: something in that room appears to be glowing. Probably the lamp.");
+          setCat(cat,"digi");
+          say.innerHTML="This is the book's own fallback — with unidirectional control, <b>other methods for monitoring system status, such as surveillance cameras, may be required</b>.";
+        }
+        return;
+      }
+      line("lg-out","→", CMD[c][0]);
+      if(mode==="bi"){
+        setTimeout(()=>{ line("lg-in","←", CMD[c][1]);
+          setCat(cat,"digi-smug");
+          say.innerHTML="That reply is <b>feedback</b>. It is the only reason anyone knows anything.";
+        }, 260);
+      } else {
+        setTimeout(()=>{ line("lg-none","·","(no acknowledgment)");
+          setCat(cat,"digi-alarm");
+          say.innerHTML="Command sent. Did it work? <b>There is no mechanism here that can tell you.</b> Try the camera.";
+        }, 260);
+      }
+    });
+    hint();
+  }
+
+  /* ── gadget 04 · the 0–10 V dimmer ── */
+  const dm=document.getElementById("dm");
+  if (dm){
+    const glow=document.getElementById("dm-glow"), t=document.getElementById("dm-t"),
+          out=document.getElementById("dm-o"), vd=document.getElementById("dm-v"),
+          v2=document.getElementById("dm-v2"), pOut=document.getElementById("dm-p"),
+          say=document.getElementById("dm-say"), cat=document.getElementById("dm-cat");
+    function draw(){
+      const v=+dm.value, pct=Math.round(v*10);
+      out.textContent=v.toFixed(1)+" V DC";
+      v2.textContent=v.toFixed(1)+" V";
+      pOut.textContent=pct+" %"; t.textContent=pct+" %";
+      vd.textContent=pct+" %"; vd.className="verdict "+(pct===0?"bad":"ok");
+      glow.style.opacity=(pct/100).toFixed(2);
+      if(pct===0){ setCat(cat,"digi-alarm");
+        say.innerHTML="<b>0 V is off.</b> Nothing subtle about the bottom of the range."; }
+      else if(pct===50){ setCat(cat,"digi-smug");
+        say.innerHTML="<b>5 V DC = 50 percent of maximum.</b> That is the book's worked example, word for word. Learn this one number and the rest is arithmetic."; }
+      else if(pct===100){ setCat(cat,"anna-oh");
+        say.innerHTML="<b>10 V is full output.</b> The top of the specified range."; }
+      else { setCat(cat,"anna");
+        say.innerHTML="<b>"+v.toFixed(1)+" V gives "+pct+" %.</b> The fixture <b>matches its output by the specified ratio</b> — move the volts, the dimming moves with it."; }
+    }
+    dm.addEventListener("input",draw);
+    draw();
+  }
+
+  /* ── gadget 05 · how far will it actually reach? ── */
+  const rc=document.getElementById("rc");
+  if (rc){
+    /* every distance the chapter commits to, in metres */
+    const PATHS=[
+      {k:"USB", m:5,    lab:"5 m · 16 ft"},
+      {k:"Bluetooth", m:10, lab:"10 m · 30 ft"},
+      {k:"Infrared", m:12,  lab:"9–12 m · 30–40 ft"},
+      {k:"RS-232", m:20,    lab:"15–20 m · 50–65 ft"},
+      {k:"Zigbee", m:30,    lab:"30 m · 100 ft"},
+      {k:"RS-422", m:1200,  lab:"1,200 m · 4,000 ft"},
+      {k:"RS-485", m:1200,  lab:"1,200 m · 4,000 ft"},
+      {k:"Ethernet", m:Infinity, lab:"the whole Internet"}
+    ];
+    const list=document.getElementById("rc-list"), out=document.getElementById("rc-o"),
+          vd=document.getElementById("rc-v"), say=document.getElementById("rc-say"),
+          cat=document.getElementById("rc-cat");
+    const SCALE=Math.log10(1401);
+    PATHS.forEach((p,i)=>{
+      const d=document.createElement("div");
+      d.className="rr"; d.id="rr"+i;
+      const w = p.m===Infinity ? 100 : Math.log10(p.m+1)/SCALE*100;
+      d.innerHTML='<span class="rr-k">'+p.k+'</span>'+
+        '<span class="rr-t"><span class="rr-f" style="width:'+w.toFixed(1)+'%"></span></span>'+
+        '<span class="rr-v">'+p.lab+'</span>';
+      list.appendChild(d);
+    });
+    function draw(){
+      const d=+rc.value;
+      out.textContent = d>=1000 ? (d/1000).toFixed(2)+" km" : d+" m";
+      let alive=0;
+      PATHS.forEach((p,i)=>{
+        const ok = d<=p.m;
+        if(ok) alive++;
+        document.getElementById("rr"+i).className="rr"+(ok?"":" out");
+      });
+      vd.className="verdict "+(alive>1?"ok":"bad");
+      vd.textContent=alive+" path"+(alive===1?"":"s")+" survive"+(alive===1?"s":"");
+      if(d<=5){ setCat(cat,"anna");
+        say.innerHTML="Everything reaches. <b>Under 5 metres even USB is fine</b>, and it is the shortest thing here."; }
+      else if(d<=12){ setCat(cat,"digi");
+        say.innerHTML="<b>"+d+" m.</b> IR is at the very end of its 9-to-12-metre tether, and USB gave up at 5."; }
+      else if(d<=20){ setCat(cat,"digi");
+        say.innerHTML="<b>"+d+" m.</b> Everything wireless and short has dropped out. <b>RS-232 is the last unbalanced option</b> — and this is exactly where its noise limit bites."; }
+      else if(d<=30){ setCat(cat,"digi-smug");
+        say.innerHTML="<b>"+d+" m.</b> Zigbee still has line of sight, and it can <b>mesh</b> to go further. RS-232 has just run out of cable."; }
+      else if(d<=1200){ setCat(cat,"anna-oh");
+        say.innerHTML="<b>"+d+" m.</b> Only the <b>balanced</b> pair and the network are left. Same lesson as Chapter 4 and Chapter 7: <b>balanced goes the distance</b>."; }
+      else { setCat(cat,"digi-alarm");
+        say.innerHTML="<b>Past 1,200 m, everything serial is dead.</b> Only <b>TCP/IP</b> is still standing — because it <b>allows routing and communications across the entire Internet</b>."; }
+    }
+    rc.addEventListener("input",draw);
+    draw();
+  }
+
+  /* ── gadget 06 · pick the control path ── */
+  const pkOpts=document.getElementById("pk-opts");
+  if (pkOpts){
+    const OPT=[
+      {k:"cc",  i:"🔘", n:"contact closure"},
+      {k:"vv",  i:"🎚", n:"variable voltage"},
+      {k:"ir",  i:"📺", n:"infrared"},
+      {k:"232", i:"🔢", n:"RS-232"},
+      {k:"422", i:"🔢", n:"RS-422"},
+      {k:"485", i:"🔢", n:"RS-485"},
+      {k:"zig", i:"📡", n:"Zigbee"},
+      {k:"bt",  i:"🦷", n:"Bluetooth"},
+      {k:"net", i:"🌐", n:"networked"}
+    ];
+    const JOBS=[
+      {i:"🎬", q:"Raise and lower a motorised projection screen.", a:"cc",
+       why:"<b>Contact closure.</b> Screens, drapes, shades, motors, HVAC and power feeds are the book's own contact-closure list — <b>On (contacts closed) or Off (contacts open)</b>, through a relay."},
+      {i:"💡", q:"Dim an analog architectural light fixture to 30 percent.", a:"vv",
+       why:"<b>Variable voltage.</b> <b>A 0 to 10V DC signal is applied to the dimming system or light fixture, which matches its output by the specified ratio.</b> 3 V gives you 30 percent.",
+       alt:{cc:"Contact closure can only say <b>on</b> or <b>off</b>. To say <b>how much</b> you need <b>variable voltage</b> — 0 to 10V DC, and 3 V is 30 percent."}},
+      {i:"🎭", q:"Drive 48 stage lighting fixtures from one console.", a:"485",
+       why:"<b>RS-485.</b> <b>The DMX-512 digital lighting control protocol, used universally in production and architectural lighting, operates over an RS-485 serial communications transmission line</b> — and RS-485 supports <b>32 devices, or 256 in some applications</b>.",
+       alt:{422:"Close. Both reach 1,200 m, but <b>RS-422 uses only one transmitter in most applications</b>. Forty-eight fixtures needs <b>RS-485</b> — which is also what <b>DMX-512</b> runs on."}},
+      {i:"📱", q:"A handheld remote for a media player, four metres away, same room.", a:"ir",
+       why:"<b>Infrared.</b> <b>Inexpensive to manufacture and simple to integrate</b>, and used where a control device needs to be <b>portable and unencumbered by cables</b>. Four metres is well inside the <b>9 to 12 m</b> range."},
+      {i:"🗄", q:"One command to one legacy projector, 18 metres down a corridor.", a:"232",
+       why:"<b>RS-232.</b> <b>A point-to-point protocol</b> on an <b>unbalanced</b> line, reliable to about <b>15 to 20 meters (50 to 65 feet)</b>, on a <b>DB9</b>. Legacy devices still offer it <b>for compatibility</b>.",
+       alt:{422:"RS-422 would certainly reach — but this is <b>one device, 18 m, and it is legacy</b>. That is <b>RS-232</b>, which is what such a projector will actually have on the back."}},
+      {i:"🏫", q:"One controller to one distant rack, 900 m across a campus, one transmitter.", a:"422",
+       why:"<b>RS-422.</b> <b>Balanced, four-wire, with separate transmit and receive links</b>, good for <b>1,200 meters (4,000 feet)</b>, and <b>a multidrop protocol that uses only one transmitter (driver) in most applications</b>.",
+       alt:{485:"RS-485 reaches 1,200 m too — the discriminator is the <b>device count</b>. <b>One transmitter</b> is the RS-422 description; <b>32 or 256 devices</b> is RS-485.",
+            232:"Not at 900 m. RS-232 is <b>unbalanced and noise-limited to about 15 to 20 metres</b>. You need a <b>balanced</b> line."}},
+      {i:"🐾", q:"Start a preshow sequence when a visitor steps onto a mat.", a:"cc",
+       why:"<b>Contact closure — as an input.</b> <b>A weight on a pressure mat</b> is in the book's list of contact-closure inputs, alongside room occupancy, a room-dividing panel's position, a broken light beam and an audio over-level sensor."},
+      {i:"🏠", q:"Wireless control of appliances round a small office, with relays to extend coverage.", a:"zig",
+       why:"<b>Zigbee.</b> <b>Designed for remote device communication and control over a small area such as a house or an office</b>, about <b>30 m (100 ft) line of sight</b>, and it <b>can use mesh network relays to extend its coverage</b>.",
+       alt:{bt:"Bluetooth is <b>personal area networking, up to about 10 m</b>, and it does not mesh. The word <b>relays</b> is pointing at <b>Zigbee</b>."}},
+      {i:"🎧", q:"Point-to-point control of a portable audio device from three metres away.", a:"bt",
+       why:"<b>Bluetooth.</b> <b>Low-energy</b>, for <b>personal area networking over distances up to about 10 meters (30 feet)</b>, and used for <b>point-to-point control and data communications in portable audio equipment</b>."},
+      {i:"🏢", q:"Control AV in forty rooms across a campus, with scheduling and real-time room support.", a:"net",
+       why:"<b>Networked.</b> Ethernet is mainly used in control systems <b>to control complex systems</b>; <b>TCP/IP allows the possibility of routing and communications across the entire Internet</b>, and <b>facility usage and scheduling</b> and <b>real-time room support</b> are on the book's list. This is the shift <b>from one facility to enterprise-wide considerations</b>."}
+    ];
+    const vd=document.getElementById("pk-v"), fb=document.getElementById("pk-fb"),
+          qEl=document.getElementById("pk-q"), iEl=document.getElementById("pk-i"),
+          say=document.getElementById("pk-say"), cat=document.getElementById("pk-cat");
+    let i=0, right=0, asked=0, locked=false;
+    OPT.forEach(o=>{
+      const b=document.createElement("button");
+      b.type="button"; b.className="pbtn"; b.dataset.k=o.k;
+      b.innerHTML='<i>'+o.i+'</i>'+o.n;
+      pkOpts.appendChild(b);
+    });
+    const btns=Array.from(pkOpts.children);
+    function show(){
+      locked=false;
+      qEl.textContent=JOBS[i].q; iEl.textContent=JOBS[i].i;
+      btns.forEach(b=>{b.disabled=false; b.className="pbtn";});
+      fb.innerHTML="&nbsp;";
+      vd.className="verdict ok"; vd.textContent=right+" / "+asked;
+    }
+    pkOpts.addEventListener("click",e=>{
+      const b=e.target.closest(".pbtn"); if(!b || locked) return;
+      locked=true; asked++;
+      const J=JOBS[i], ok=b.dataset.k===J.a;
+      if(ok) right++;
+      btns.forEach(x=>{
+        x.disabled=true;
+        if(x.dataset.k===J.a) x.className="pbtn right";
+        else if(x===b) x.className="pbtn wrong";
+      });
+      vd.className="verdict "+(ok?"ok":"bad"); vd.textContent=right+" / "+asked;
+      const alt = (!ok && J.alt && J.alt[b.dataset.k]) ? J.alt[b.dataset.k] : J.why;
+      fb.innerHTML=(ok?"✧ ":"✗ ")+alt;
+      if(ok){ setCat(cat,"digi-smug"); say.innerHTML="That is what I would have specified. <b>Cheapest thing that actually reaches.</b>"; }
+      else { setCat(cat,"digi-work"); say.innerHTML="Read the reason, not the answer. <b>What, where, who</b> — that is how the chapter says to choose."; }
+      i=(i+1)%JOBS.length;
+      setTimeout(show, 2600);
+    });
+    show();
+  }
+
+  /* ── boss fight · 9 questions, with ringside cats ── */
+  const QS=[
+    {q:"Remote control systems _____ the operation of an AV system.",
+     o:["Complicate","Automate","Reconfigure","Simplify"],a:3,
+     fb:"<b>Simplify.</b> <em>Automate</em> is sitting right there to tempt you, and it is not the book's word. Control systems <b>simplify the complex individual functions and steps necessary to complete specific tasks</b>."},
+    {q:"Which of these is not a common method of interfacing with a control system?",
+     o:["GUIs","Flip charts","Wireless touch panels","Wall switches"],a:1,
+     fb:"<b>Flip charts.</b> The other three are all real interfaces — the chapter lists GUIs, touch-sensitive screens, web-based panels and multibutton wall panels. A flip chart has never once dimmed a light."},
+    {q:"Which of the following is most likely to be a function rather than a program?",
+     o:["Starting a videoconference","Playing a video","Dimming the lights and starting a media player","Setting volume levels"],a:3,
+     fb:"<b>Setting volume levels</b> — because that exact phrase is on the book's own list of common functions. Option C gives itself away with the word <em>and</em>. (<em>Playing a video</em> is arguably one action too; on the exam, the book's list decides.)"},
+    {q:"Which of the following would most likely require a program?",
+     o:["Turning on the lights","Activating a single function on a device","Powering on the audio amplifier and display","Setting a volume level"],a:2,
+     fb:"<b>Powering on the audio amplifier and display.</b> Two devices, two actions, one button — the definition of <b>a programmed sequence of several functions</b>. <b>Count the verbs.</b>"},
+    {q:"The purpose of a control system interface is to send instructions to the _____.",
+     o:["Internet gateway","Network printers","Hard drive","Control system CPU"],a:3,
+     fb:"<b>The control system CPU</b> — <b>the “brain” of the entire system</b>. Every button press ends up there, and a <b>control system programmer</b> decides what it does next."},
+    {q:"Communication that allows a return message is called _____.",
+     o:["Omnidirectional","Bidirectional","Multidirectional","Unidirectional"],a:1,
+     fb:"<b>Bidirectional.</b> The device <b>replies to the CPU to confirm its action and status</b>, and that reply is called <b>feedback</b>. <em>Omni</em> and <em>multi</em> are decoys — there are only two of you in this conversation."},
+    {q:"Contact-closure control communication provides device operation by _____.",
+     o:["Increasing the power level of the electrical circuit","Reducing the wattage in a current loop","Increasing resistance in a voltage loop","Closing or opening an electrical contact"],a:3,
+     fb:"<b>Closing or opening an electrical contact.</b> <b>Closed is on, open is off</b> — <b>the most basic protocol</b> in the chapter. The other three options are all inventing electrical work it does not do."},
+    {q:"Which of the following can interfere with an IR control?",
+     o:["Quality of the device","Strength of the power source","Shadows and darkness","Bright sunshine or fluorescent lighting"],a:3,
+     fb:"<b>Bright sunshine or fluorescent lighting.</b> <b>IR is blinded by light, not by dark</b> — receivers are <b>light-sensitive devices</b> that get <b>overwhelmed</b> by IR in sunshine and <b>confused by the pulsed light from fluorescent and LED sources</b>. Option C is the trap, and it is backwards."},
+    {q:"Ethernet is mainly used in control systems _____.",
+     o:["To control complex systems","For one-way device communication","To create IP addresses","For analog devices"],a:0,
+     fb:"<b>To control complex systems.</b> Ethernet does not create IP addresses, it is not one-way, and it is not for analog gear. It is there because it <b>allows communication among control components, devices, input systems, output systems, applications, data, and the Internet</b>."}
+  ];
+  const box=document.getElementById("quizlist");
+  if (box){
+    const scoreEl=document.getElementById("score"), hp=document.getElementById("hp"), hpt=document.getElementById("hptext");
+    const rsA=document.getElementById("rs-anna"), rsD=document.getElementById("rs-digi"),
+          rsAS=document.getElementById("rs-anna-say"), rsDS=document.getElementById("rs-digi-say");
+    const TAUNT=["it is on step 1 of 15 and will not be rushed.","step 2 failed. It is pretending that was deliberate.",
+      "the haze machine came on early.","it has lost line of sight.","no acknowledgment received…",
+      "somebody has unplugged its DB9.","it is down to one transmitter.",
+      "the IT department has been informed.","one function left…",
+      "DEFEATED! ✧ 9 / 9 ✧"];
+    const CHEER=[
+      ["anna-press","Which button do I press?","digi-work","There is only one. That is the design."],
+      ["anna","That is one.","digi","Logged."],
+      ["anna","Press it again!","digi","It is a different question, Anna."],
+      ["anna-press","I am pressing.","digi-smug","You are in fact reading."],
+      ["anna-oh","Halfway!","digi","Its sequence is drifting."],
+      ["anna","Keep going!","digi-smug","Better than the simulation."],
+      ["anna-oh","It is glitching!","digi-alarm","It has lost feedback!"],
+      ["anna-oh","Nearly!","digi-alarm","No acknowledgment. None!"],
+      ["anna-press","ONE MORE!","digi-alarm","Press it! PRESS IT!"],
+      ["anna","WE DID IT ✧","digi-work","I will document this button by button."]
+    ];
+    let score=0, done=new Set();
+    function updateHP(){
+      const leftHP=QS.length-score;
+      hp.style.width=(leftHP/QS.length*100)+"%";
+      hp.className="hpfill"+(leftHP<=2?" dying":leftHP<=5?" hurt":"");
+      hpt.textContent="HP "+leftHP+" / "+QS.length+" — "+TAUNT[score];
+      const [ca,ta,cd,td]=CHEER[score];
+      setCat(rsA,ca); rsAS.textContent=ta;
+      setCat(rsD,cd); rsDS.textContent=td;
+    }
+    function build(){
+      score=0; done.clear(); scoreEl.textContent="0"; updateHP(); box.innerHTML="";
+      QS.forEach((item,qi)=>{
+        const el=document.createElement("article"); el.className="q";
+        el.innerHTML='<span class="q-num">Q'+(qi+1)+' / '+QS.length+'</span>'+
+          '<p class="q-text">'+item.q+'</p><div class="opts"></div><div class="q-fb"></div>';
+        const opts=el.querySelector(".opts"), fb=el.querySelector(".q-fb");
+        item.o.forEach((text,oi)=>{
+          const b=document.createElement("button");
+          b.type="button"; b.className="opt";
+          b.innerHTML='<span class="key">'+"ABCD"[oi]+'</span><span>'+text+'</span>';
+          b.addEventListener("click",()=>{
+            if(done.has(qi))return;
+            done.add(qi);
+            const right = oi===item.a;
+            if(right){ scoreEl.textContent=++score; updateHP(); }
+            b.classList.add(right?"right":"wrong");
+            if(!right) opts.children[item.a].classList.add("right");
+            Array.from(opts.children).forEach(c=>c.disabled=true);
+            fb.innerHTML=(right?"✧ ":"")+item.fb;
+            fb.classList.add("show");
+          });
+          opts.appendChild(b);
+        });
+        box.appendChild(el);
+      });
+    }
+    document.getElementById("reset").addEventListener("click",build);
+    build();
+
+    const bossEl=document.getElementById("boss"), sentinel=document.getElementById("boss-sentinel");
+    if(bossEl && sentinel){
+      const stickTop = parseFloat(getComputedStyle(bossEl).top) || 0;
+      let ticking=false;
+      const update=()=>{ ticking=false;
+        bossEl.classList.toggle("stuck", sentinel.getBoundingClientRect().top < stickTop-1); };
+      const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, {passive:true});
+      addEventListener("resize", onScroll);
+      update();
+    }
+  }
+
+})();
+</script>

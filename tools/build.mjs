@@ -78,6 +78,15 @@ const CHAPTERS = [
     icon: "🔌",
     desc: "CTS Chapter 7 — signal management: wire, cable, connectors, switchers and racks. 11 levels, 5 interactive gadgets and a 9-HP boss.",
   },
+  {
+    src: "cafe-preset.html",
+    url: "cafe-preset",
+    n: 8,
+    cafe: "Café Preset",
+    topic: "Control systems",
+    icon: "🎛",
+    desc: "CTS Chapter 8 — control systems: one button, fourteen things. 11 levels, 6 interactive gadgets and a 9-HP boss.",
+  },
 ];
 
 /** Pages that are not chapters. `chrome: "plain"` = top bar with the home link only. */

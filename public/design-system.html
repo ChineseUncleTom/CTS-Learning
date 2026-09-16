@@ -415,6 +415,131 @@ pre .c{color:#C3A4B0}pre .p{color:#FFB84D}
 footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var(--bw) dashed var(--line);
   display:flex;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;
   font-family:var(--f-mono);font-size:var(--t-xs);font-weight:700;color:var(--ink-soft)}
+/* ═══ CHANT BOARD — the shout-along block at the end of the song ═══ */
+/* Used by every chapter from Ch4 on. The markup is .board > h3 + .lyric > .lyric-line > strong. */
+.board{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6) var(--sp-6) var(--sp-8)}
+.lyric{display:flex; flex-direction:column; gap:var(--sp-3); margin-top:var(--sp-4);
+  counter-reset:chant}
+.lyric-line{position:relative; counter-increment:chant; margin:0;
+  background:var(--paper-2); border:2px solid var(--line); border-left:9px solid var(--tone,var(--sakura));
+  border-radius:var(--r); box-shadow:2px 2px 0 var(--stamp);
+  padding:var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-4) + 1.4rem)}
+.lyric-line::before{content:counter(chant); position:absolute; left:var(--sp-3); top:.55rem;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-faint)}
+.lyric-line strong{font-family:var(--f-display); font-size:var(--t-base); line-height:1.4;
+  font-weight:800}
+.lyric-line:nth-child(6n+1){--tone:var(--sakura)}
+.lyric-line:nth-child(6n+2){--tone:var(--sun)}
+.lyric-line:nth-child(6n+3){--tone:var(--mint)}
+.lyric-line:nth-child(6n+4){--tone:var(--lav)}
+.lyric-line:nth-child(6n+5){--tone:var(--sky)}
+.lyric-line:nth-child(6n+6){--tone:var(--berry)}
+/* ═══ CH8 ADDITIONS ═══════════════════════════════════════ */
+
+/* .bigbtn — the one button this whole chapter is about */
+.bigbtn{display:flex; align-items:center; gap:var(--sp-4); width:100%; cursor:pointer;
+  font-family:var(--f-display); font-size:var(--t-lg); color:var(--tag-ink);
+  background:var(--sun); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-4) var(--sp-6); text-align:left;
+  transition:transform .1s ease, box-shadow .1s ease, background .16s ease}
+.bigbtn:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:8px 8px 0 var(--stamp)}
+.bigbtn:active:not(:disabled){transform:translate(3px,3px); box-shadow:1px 1px 0 var(--stamp)}
+.bigbtn:disabled{background:var(--panel); color:var(--ink-soft); cursor:default; box-shadow:var(--pop)}
+.bigbtn i{font-style:normal; font-size:1.8rem; line-height:1; flex:none}
+.bigbtn small{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; opacity:.75}
+
+/* .seq — a program: the numbered functions, firing in order */
+.seq{display:flex; flex-direction:column; gap:3px; border:var(--bw) solid var(--line);
+  border-radius:var(--r); background:var(--night); padding:var(--sp-3);
+  max-height:23rem; overflow-y:auto}
+.seq-step{display:grid; grid-template-columns:2rem minmax(0,1fr) auto; gap:var(--sp-2);
+  align-items:center; border:2px solid transparent; border-radius:8px; padding:.3rem var(--sp-2);
+  color:#8E7280; transition:background .2s ease, color .2s ease, border-color .2s ease}
+.seq-step .sq-n{font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  text-align:right; opacity:.75}
+.seq-step .sq-t{font-size:var(--t-sm); min-width:0}
+.seq-step .sq-s{font-size:1rem; line-height:1; flex:none}
+.seq-step.done{color:#FFE9D6}
+.seq-step.now{background:var(--sun); color:var(--line); border-color:var(--line)}
+.seq-step.wait{background:var(--lav); color:var(--tag-ink); border-color:var(--line)}
+
+/* .reach — how far each control path actually goes */
+.reach{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-2)}
+.rr{display:grid; grid-template-columns:7.5rem minmax(0,1fr) 5.5rem; gap:var(--sp-3);
+  align-items:center; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700}
+@media (max-width:640px){.rr{grid-template-columns:6rem minmax(0,1fr); }
+  .rr .rr-v{grid-column:2; text-align:right; margin-top:-.4rem}}
+.rr-k{color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rr-t{height:20px; border:2px solid var(--line); border-radius:var(--r-pill);
+  background:var(--panel); overflow:hidden; position:relative}
+.rr-f{height:100%; background:var(--mint); transition:width .35s ease, background .2s ease}
+.rr.out .rr-f{background:var(--berry)}
+.rr.out .rr-k{color:var(--ink-faint)}
+.rr-v{color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap}
+.rr.out .rr-v{color:var(--berry)}
+
+/* .roomlit — the 0–10 V dimmer's room preview */
+.roomlit{position:relative; height:120px; border:var(--bw) solid var(--line);
+  border-radius:var(--r); overflow:hidden; background:#1A1118;
+  display:grid; place-items:center}
+.roomlit .rl-glow{position:absolute; inset:0; background:radial-gradient(
+  ellipse 80% 120% at 50% -10%, #FFE9B0, rgba(255,233,176,0) 72%)}
+.roomlit .rl-t{position:relative; font-family:var(--f-display); font-size:var(--t-xl);
+  color:#2A1B10; text-shadow:0 1px 0 rgba(255,255,255,.35); font-variant-numeric:tabular-nums}
+
+/* .log — a command / response console */
+.log{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--night);
+  padding:var(--sp-3) var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-1);
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  min-height:8.5rem; max-height:11rem; overflow-y:auto}
+.log p{display:flex; gap:var(--sp-2); align-items:baseline}
+.log .lg-a{color:var(--sun); flex:none}
+.log .lg-out{color:#FFE9D6}
+.log .lg-in{color:#3FD8BC}
+.log .lg-none{color:#8E7280; font-style:italic}
+.log .lg-hint{color:#C3A4B0; font-weight:400}
+
+/* .paths — the pick-a-control-path board */
+.paths{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(9rem,100%),1fr));
+  gap:var(--sp-2); margin-top:var(--sp-2)}
+.pbtn{cursor:pointer; text-align:center; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; line-height:1.3; color:var(--ink); background:var(--paper-2);
+  border:2px solid var(--line); border-radius:var(--r); box-shadow:2px 2px 0 var(--stamp);
+  padding:var(--sp-2) var(--sp-3); transition:transform .12s ease, background .16s ease}
+.pbtn:hover:not(:disabled){transform:translate(-2px,-2px); background:var(--sun-soft)}
+.pbtn:disabled{cursor:default}
+.pbtn i{display:block; font-style:normal; font-size:1.3rem; line-height:1.4}
+.pbtn.right{background:var(--mint); color:var(--line)}
+.pbtn.wrong{background:var(--berry); color:var(--tag-ink)}
+
+/* .brief — the job ticket above a scenario gadget */
+.brief{background:var(--lav-soft); border:2px solid var(--line); border-radius:var(--r);
+  padding:var(--sp-3) var(--sp-4); display:flex; gap:var(--sp-3); align-items:flex-start}
+.brief i{font-style:normal; font-size:1.5rem; line-height:1.2; flex:none}
+.brief b{display:block; font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.brief p{font-size:var(--t-base)}
+
+/* .fp — the function-or-program drill */
+.fp-card{background:var(--paper-2); border:var(--bw) solid var(--line); border-radius:var(--r);
+  box-shadow:var(--pop); padding:var(--sp-4) var(--sp-6); text-align:center;
+  font-family:var(--f-display); font-size:var(--t-md); line-height:1.35}
+.fp-btns{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3)}
+@media (max-width:520px){.fp-btns{grid-template-columns:1fr}}
+.fp-btns button{cursor:pointer; font-family:var(--f-display); font-size:var(--t-md);
+  color:var(--ink); background:var(--paper); border:var(--bw) solid var(--line);
+  border-radius:var(--r); box-shadow:var(--pop); padding:var(--sp-3) var(--sp-4);
+  transition:transform .12s ease, background .16s ease}
+.fp-btns button:hover:not(:disabled){transform:translate(-2px,-2px); background:var(--sun-soft)}
+.fp-btns button:disabled{cursor:default}
+.fp-btns button small{display:block; font-family:var(--f-mono); font-size:var(--t-xs);
+  font-weight:700; color:var(--ink-soft); letter-spacing:.06em}
+.fp-btns button.right{background:var(--mint); color:var(--line)}
+.fp-btns button.right small{color:var(--line)}
+.fp-btns button.wrong{background:var(--berry); color:var(--tag-ink)}
+.fp-btns button.wrong small{color:var(--tag-ink)}
 </style>
 
 <header class="mast">
@@ -424,7 +549,7 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
       <span class="tab">design system · v2.0</span>
       <h1>Neko Notes<br>Kit</h1>
       <p class="mast-sub">The house style for CTS study notes. Chibi café, sticker outlines, screentone dots,
-        and two cats who <b>disagree about everything</b>. Copy the token block, use the sixteen parts, and every
+        and two cats who <b>disagree about everything</b>. Copy the token block, use the eighteen parts, and every
         chapter will look like it came from the same notebook ✧</p>
     </div>
     <div class="mast-cats" aria-hidden="true">
@@ -532,6 +657,51 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
       <path d="M96 20h6v4h-6zM96 28h6v10h-6z" fill="#EE3D5C"/>
     </g>
   
+    <!-- ANNA · pressing the button — one paw out, one very large button -->
+    <g id="anna-press">
+      <circle cx="19" cy="100" r="11" fill="#4A2B33"/>
+      <circle cx="19" cy="98" r="10" fill="#FF9F1A" stroke="#4A2B33" stroke-width="4"/>
+      <circle cx="16" cy="95" r="2.6" fill="#FFE6B8"/>
+      <path d="M4 84l-4-6M34 84l5-6M2 98h-7" stroke="#FF9F1A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M40 66C28 80 28 100 32 108h56c4-8 4-28-8-42z" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M88 102c24-3 24-26 10-33-9-4-16 5-10 12" stroke="#4A2B33" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M36 78C30 80 24 84 21 89" stroke="#4A2B33" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M36 78C30 80 24 84 21 89" stroke="#E4DCFA" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M38 34 34 12l18 11M82 34l4-22-18 11" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M42 24 40 16l7 5M78 24l2-8-7 5" fill="#FF6F91"/>
+      <circle cx="60" cy="48" r="27" fill="#E4DCFA" stroke="#4A2B33" stroke-width="4"/>
+      <path d="M43 42q6-5 12 0M65 42q6-5 12 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="49" cy="49" rx="5" ry="6" fill="#4A2B33"/>
+      <ellipse cx="71" cy="49" rx="5" ry="6" fill="#4A2B33"/>
+      <circle cx="50.5" cy="46.5" r="2.2" fill="#fff"/><circle cx="72.5" cy="46.5" r="2.2" fill="#fff"/>
+      <ellipse cx="38" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <ellipse cx="82" cy="58" rx="6" ry="4" fill="#FF6F91" opacity=".75"/>
+      <path d="M53 59q7 6 14 0" stroke="#4A2B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M24 46h-9M24 53h-9M96 46h9M96 53h9" stroke="#4A2B33" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- DIGI · working — a tablet, and eyes pointed down at it -->
+    <g id="digi-work">
+      <path d="M38 66h-6v14h-6v28h60V80h-6V66h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M92 104h10v-8h6v-8h6V76h-8v8h-6v8h-8" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28h-6v12h-6v18h6v12h56V58h6V40h-6V28h-6z" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M38 28V12h8v6h8v10M82 28V12h-8v6h-8v10" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 24v-7h6v4M80 24v-7h-6v4" fill="#12B39A"/>
+      <rect x="44" y="47" width="8" height="7" fill="#4A2B33"/>
+      <rect x="68" y="47" width="8" height="7" fill="#4A2B33"/>
+      <rect x="45.5" y="48.5" width="3" height="2" fill="#fff"/><rect x="69.5" y="48.5" width="3" height="2" fill="#fff"/>
+      <rect x="30" y="52" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <rect x="81" y="52" width="9" height="5" fill="#FF6F91" opacity=".75"/>
+      <path d="M54 61h12" stroke="#4A2B33" stroke-width="3"/>
+      <rect x="28" y="82" width="64" height="26" rx="3" fill="#3B2430" stroke="#4A2B33" stroke-width="4"/>
+      <rect x="33" y="87" width="26" height="4" fill="#3FD8BC"/>
+      <rect x="33" y="94" width="42" height="4" fill="#FFB84D"/>
+      <rect x="33" y="101" width="18" height="4" fill="#3FD8BC"/>
+      <rect x="63" y="87" width="8" height="4" fill="#FF8FAB"/>
+      <rect x="20" y="76" width="12" height="9" rx="4" fill="#CBF1E7" stroke="#4A2B33" stroke-width="4"/>
+      <rect x="98" y="66" width="7" height="4" fill="#12B39A"/>
+      <rect x="104" y="58" width="6" height="4" fill="#12B39A"/>
+    </g>
   </defs>
 </svg>
 
@@ -690,7 +860,7 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
 <section>
   <div class="head">
     <span class="lv">components</span>
-    <h2>Sixteen parts, one job each <span class="kao">🧩</span></h2>
+    <h2>Eighteen parts, one job each <span class="kao">🧩</span></h2>
     <p class="lede">When a chapter needs something new, check whether an existing part can stretch before
       adding a tenth.</p>
   </div>
@@ -780,6 +950,8 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
         <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi"/></svg><figcaption>#digi</figcaption></figure>
         <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-smug"/></svg><figcaption>#digi-smug</figcaption></figure>
         <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg><figcaption>#digi-alarm</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#anna-press"/></svg><figcaption>#anna-press</figcaption></figure>
+        <figure><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-work"/></svg><figcaption>#digi-work</figcaption></figure>
       </div>
       <div class="catline">
         <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#digi-alarm"/></svg>
@@ -794,7 +966,7 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
     </div>
     <div class="demo-note">
       <h4>The cat vocabulary &mdash; .chat / .catline / .ringside</h4>
-      <p>Anna and Digi are the system's most reusable teaching device, so they have <b>six sprites</b>, not
+      <p>Anna and Digi are the system's most reusable teaching device, so they have <b>eight sprites</b>, not
         two. All live in the shared <code>&lt;defs&gt;</code> and are placed with
         <code>&lt;use href="#anna-oh"&gt;</code>; JavaScript swaps expression by rewriting that one
         attribute.</p>
@@ -807,9 +979,16 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
       <p><b>.ringside</b> puts both cats beside the boss bar, reacting to your score.</p>
       <p class="when"><b>Expression carries meaning:</b> <code>-oh</code> is surprise or delight,
         <code>-smug</code> is Digi being technically correct, <code>-alarm</code> flags a genuine danger
-        or exam trap, <code>-zzz</code> closes a chapter.</p>
+        or exam trap, <code>-zzz</code> closes a chapter. <code>-press</code> is Anna operating something
+        without knowing how it works, and <code>-work</code> is Digi with the tablet, being the person
+        who does.</p>
       <p class="whennot"><b>Still not for facts.</b> A cat may voice the intuition and react to a result,
         but nothing examinable should live only in a bubble.</p>
+      <p class="whennot"><b>.cat-list items are normal text flow, not flex rows.</b> They used to be
+        flex, and a nowrap flex container's min-content is the <em>sum</em> of its items &mdash; so a
+        bullet holding two <code>&lt;b&gt;</code> phrases refused to wrap and shoved the whole card wider
+        than a phone screen. The star is an absolutely positioned <code>::before</code> now. Keep it
+        that way.</p>
     </div>
   </div>
 
@@ -1012,6 +1191,72 @@ footer{margin-top:var(--sp-16);padding:var(--sp-8) 0 var(--sp-16);border-top:var
         order they appeared. It's the only place numbering is allowed, because it's the only place the order
         is a real sequence to recite.</p>
       <p class="when"><b>Cap it at 12 lines.</b> If it runs longer, the chapter has too many hooks.</p>
+    </div>
+  </div>
+
+  <!-- chant board -->
+  <div class="demo">
+    <div class="board">
+      <h3>Three chants for the walk in 🥁</h3>
+      <div class="lyric">
+        <p class="lyric-line"><strong>ONE VERB is a FUNCTION · A LIST is a PROGRAM</strong></p>
+        <p class="lyric-line"><strong>CLOSED is ON · OPEN is OFF</strong></p>
+        <p class="lyric-line"><strong>IR is BLINDED BY LIGHT, not by DARK</strong></p>
+      </div>
+    </div>
+    <div class="demo-note">
+      <h4>.board / .lyric &mdash; the chant block</h4>
+      <p>The last thing in every song section: the chapter's mnemonics stripped down to
+        <b>shoutable half-lines</b>, split on a <code>&middot;</code>. Numbered plaques, one accent colour
+        each, cycling through the palette.</p>
+      <p>Markup is <code>.board &gt; h3 + .lyric &gt; .lyric-line &gt; strong</code>. The numbers come from
+        a CSS counter, so reordering a chant renumbers it by itself.</p>
+      <p class="when"><b>Use it for things you would say out loud</b> on the way into the exam. If a line
+        needs a clause to make sense, it belongs in a <code>.skill</code> instead.</p>
+      <p class="whennot"><b>Five to seven lines.</b> Past that it stops being a chant and becomes the
+        cheat sheet, which already exists.</p>
+    </div>
+  </div>
+
+  <!-- the control-room set -->
+  <div class="demo">
+    <div class="stack g-4">
+      <button class="bigbtn" type="button"><i>▶</i><span>PLAY SHOW<small>one press · fifteen functions</small></span></button>
+      <div class="seq">
+        <div class="seq-step done"><span class="sq-n">1</span><span class="sq-t">Power up the haze and smoke machines</span><span class="sq-s">💨</span></div>
+        <div class="seq-step now"><span class="sq-n">2</span><span class="sq-t">Power up the effects lighting system</span><span class="sq-s">🎆</span></div>
+        <div class="seq-step wait"><span class="sq-n">3</span><span class="sq-t">Wait 10 minutes</span><span class="sq-s">⏳</span></div>
+        <div class="seq-step"><span class="sq-n">4</span><span class="sq-t">Lower house light levels in the room</span><span class="sq-s">🌙</span></div>
+      </div>
+      <div class="reach">
+        <div class="rr"><span class="rr-k">RS-485</span><span class="rr-t"><span class="rr-f" style="width:100%"></span></span><span class="rr-v">1,200 m</span></div>
+        <div class="rr out"><span class="rr-k">Infrared</span><span class="rr-t"><span class="rr-f" style="width:34%"></span></span><span class="rr-v">9–12 m</span></div>
+      </div>
+      <div class="log">
+        <p><span class="lg-a">→</span><span class="lg-out">POWER ON PROJECTOR</span></p>
+        <p><span class="lg-a">←</span><span class="lg-in">ACK · lamp on · 41 °C</span></p>
+        <p><span class="lg-a">·</span><span class="lg-none">(no acknowledgment)</span></p>
+      </div>
+    </div>
+    <div class="demo-note">
+      <h4>The control-room set &mdash; .bigbtn / .seq / .reach / .log</h4>
+      <p>Four parts that all answer the same kind of question: <b>what actually happens, in what order,
+        and how far does it get?</b></p>
+      <p><b>.bigbtn</b> is a single oversized control with a mono subtitle. It presses <em>in</em> on
+        <code>:active</code>, because the whole point of a chapter about control systems is that one press
+        does fifteen things.</p>
+      <p><b>.seq</b> is a program: numbered steps on the dark panel, each one
+        <code>.done</code>, <code>.now</code> or <code>.wait</code>. The <code>.wait</code> state exists
+        because the book's own example sequence contains &ldquo;Wait 10 minutes&rdquo; &mdash; waiting is a
+        step, and it should look like one.</p>
+      <p><b>.reach</b> compares distances on a <b>log scale</b>, so 5 m and 1,200 m are both visible in one
+        chart. An <code>.out</code> row dims its label and turns its bar berry.</p>
+      <p><b>.log</b> is a command/response console: <code>.lg-out</code> sent, <code>.lg-in</code>
+        received, <code>.lg-none</code> for the silence you get from a unidirectional link.</p>
+      <p class="when"><b>Reach for these when a fact is a sequence or a limit.</b> A table can list the
+        numbers; only a bar that dies at 12 m makes you feel why nobody controls a campus over infrared.</p>
+      <p class="whennot"><b>Do not put the only copy of a fact in a .seq.</b> It is scrollable and it
+        animates &mdash; the verbatim list belongs in prose or the cheat sheet as well.</p>
     </div>
   </div>
 

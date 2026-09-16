@@ -230,8 +230,13 @@ h3{font-size:var(--t-lg)}
   color:var(--ink-soft); margin-top:var(--sp-1)}
 .cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
   font-size:var(--t-sm)}
-.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
-.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+/* Not a flex row: every inline child (each <b>) would become its own flex item, and a
+   nowrap flex container's min-content is the SUM of its items. A list item with two bold
+   phrases then refused to wrap and forced the whole card wider than a phone screen.
+   Normal text flow + an out-of-flow bullet lets it wrap word by word instead. */
+.cat-list li{position:relative; padding-left:1.2em}
+.cat-list li::before{content:"★"; position:absolute; left:0; top:.05em;
+  color:var(--tone); font-size:.85em}
 .cat-list b{color:var(--ink)}
 
 /* ═══ STAT BLOCK — the nerd receipt ═══ */

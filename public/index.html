@@ -247,8 +247,13 @@ h3{font-size:var(--t-lg)}
   color:var(--ink-soft); margin-top:var(--sp-1)}
 .cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
   font-size:var(--t-sm)}
-.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
-.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+/* Not a flex row: every inline child (each <b>) would become its own flex item, and a
+   nowrap flex container's min-content is the SUM of its items. A list item with two bold
+   phrases then refused to wrap and forced the whole card wider than a phone screen.
+   Normal text flow + an out-of-flow bullet lets it wrap word by word instead. */
+.cat-list li{position:relative; padding-left:1.2em}
+.cat-list li::before{content:"★"; position:absolute; left:0; top:.05em;
+  color:var(--tone); font-size:.85em}
 .cat-list b{color:var(--ink)}
 
 /* ═══ STAT BLOCK — the nerd receipt ═══ */
@@ -712,6 +717,24 @@ footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:v
         <li>Core, coat, chainmail, cloak.</li>
         <li>Seventy-five for the eyes, fifty for the sky.</li>
         <li>A switcher picks one, a mixer blends many.</li>
+      </ul>
+      <span class="ch-go">Enter ▸</span>
+    </a>
+
+    <a class="ch" href="/cafe-preset" style="--tone:var(--lav)">
+      <span class="ch-num">CHAPTER 8</span>
+      <span class="ch-icon">🎛</span>
+      <div>
+        <div class="ch-name">Café Preset</div>
+        <div class="ch-topic">Control systems</div>
+      </div>
+      <p class="ch-blurb">Anna presses one button. Digi programmed it. Functions and programs, the CPU,
+        feedback, and the six ways a control system can talk to a box.</p>
+      <div class="ch-stats"><span>11 levels</span><span>6 gadgets</span><span>9-HP boss</span></div>
+      <ul class="ch-hooks">
+        <li>One verb is a function. A list is a program.</li>
+        <li>IR is blinded by light, not by dark.</li>
+        <li>Unbalanced crosses the room, balanced crosses the campus.</li>
       </ul>
       <span class="ch-go">Enter ▸</span>
     </a>

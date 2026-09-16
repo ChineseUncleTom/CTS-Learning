@@ -71,7 +71,7 @@ a.cn-card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--stamp)
 <nav class="topbar" aria-label="Site">
 <a class="tb-home" href="/">☕ <span>CTS Café</span></a>
 <span class="tb-here">Ch.7 · Signal-management systems</span>
-<span class="tb-links"><a class="tb-arrow" href="/cafe-localhost" title="Chapter 6 · Café Localhost">◂ Ch.6</a><span class="tb-arrow is-off" aria-hidden="true">next ▸</span></span>
+<span class="tb-links"><a class="tb-arrow" href="/cafe-localhost" title="Chapter 6 · Café Localhost">◂ Ch.6</a><a class="tb-arrow" href="/cafe-preset" title="Chapter 8 · Café Preset">Ch.8 ▸</a></span>
 </nav>
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -304,8 +304,13 @@ h3{font-size:var(--t-lg)}
   color:var(--ink-soft); margin-top:var(--sp-1)}
 .cat-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--sp-2);
   font-size:var(--t-sm)}
-.cat-list li{display:flex; gap:var(--sp-2); align-items:baseline}
-.cat-list li::before{content:"★"; color:var(--tone); flex:none; font-size:.85em}
+/* Not a flex row: every inline child (each <b>) would become its own flex item, and a
+   nowrap flex container's min-content is the SUM of its items. A list item with two bold
+   phrases then refused to wrap and forced the whole card wider than a phone screen.
+   Normal text flow + an out-of-flow bullet lets it wrap word by word instead. */
+.cat-list li{position:relative; padding-left:1.2em}
+.cat-list li::before{content:"★"; position:absolute; left:0; top:.05em;
+  color:var(--tone); font-size:.85em}
 .cat-list b{color:var(--ink)}
 
 /* ═══ STAT BLOCK — the nerd receipt ═══ */
@@ -647,6 +652,26 @@ footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:v
   background:var(--paper); border:2px solid var(--line); border-radius:var(--r-pill);
   padding:.2rem .7rem; box-shadow:2px 2px 0 var(--stamp); white-space:nowrap;
   max-width:42vw; overflow:hidden; text-overflow:ellipsis}
+/* ═══ CHANT BOARD — the shout-along block at the end of the song ═══ */
+/* Used by every chapter from Ch4 on. The markup is .board > h3 + .lyric > .lyric-line > strong. */
+.board{background:var(--paper); border:var(--bw) solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--pop-lg); padding:var(--sp-6) var(--sp-6) var(--sp-8)}
+.lyric{display:flex; flex-direction:column; gap:var(--sp-3); margin-top:var(--sp-4);
+  counter-reset:chant}
+.lyric-line{position:relative; counter-increment:chant; margin:0;
+  background:var(--paper-2); border:2px solid var(--line); border-left:9px solid var(--tone,var(--sakura));
+  border-radius:var(--r); box-shadow:2px 2px 0 var(--stamp);
+  padding:var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-4) + 1.4rem)}
+.lyric-line::before{content:counter(chant); position:absolute; left:var(--sp-3); top:.55rem;
+  font-family:var(--f-mono); font-size:var(--t-xs); font-weight:700; color:var(--ink-faint)}
+.lyric-line strong{font-family:var(--f-display); font-size:var(--t-base); line-height:1.4;
+  font-weight:800}
+.lyric-line:nth-child(6n+1){--tone:var(--sakura)}
+.lyric-line:nth-child(6n+2){--tone:var(--sun)}
+.lyric-line:nth-child(6n+3){--tone:var(--mint)}
+.lyric-line:nth-child(6n+4){--tone:var(--lav)}
+.lyric-line:nth-child(6n+5){--tone:var(--sky)}
+.lyric-line:nth-child(6n+6){--tone:var(--berry)}
 </style>
 
 <!-- ══════════════ HERO ══════════════ -->
@@ -1490,8 +1515,8 @@ footer{margin-top:var(--sp-16); padding:var(--sp-8) 0 var(--sp-16); border-top:v
 <a class="cn-card cn-prev" href="/cafe-localhost" style="--tone:var(--sakura)"><span class="cn-dir">◂ Previous</span>
 <span class="cn-name">🌐 Café Localhost</span><span class="cn-topic">Ch.6 · Networks</span></a>
 <a class="cn-home" href="/"><i>☕</i>All chapters</a>
-<span class="cn-card cn-next is-off"><span class="cn-dir">Next ▸</span>
-<span class="cn-name">Not written yet</span><span class="cn-topic">More cafés are coming</span></span>
+<a class="cn-card cn-next" href="/cafe-preset" style="--tone:var(--lav)"><span class="cn-dir">Next ▸</span>
+<span class="cn-name">🎛 Café Preset</span><span class="cn-topic">Ch.8 · Control systems</span></a>
 </nav>
 <footer>
   <span>🔌 Café Patchbay · CTS Ch.7 · signal-management systems</span>

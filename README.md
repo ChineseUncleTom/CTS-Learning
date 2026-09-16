@@ -12,6 +12,7 @@ Live: **https://cts-cafe.web.app**
 | Café Lumen | 5 — Video systems | `/cafe-lumen` |
 | Café Localhost | 6 — Networks | `/cafe-localhost` |
 | Café Patchbay | 7 — Signal-management systems | `/cafe-patchbay` |
+| Café Preset | 8 — Control systems | `/cafe-preset` |
 | Neko Notes Kit | the design system | `/design-system` |
 
 ## How it's put together
